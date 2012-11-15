@@ -1,0 +1,362 @@
+\documentclass{scrreprt}
+\usepackage{listings}
+\usepackage{underscore}
+\usepackage{multirow}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+\setlength{\footskip}{0.3in}
+\geometry{margin=1in} % for example, change the margins to 2 inches all round
+\usepackage{longtable}
+\usepackage{booktabs} % for much better looking tables
+%\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+%\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+\usepackage{graphicx} % support the \includegraphics command and options
+
+\usepackage{color}
+
+\usepackage[pagebackref=true]{hyperref}
+\sffamily\bfseries
+
+\hypersetup{
+    bookmarks=true,    % show bookmarks bar?
+    pdftitle={Specification},    % title
+    pdfauthor={Selyunin, Pelesic},                     % author
+    pdfsubject={TeX and LaTeX},                        % subject of the document
+    pdfkeywords={TeX, LaTeX, graphics, images}, % list of keywords
+    colorlinks=false,       % false: boxed links; true: colored links
+    linkcolor=blue,       % color of internal links
+    citecolor=black,       % color of links to bibliography
+    filecolor=black,        % color of file links
+    urlcolor=purple,        % color of external links
+    linktoc=page            % only page is linked
+}%
+
+\def\myversion{1.0 }
+\title{%
+\flushright
+\rule{16cm}{2pt}\vskip1cm
+\Huge{SPECIFICATION}\\
+\vspace{1cm}
+%for\\
+%\vspace{1cm}
+Code mobility in \\Networked Embedded System\\
+\vspace{1cm}
+%\vspace{1cm}
+%\title{About Chinese Food}
+\LARGE{Release 0.0.1\\}
+%\vspace{0.5cm}
+%\LARGE{Version \myversion approved\\}
+\vspace{1cm}
+Group 4\\
+\vspace{1cm}
+\author{Igor Pelesi\'c, Matrikelnumber 0006828\\
+Konstantin Selyunin, Matrikelnumber 1228206}
+\vfill
+\rule{16cm}{2pt}\vskip1cm
+\date{}
+\today
+}
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
+\makeatother
+
+\begin{document}
+\maketitle
+\tableofcontents
+\renewcommand{\familydefault}{\sfdefault}
+
+\chapter{Introduction}
+\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
+  \section{Purpose}
+
+The specification defines the goals that should meet the project "Code mobility in Networked Embedded system". It is written by project members listed on the title page to precisely identify the goals to meet at the end of the project.
+
+  \section{Scope}
+
+  \section{Definitions, Acronyms, and Abbreviations}
+
+  \section{Background}
+
+  \section{References}
+
+  \section{Overview}
+
+\chapter{General Description}
+
+This section of the SRS should describe the general factors that affect 'the product and its requirements.  It should be made clear that this section does not state specific requirements; it only makes those requirements easier to understand.
+
+  \section{Product Perspective}
+
+This subsection of the SRS puts the product into perspective with other related products or
+projects.  (See the IEEE Guide to SRS for more details).
+
+  \section{Product Functions}
+
+This subsection of the SRS should provide a summary of the functions that the software will perform. 
+
+  \section{User Characteristics}
+
+This subsection of the SRS should describe those general characteristics of the eventual users of the product that will affect the specific requirements.  (See the IEEE Guide to SRS for more details).
+
+  \section{General Constraints}
+
+This subsection of the SRS should provide a general description of any other items that will
+limit the developer’s options for designing the system. (See the IEEE Guide to SRS for a partial list of possible general constraints).
+
+  \section{Assumptions and Dependencies}
+
+This subsection of the SRS should list each of the factors that affect the requirements stated in the SRS. These factors are not design constraints on the software but are, rather, any changes to them that can affect the requirements in the SRS. For example, an assumption might be that a specific operating system will be available on the hardware designated for the software product. If, in fact, the operating system is not available, the SRS would then have to change accordingly.
+
+\chapter{Statement of Requirements}  
+
+\chapter{Specific Requirements}
+
+This will be the largest and most important section of the SRS.  The customer requirements will be embodied within Section 2, but this section will give the D-requirements that are used to guide the project’s software design, implementation, and testing.
+
+Each requirement in this section should be:
+•  Correct
+•  Traceable (both forward and backward to prior/future artifacts)
+•  Unambiguous
+•  Verifiable (i.e., testable)
+•  Prioritized (with respect to importance and/or stability)
+•  Complete
+•  Consistent
+•  Uniquely identifiable (usually via numbering like 3.4.5.6)
+
+Attention should be paid to the carefuly organize the requirements presented in this section so that they may easily accessed and understood.  Furthermore, this SRS is not the software design document, therefore one should avoid the tendency to over-constrain (and therefore design) the software project within this SRS.
+
+  \section{External Interface Requirements}
+
+    \subsection{User Interfaces}
+
+    \subsection{Hardware Interfaces}
+
+    \subsection{Software Interfaces}
+
+    \subsection{Communications Interfaces}
+
+  \section{Functional Requirements}
+This section describes specific features of the software project.  If desired, some requirements may be specified in the use-case format and listed in the Use Cases Section.
+    \subsection{Functional Requirement or Feature 1}
+
+      \subsubsection{Introduction}
+
+      \subsubsection{Inputs}
+
+      \subsubsection{ Processing}
+
+      \subsubsection{Outputs}
+
+      \subsubsection{Error Handling}
+
+    \subsection{ Functional Requirement or Feature 2}
+…
+  \section{Use Cases}
+
+    \subsection{Use Case \#1}
+
+    \subsection{Use Case \#2}
+…
+  \section{ Classes / Objects}
+
+    \subsection{Class / Object \#1}
+
+      \subsubsection{Attributes}
+
+      \subsubsection{Functions}
+
+<Reference to functional requirements and/or use cases>
+
+    \subsection{Class / Object \#2}
+…
+  \section{ Non-Functional Requirements}
+Non-functional requirements may exist for the following attributes.  Often these requirements must be achieved at a system-wide level rather than at a unit level.  State the requirements in the following sections in measurable terms (e.g., 95% of transaction shall be processed in less than a second, system downtime may not exceed 1 minute per day, > 30 day MTBF value, etc). 
+    \subsection{Performance}
+
+    \subsection{Reliability}
+
+    \subsection{Availability}
+
+    \subsection{Security}
+
+    \subsection{Maintainability}
+
+    \subsection{Portability}
+
+    \section{Inverse Requirements}
+
+State any *useful* inverse requirements.
+
+  \section{Design Constraints}
+
+Specify design constrains imposed by other standards, company policies, hardware limitation, etc. that will impact this software project.
+
+  \section{Logical Database Requirements}
+
+Will a database be used?  If so, what logical requirements exist for data formats, storage capabilities, data retention, data integrity, etc.
+
+  \section{Other Requirements}
+
+Catchall section for any additional requirements.
+
+\chapter{Analysis Models}
+
+List all analysis models used in developing specific requirements previously given in this SRS.  Each model should include an introduction and a narrative description.  Furthermore, each model should be traceable the SRS’s requirements.
+
+  \section{Sequence Diagrams}
+
+  \section{Data Flow Diagrams (DFD)}
+
+  \section{State-Transition Diagrams (STD)}
+
+\chapter{Change Management Process}
+
+Identify and describe the process that will be used to update the SRS, as needed, when project scope or requirements change.  Who can submit changes and by what means, and how will these changes be approved.
+
+\chapter{Implementation timetable}
+
+Compiler for agent language:
+\begin{itemize}
+\item Agent language lexical analysis
+\item Agent language syntax analysis
+\item Agent language semantic analysis
+\end{itemize}
+
+Platform for mobile agents:
+
+\begin{itemize}
+\item Agent structure representation
+\item Implementation of Agent structure
+\item Implementation of Agent functions
+\item Implementation of drivers
+\item Implementation of scheduler
+\item Implementation of communication protocols
+
+\end{itemize}
+
+\chapter {Agent language}
+
+
+\begin{longtable}{|l|p{5in}|}
+\hline
+Lexical elements  
+&
+Agent program includes the following lexical elements
+\\
+\hline
+keyword
+&
+'function' $~\mid~$ 'var' $~\mid~$ 'function' $~\mid~$ 'var' $~\mid~$ 'int' $~\mid~$ 'char' $~\mid~$ 'boolean' $~\mid~$ 'true' $~\mid~$ 'false' $~\mid~$ 'this' $~\mid~$ 'if' $~\mid~$ 'else' $~\mid~$ 'while' $~\mid~$ 'return' $~\mid~$ 'move' $~\mid~$ 'clone' $~\mid~$  'message' $~\mid~$  'to'  $~\mid~$  'wrtarget'  $~\mid~$
+\\
+\hline
+symbol
+&
+$~\mid~$  '\{'  $~\mid~$  '\}'  $~\mid~$  '('  $~\mid~$  ')'  $~\mid~$  '['  $~\mid~$  ']'  $~\mid~$  '.'  $~\mid~$  ','  $~\mid~$  ';'  $~\mid~$  '+'  $~\mid~$  '-'  $~\mid~$  '*'  $~\mid~$  '/'  $~\mid~$  '\&'  $~\mid~$  '$~\mid~$'  $~\mid~$  '<'  $~\mid~$  '>'  $~\mid~$  '='  $~\mid~$  '\~   '  
+\\
+\hline
+intConstant
+&
+a number in range $0 \ldots 2^{16}$
+\\
+\hline
+stringConstant
+&
+' " ' a sequence of Unicode characters including in double quotes ' " '
+\\
+\hline
+identifier
+&
+A sequence of letters, digits, and underscore('_') starting with a letter
+\\
+\hline
+boardIdentifier
+&
+Board1 $~\mid~$ Board2
+\\
+\hline
+platformIdentifier
+&
+boardIdentifier.(Platform1 $~\mid~$ Platform2 $~\mid~$ Platform3 $~\mid~$ Platform4)
+\\
+\hline
+serviceIdentifier
+&
+boardIdenttifier.platformIdentifier.( serviceA $~\mid~$ serviceB $~\mid~$ serviceC $~\mid~$ serviceD $~\mid~$ serviceE $~\mid~$ serviceF1 $~\mid~$  serviceF2 $~\mid~$ serviceG )
+\\
+\hline
+agentIdentifier
+&
+indentifier
+\\
+\hline
+Program structure
+&
+Structure of Agent program
+\\
+\hline
+
+&
+
+\\
+\hline
+
+&
+
+\\
+\hline
+
+&
+
+\\
+\hline
+
+&
+
+\\
+\hline
+
+&
+
+\\
+\hline
+
+&
+
+\\
+\hline
+
+&
+
+\\
+\hline
+
+&
+
+\\
+\hline
+
+&
+
+\\
+\hline
+
+&
+
+\\
+\hline
+
+\end{longtable}
+
+\chapter{Appendix 1}
+\chapter{Appendix 2}
+
+  \section{Standards}
+  \section{Training}
+
+% add other chapters and sections to suit
+\end{document}
