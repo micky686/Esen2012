@@ -1,0 +1,12 @@
+Define requirements for the project
+
+Code mobility in Networked Embedded system
+
+User defines agents in a simple programming language (called "Agent").
+"Agents" program is interpreted to opcodes.
+
+NES board support four platforms for agents interactions and execution and 
+
+Project outline
+
+
