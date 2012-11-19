@@ -24,7 +24,7 @@
 \hypersetup{
     bookmarks=true,    % show bookmarks bar?
     pdftitle={Specification},    % title
-    pdfauthor={Selyunin, Pelesic},                     % author
+    pdfauthor={Selyunin, Pelesic, Jakovljevic},                     % author
     pdfsubject={TeX and LaTeX},                        % subject of the document
     pdfkeywords={TeX, LaTeX, graphics, images}, % list of keywords
     colorlinks=false,       % false: boxed links; true: colored links
@@ -33,7 +33,7 @@
     filecolor=black,        % color of file links
     urlcolor=purple,        % color of external links
     linktoc=page            % only page is linked
-}%
+}
 
 \def\myversion{1.0 }
 \title{%
@@ -449,6 +449,54 @@ Structure of Agent program
 
 \end{longtable}
 
+\chapter{Communication Architecture}
+The communication architecture is designed to support communication 
+between nodes on the same development board as well as between boards.
+
+
+\section{Hardware}
+
+The communication on the board is carried out
+over two serial bus channels. One of them is to be used for a distributed control
+application running on nodes 0-3. Another bus is dedicated for code mobility between nodes 0-4.
+
+Access to the bus is controlled by separate UART modules on each
+micro-controller. The bit rate is constrained by the maximum value of 2 Mbps according to the manual.  
+
+Node 4 functions as a gateway to another board. It is a bridge between the local
+and the wireless zigbee network.
+
+\section{Distributed Control}
+Time-triggered protocols are customary for distributed control applications.
+This approach is suitable for low data volumes and data subject to real time
+constraints and regular sending intervals. 
+In a time triggered scheme each node has a separate slot for writing to the bus.
+Meanwhile, other nodes can read the bus in the same slot or process a computation task.
+
+
+\section{Code Mobility}
+Code mobility between nodes includes local mobility on the same board and
+remote mobility between different boards. Executable agents generally have
+larger volume than control data. Sending at regular time intervals is not assumed,
+thus communication is aperiodic.
+A simple protocol based on message acknowledgment can be used. 
+
+There are two use cases: a) local mobility: destination is one of the nodes 0-3.
+b) remote mobility: destination is the gateway node 4. 
+The gateway is to contain a zigbee stack implementation to enable 
+access to the personal area network.
+
+
+\section{Addressing Scheme}
+Simple local addressing requires unique identifiers for
+each node. The requirement is that this be compatible with the time-triggered protocol
+implementation. For remote communication, board addresses have to be compatible
+with the configuration of the zigbee network. Since, each node will have a static 
+number of agent execution environments, the address has to contain its
+identifier as as well.  
+
+
+
 \chapter{Appendix 1}
 \chapter{Appendix 2}
 
@@ -457,3 +505,4 @@ Structure of Agent program
 
 % add other chapters and sections to suit
 \end{document}
+
