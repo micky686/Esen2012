@@ -14,7 +14,9 @@
 \usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
 %\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
 \usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
-\usepackage{graphicx} % support the \includegraphics command and options
+%\usepackage{graphicx} % support the \includegraphics command and options
+\usepackage[pdftex]{graphicx}
+
 
 \usepackage{color}
 
@@ -54,7 +56,8 @@ Code mobility in \\Networked Embedded System\\
 Group 4\\
 \vspace{1cm}
 \author{Igor Pelesi\'c, Matrikelnumber 0006828\\
-Konstantin Selyunin, Matrikelnumber 1228206}
+Konstantin Selyunin, Matrikelnumber 1228206\\
+Miljenko Jakovljevic Matrikelnumber }
 \vfill
 \rule{16cm}{2pt}\vskip1cm
 \date{}
@@ -335,6 +338,167 @@ Platform for mobile agents:
 \item Implementation of communication protocols
 
 \end{itemize}
+
+\chapter {Specification}
+
+\section{General}
+
+The following figure depicts the general outline of the code mobility project.
+
+\begin{figure}[]
+\includegraphics[scale=0.4]{figures/global.png}
+\caption{Overview}
+\end{figure}
+
+On each of the 4 nodes, which can be found the ESE board, a virtualization platform will be deployed. 
+This virtualization platform will be able to execute up to 4 agents concurrently. The agents will be 
+programmed in a simplistic assembler like agent language. On the platform there will be an execution 
+layer which is able to execute the agent language. The agents will be able to access the hardware attached
+to a node via services which are provided by the virtualization platform. Additionally the agents can
+reproduce themselves to another node or even board. Within the platform a scheduler will be responsible for
+providing execution time to each of the agents according to their priority. 
+
+\section{Virtualization Platform}
+The main task of the virtualization platform is to interprete the agent language commands of the agents 
+and to provide them access to the hardware attached to a node via well defined interfaces. Additionally 
+the platform should allow the concurrent execution of the agents. Therefore some basic means for code and 
+data protection for the agent memory is required. This is achieved by assigning each of the agents an own 
+memory segment and not allowing any other agent to access any other memory but its own. If some collaboration 
+between the agents is required this must be requested via the communication service. The metadata of an agent 
+as its code and memory segment will be stored in a structure that is shown in the figure below. \newline
+
+\begin{figure}[]
+\begin{center}
+\includegraphics[scale=0.4]{figures/agent.png}
+\caption{Agent structure}
+\end{center}
+\end{figure}
+
+Every agent has a unique id within the virtualization platform. Additionally a priority and a status for the
+scheduler are stored. Assigning these values for an agent lies within the scope of an agent developer. 
+Reproducing an agent on a virtualization platform where the agent’s id is already used will result in a denial 
+of the reproduction by the platform. Every agent has 6 numerical general purpose registers used for the execution
+of the agent language. Additonally there are 3 char general purpose registers. The result of every agent language 
+command will be written to the accumulator. There is also a program counter which is used for the execution of the
+agent and the numerical agent language representation is stored as well. The agent structure also contains a buffer
+for receiving messages from other agents and variable to store the id of the received message.
+\newline
+\\
+\noindent
+In order to reproduce the agent on another board or node the agent’s structure needs to be serialized and transmitted via the communication layer.
+\newline
+\\
+\noindent
+Additionally the virtualization platform has to provide the agent developer with some means to deploy the agent
+executable to the virtualization platform, during compilation of the platform. During the initialization of the
+platform all deployed agents should be instantiated on the given platform.
+
+\section{Execution Layer}
+
+The execution layer is responsible for the execution of an agent which is written in the agent language and later translated to agent opcodes. 
+The agent language provides means for:
+\begin{itemize}
+ \item storing values to the general purpose registers
+ \item comparing the contents of the general purpose registers 
+ \item performing basic mathematical functions like addition, subtraction, multiplication and division
+ \item a jump operation 
+ \item reproduction and cloning functions
+ \item sleep, delay and terminate functions
+ \item functions to access the hardware attached to a node
+\end{itemize}
+
+
+If a function of the agent language returns a value, this value will be stored in the accumulator, 
+where it can be used later on for further operations e.g. comparison etc. \newline
+\\
+\noindent
+The basic workflow of the execution layer as soon it is called by the scheduler is to read the next 
+agent language opcode (all agent opcodes have a fixed length) as identified by the program counter, 
+to decode it and to perform the function which is described by the opcode. Eventually the program 
+counter value is changed and the control is returned back to the scheduler. The execution layer is 
+called by the method execute which takes the following input parameters:
+\begin{itemize}
+ \item Pointer to a specific agent structure
+ \item Number of opcodes to execute
+\end{itemize}
+
+
+
+\section{Hardware Services}
+
+The virtualization platform provides access to the hardware attached to a node via according hardware 
+device drivers. The methods of the device drivers are made public to the execution layer which in turns 
+allows the agents to access these methods. As the hardware supported by a node differs from node to node 
+the virtualization platform should be able to discover during its initialization which hardware is supported 
+on the node where it’s running. \newline
+\\
+\noindent
+This will be achieved by defining a global set of function pointers within the virtualization platform. 
+This set should contain all possible methods of all available device drivers. During initialization the platform 
+will assign the according function pointer to a method provided by the device driver if the device is supported, 
+otherwise the according function pointer will stay null. \newline
+\\
+\noindent
+All device drivers should support the method init_driver, which will be called by the platform during its initialization. 
+Even if a hardware device is not supported on a given node, there should be at least a dummy device driver for it present, 
+providing an empty init method. A real device driver should register its methods to the global function pointers during its 
+init_driver method execution. Choosing this approach we would reach some form of modularity which would allow us to exchange 
+to device drivers without necessity to change the platform code.
+
+\section{Communication Layer}
+
+The agents should be able to communicate with other agents on the same node or on the same board. Therefore the agent 
+language provides means to request the sending or receiving of a message.  \newline
+\\
+\noindent
+The sending function is blocking the further execution of the agent until the message is sent respectively received. 
+When an agent wants to send a message this message is proceeded to the communications service which takes care of the 
+actual transmission. While the sending procedure is ongoing the further execution of the sending agent is blocked. 
+Its status in the agent structure is set to “blocked”. As soon as the communication service signalizes a successful 
+message transmission or a failure the result of the sending function is written to the accumulator and the agent will 
+be made available for further execution.  \newline
+\\
+\noindent
+When an agent sends a message to another agent, the receiving platform stores the id of the message and its content 
+to the receiver agent structure. The receiving agent is able to retrieve the last message from its buffer. 
+However only one message can be stored within the receiving agent structure and the next message will overwrite the 
+content and possible the id of the last message.  \newline
+\\
+\noindent
+The communication service provides no guarantees that sending of a message will succeed; it works on a best effort 
+approach. Therefore the agent developer has to make sure by reading the return value of a sending operation whether 
+the message was successfully sent or not and should initialize a retransmission in case of failure. \newline
+\\
+\noindent
+Every message sent should be identified by an id, in order to allow the transmission of messages with different semantics.
+
+The receiver of a message should be identified via the node number (0..3) where the receiving agent is currently expected
+ to be running and the receiver agent id. As the ids of agents are within the scope of the agent developer she has to make 
+sure, that the correct receiving agent is addressed.Additionally a multicast message could be supported by allowing omitting 
+the node address which should result in sending the message to all agents identified by the provided id. 
+
+\section{Scheduler}
+The main task of the scheduler which is part of the virtualization platform is to identify the next agent to be executed 
+and to utilize the execution layer to perform the execution of the according agent. The decision which agent to be chosen 
+should be made on a static priority based scheduling policy.
+\newline
+\\
+\noindent
+Every agent is assigned a priority (0..3) by the agent developer which is stored within the agent structure. 
+The highest priority is 3 and the lowest priority is 0. Based on the priorities of the currently running agents 
+the scheduler creates a static list by which the order of the agent execution is defined. The scheduler instructs 
+the execution layer to execute exactly priority + 1 opcodes for a given agent. Eventually the control returns to 
+the scheduler and the next agent from the list is picked. The list is iterated cyclically.
+\newline
+\\
+\noindent
+If an agent which is to be scheduled next is currently blocked by a sending operation, then its execution should be omitted. 
+\newline
+\\
+\noindent
+As an agent can reproduce it self to another node or board or clone itself within the same platform the scheduling 
+list requires adaptation as soon as new agent is deployed on a platform. Whenever a given platform is the destination 
+end point of a reproduction respectively cloning operation the scheduler needs to update its scheduling list before proceeding with further executions.
 
 \chapter {Agent language}
 
