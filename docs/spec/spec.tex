@@ -4,6 +4,7 @@
 \usepackage{multirow}
 \usepackage[utf8]{inputenc}
 \usepackage{xcolor}
+\usepackage{verbatim}
 \usepackage{geometry} % to change the page dimensions
 \geometry{a4paper} % or letterpaper (US) or a5paper or....
 \setlength{\footskip}{0.3in}
@@ -57,7 +58,7 @@ Group 4\\
 \vspace{1cm}
 \author{Igor Pelesi\'c, Matrikelnumber 0006828\\
 Konstantin Selyunin, Matrikelnumber 1228206\\
-Miljenko Jakovljevic Matrikelnumber }
+Miljenko Jakovljevic, Matrikelnumber }
 \vfill
 \rule{16cm}{2pt}\vskip1cm
 \date{}
@@ -68,26 +69,39 @@ Miljenko Jakovljevic Matrikelnumber }
 \patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
 \makeatother
 
+
 \begin{document}
 \maketitle
 \tableofcontents
 \renewcommand{\familydefault}{\sfdefault}
-
+\clearpage
 \chapter{Introduction}
-\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
+
 	\section{Purpose}
 
 The specification defines the goals that should meet the project "Code mobility in Networked Embedded system". It is written by project members listed on the title page to precisely identify the goals to meet at the end of the project.
+\\
+\noindent
+The purpose of the project is to build code mobility platform on Embedded system engineering board \cite{Gallaher}. Our goal is to develop the system that allows users to build and execute simple agent program on top of  hardware ESE platform. To achieve the goal we propose to develop three layered structure: agent layer, platform layer, communication layer. Developer of the agent program should not aware of location of the services available on the platform and details about method to access the particular service. Given list of services agent is executed on a platform that is .
 
-	\section{Scope}
+	%\section{Scope}
 
 	\section{Definitions, Acronyms, and Abbreviations}
 
+By \emph{code mobility} we mean the capability of code to change the location where it is executed.
+
+\emph{Strong} code mobility is the ability to allow migration of both code and execution state to the destination, \emph{weak} code mobility allows code transfer but it does not involve the transfer of the execution state.
+
+\emph{Platform} is a component that provides corresponding hardware services to 
+
 	\section{Background}
+\noindent
 
-	\section{References}
+The research has been done to use code mobility in distributed environment \cite{Bart1} and various application has been developed including \cite{Bart2} web application platform that allows people without major programming experience to develop the application as work-flow specification in graphical form. The use of code mobility is to "move the knowledge close to the resources" \cite{Picco} and enable higher flexibility of accessing remote resources.
+	%\section{References}
 
-	\section{Overview}
+	%\section{Overview}
+
 
 \chapter{General Description}
 
@@ -172,8 +186,8 @@ Global Requirements:
 \item\textbf{Non-functional requirements}
 
 \begin{enumerate}
-\item The platform should be open to extensions i.e adding new hardware. (Non-functional)
-\item The agent language should be extendable.(Non-functional)
+\item The platform should be open to extensions i.e adding new hardware.
+\item The agent language should be extendable.
 \item Scalability
 \item Documentation 
 \item A platform tracing mechanism should be provided which allows for more efficient bugfixing.
@@ -193,43 +207,43 @@ Global Requirements:
 
 \end{enumerate}
 
-\section{MESS)}
-
-What do the Application Testers need:
-1) ?? To test control applications you need access to sensor data ?? Hence a test mode should be supported where sensor data are presented to the tester.
-
-Functional requirements
-
-Non-functional requirements
 
 
-Specification (based on this functional and non-functional requirements)
+%What do the Application Testers need:
+%1) ?? To test control applications you need access to sensor data ?? Hence a test mode should be supported where sensor data are presented to the tester.
+
+%Functional requirements
+
+%Non-functional requirements
 
 
-
-User defines agents in a simple programming language (called "Agent").
-"Agents" program is interpreted on PC to bytecode.
-
-NES board support four platforms (nodes) for agents interactions and execution and 1 platform (node) for board-to-board communication.
+%Specification (based on this functional and non-functional requirements)
 
 
 
-Project outline
+%User defines agents in a simple programming language (called "Agent").
+%"Agents" program is interpreted on PC to bytecode.
 
-This will be the largest and most important section of the SRS.  The customer requirements will be embodied within Section 2, but this section will give the D-requirements that are used to guide the project’s software design, implementation, and testing.
+%NES board support four platforms (nodes) for agents interactions and execution and 1 platform (node) for board-to-board communication.
 
-Each requirement in this section should be:
-•	Correct
-•	Traceable (both forward and backward to prior/future artifacts)
-•	Unambiguous
-•	Verifiable (i.e., testable)
-•	Prioritized (with respect to importance and/or stability)
-•	Complete
-•	Consistent
-•	Uniquely identifiable (usually via numbering like 3.4.5.6)
 
-Attention should be paid to the carefuly organize the requirements presented in this section so that they may easily accessed and understood.  Furthermore, this SRS is not the software design document, therefore one should avoid the tendency to over-constrain (and therefore design) the software project within this SRS.
 
+%Project outline
+
+%This will be the largest and most important section of the SRS.  The customer requirements will be embodied within Section 2, but this section will give the D-requirements that are used to guide the project’s software design, implementation, and testing.
+
+%Each requirement in this section should be:
+%•	Correct
+%•	Traceable (both forward and backward to prior/future artifacts)
+%•	Unambiguous
+%•	Verifiable (i.e., testable)
+%•	Prioritized (with respect to importance and/or stability)
+%•	Complete
+%•	Consistent
+%•	Uniquely identifiable (usually via numbering like 3.4.5.6)
+
+%Attention should be paid to the carefuly organize the requirements presented in this section so that they may easily accessed and understood.  Furthermore, this SRS is not the software design document, therefore one should avoid the tendency to over-constrain (and therefore design) the software project within this SRS.
+\begin{comment}
 	\section{External Interface Requirements}
 
 		\subsection{User Interfaces}
@@ -318,26 +332,7 @@ List all analysis models used in developing specific requirements previously giv
 
 Identify and describe the process that will be used to update the SRS, as needed, when project scope or requirements change.  Who can submit changes and by what means, and how will these changes be approved.
 
-\chapter{Implementation timetable}
-
-Compiler for agent language:
-\begin{itemize}
-\item Agent language lexical analysis
-\item Agent language syntax analysis
-\item Agent language semantic analysis
-\end{itemize}
-
-Platform for mobile agents:
-
-\begin{itemize}
-\item Agent structure representation
-\item Implementation of Agent structure
-\item Implementation of Agent functions
-\item Implementation of drivers
-\item Implementation of scheduler
-\item Implementation of communication protocols
-
-\end{itemize}
+\end{comment}
 
 \chapter {Specification}
 
@@ -345,7 +340,7 @@ Platform for mobile agents:
 
 The following figure depicts the general outline of the code mobility project.
 
-\begin{figure}[]
+\begin{figure}[!htbp]
 \includegraphics[scale=0.4]{figures/global.png}
 \caption{Overview}
 \end{figure}
@@ -367,11 +362,12 @@ memory segment and not allowing any other agent to access any other memory but i
 between the agents is required this must be requested via the communication service. The metadata of an agent 
 as its code and memory segment will be stored in a structure that is shown in the figure below. \newline
 
-\begin{figure}[]
+\begin{figure}[!htbp]
 \begin{center}
 \includegraphics[scale=0.4]{figures/agent.png}
 \caption{Agent structure}
 \end{center}
+\label{agent}
 \end{figure}
 
 Every agent has a unique id within the virtualization platform. Additionally a priority and a status for the
@@ -500,7 +496,176 @@ As an agent can reproduce it self to another node or board or clone itself withi
 list requires adaptation as soon as new agent is deployed on a platform. Whenever a given platform is the destination 
 end point of a reproduction respectively cloning operation the scheduler needs to update its scheduling list before proceeding with further executions.
 
-\chapter {Agent language}
+\section{Agent language}
+
+\subsection{Agent language (Assembler level)}
+\noindent
+To develop a mobile agent \textit{Agent language} will be used. Language is tied to agent internal structure and support necessary operation for code mobility and message exchange. While writing the program for agent user should not be aware of hardware services presented on a given platform, but have common knowledge about all available services and what operations are allowed to do with the services (have list of services and available operations). It is the responsibility of the platform to provide required service to the agent (perform measurement, IO operation) or to manifest an error if the service is not available on the given platform. All current variables are allowed to store only in registers of agent structure (Fig. ~\ref{agent}).
+\\
+\noindent
+The language supports the following groups of operations: arithmetic, control flow, code mobility, message exchange , access to hardware services.
+
+\subsubsection{Arithmetic operations of agent assembly language}
+\noindent
+Addition\\
+\noindent
+Add the content of reg1 and reg2 (or value) and put the result into acc.\\
+\noindent
+\texttt{add reg1, reg2}\\
+\texttt{add reg1, value}\\
+
+
+\noindent
+Subtraction\\
+\noindent
+Subtract reg2 (or value) from reg1 and put the result into acc.\\
+\noindent
+\texttt{sub reg1, reg2}\\
+\texttt{sub reg1, value}\\
+
+
+\noindent
+Division\\
+\noindent
+Divide reg1 by reg2 (or value) and put the result into acc.\\
+\noindent
+\texttt{div reg1, reg2}\\
+\texttt{div reg1, value}\\
+
+
+\noindent
+Multiplication\\
+\noindent
+Multiply reg1 and reg2 (or value) and put the result into acc.\\
+\noindent
+\texttt{mul reg1, reg2}\\
+\texttt{mul reg1, value}\\
+\noindent
+
+\subsubsection{Control flow operations and comparison in agent assembly language}
+\noindent
+Jump if greater\\
+\noindent
+Jump to addr in code segment of agent structure if the value of acc. is 1.\\
+\noindent
+\texttt{jmpgr  addr}\\
+
+
+\noindent
+Jump if equal\\
+\noindent
+Jump to addr in code segment of agent structure if the value of acc. is 0.\\
+\noindent
+\texttt{jmpeq  addr}\\
+
+
+\noindent
+Jump if less\\
+\noindent
+Jump to addr in code segment of agent structure if the value of acc. is -1.\\
+\texttt{jmpls  addr}\\
+
+
+\noindent
+Comparison\\
+\noindent
+Compare reg1 and reg2 (or value).\\ If reg1 $>$ reg2 put 1 into acc,\\ if reg1 $=$ reg2 put 0 into acc,\\ if reg1 $<$ reg2 put -1 into acc.\\
+\noindent
+\texttt{compare reg1, reg2}\\
+\texttt{compare reg1, value}\\
+
+
+\subsubsection{Code mobility operations of agent assembly language}
+\noindent
+Move code\\
+\noindent
+Move agent structure to platform that possess required service\\
+\noindent
+\texttt{move service}\\
+
+
+\noindent
+Clone code\\
+\noindent
+Replicate agent structure on the given platform\\
+\noindent
+\texttt{clone}\\
+
+
+\noindent
+Die\\
+\noindent
+Destroy agent structure and free corresponding memory\\
+\noindent
+\texttt{die}\\
+
+\subsubsection{Message exchange}
+\noindent
+Send\\
+\noindent
+Send acc. value to platform.\\
+\noindent
+\texttt{sendmsg platform}\\
+
+\noindent
+Receive\\
+\noindent
+Pull message from platform to acc.\\
+\noindent
+\texttt{pullmsg}\\
+
+\subsubsection{Store, move and wait operations}
+\noindent
+Store\\
+\noindent
+Store value in register\\
+Store character in register\\
+\noindent
+\texttt{store reg, value}\\
+\texttt{storecr reg, char}\\
+
+\noindent
+Move\\
+\noindent
+Move value from reg2 to reg1\\
+\noindent
+\texttt{mv reg1, reg2}\\
+
+\noindent
+Wait\\
+\noindent
+Wait until event??\\
+\noindent
+\texttt{wait }\\
+
+\noindent
+Assign priority value\\
+\noindent
+Assign priority of the agent to value in range 0..3\\
+\noindent
+\texttt{priority value}\\
+
+\subsubsection{Access to hardware services}
+\noindent
+Set\\
+\noindent
+Set service to reg or value\\
+\noindent
+\texttt{setservice reg}\\
+\texttt{setservice value}\\
+
+\noindent
+Get\\
+\noindent
+Put corresponding value from the service to the acc.\\
+\noindent
+\texttt{getsetvice }\\
+
+
+\begin{comment}
+, comparison of operands, jump and loop constructs, as well as operations related to code mobility ( move to service, clone, die). Developer of agent program should not be aware of present services on the 
+The agent developer use the following language to develop the program.
+Program consist of single possible recursive function. The language has two types: integer and string.
 
 
 \begin{longtable}{|l|p{5in}|}
@@ -512,7 +677,7 @@ Agent program includes the following lexical elements
 \hline
 keyword
 &
-'function' $~\mid~$ 'var' $~\mid~$ 'function' $~\mid~$ 'var' $~\mid~$ 'int' $~\mid~$ 'char' $~\mid~$ 'boolean' $~\mid~$ 'true' $~\mid~$ 'false' $~\mid~$ 'this' $~\mid~$ 'if' $~\mid~$ 'else' $~\mid~$ 'while' $~\mid~$ 'return' $~\mid~$ 'move' $~\mid~$ 'clone' $~\mid~$  'message' $~\mid~$  'to'  $~\mid~$  'wrtarget'  $~\mid~$
+'function' $~\mid~$ 'var' $~\mid~$ 'int' $~\mid~$ 'char' $~\mid~$ 'boolean' $~\mid~$ 'true' $~\mid~$ 'false' $~\mid~$ 'this' $~\mid~$ 'if' $~\mid~$ 'else' $~\mid~$ 'while' $~\mid~$ 'return' $~\mid~$ 'move' $~\mid~$ 'clone' $~\mid~$  'message' $~\mid~$  'to'  $~\mid~$  
 \\
 \hline
 symbol
@@ -560,65 +725,152 @@ Program structure
 Structure of Agent program
 \\
 \hline
-
+function declaration
 &
-
+'function' ( 'void' $~\mid~$ type) functionName '(' parameterList ')' functionBody
 \\
 \hline
-
+parameterList
 &
-
+((type varName) (',' type varName)*)?
 \\
 \hline
-
+functionBody
 &
-
+'{' varDec* statements  '}'
 \\
 \hline
-
+varDec
 &
-
+'var' type varName (',' varName)* ';'
 \\
 \hline
-
+functionName
 &
-
+identifier
 \\
 \hline
-
+varName
 &
-
+identifier
 \\
 \hline
-
+Statements
 &
-
+Statements in Agent program
 \\
 \hline
-
+statements
 &
-
+statement*
 \\
 \hline
-
+statement
 &
-
+decStatement $~\mid~$ ifStatement $~\mid~$ whileStatement $~\mid~$ returnStatement $~\mid~$ dieStatement
 \\
 \hline
-
+decStatement
 &
-
+varName ( '[' expression ']' )? '=' expression ';'
 \\
 \hline
-
+ifStatement
+&
+if '(' expression ')' '{' statements '}' (else '{' statements '}')?
+\\
+\hline
+whileStatement
+&
+while '(' expression ')'  '{'  statements '}'
+\\
+\hline
+returnStatement
+&
+return expression? ';'
+\\
+\hline
+moveStatement
+&
+move to (platformIdentifier  $~\mid~$ serviceIdentifier) ';'
+\\
+\hline
+cloneStatement
+&
+clone ';'
+\\
+\hline
+messageStatement
+&
+message '(' expression ')' to (platformIdentifier $~\mid~$ agentIdentifier ) ';'
+\\
+\hline
+getserviceStatement
+&
+getservice '(' serviceIdentifier ')' ';'
+\\
+\hline
+setserviceStatement
+&
+setservice serviceIdentifier to expression ';'
+\\
+\hline
+dieStatement
+&
+die ';'
+\\
+\hline
+Expression
+&
+Expressions in Agent program
+\\
+\hline
+expression
+&
+term (op term)*
+\\
+\hline
+term
+&
+intConstant  $~\mid~$  stringConstant  $~\mid~$  keywordConstant  $~\mid~$  varName  $~\mid~$ varName '[' expression ']' $~\mid~$ functionCall $~\mid~$ 
+ '(' expression ')'  $~\mid~$ unaryOp term
+\\
+\hline
+functionCall
+&
+ functionName '(' expressionList ')'
+\\
+\hline
+expressionList
+&
+ (expression (',' expression)*)?
+\\
+\hline
+op
+&
+ '+'  $~\mid~$  '-'  $~\mid~$  '*'  $~\mid~$  '/'  $~\mid~$  '\&\&'  $~\mid~$  '||'  $~\mid~$  '<'  $~\mid~$  '>'  $~\mid~$  '='  $~\mid~$
+\\
+\hline
+unaryOp
+&
+'~'
+\\
+\hline
+keywordConstant
+&
+ 'true'  |  'false'
+\\
+\hline
 \end{longtable}
 
-\chapter{Communication Architecture}
+\end{comment}
+
+\section{Communication Architecture}
 The communication architecture is designed to support communication 
 between nodes on the same development board as well as between boards.
 
 
-\section{Hardware}
+\subsection{Hardware}
 
 The communication on the board is carried out
 over two serial bus channels. One of them is to be used for a distributed control
@@ -630,7 +882,7 @@ micro-controller. The bit rate is constrained by the maximum value of 2 Mbps acc
 Node 4 functions as a gateway to another board. It is a bridge between the local
 and the wireless zigbee network.
 
-\section{Distributed Control} 
+\subsection{Distributed Control} 
 % Igor: There seems to be a collision between ttp interrupts and our virtual machine scheduler??? 
 Time-triggered protocols are customary for distributed control applications.
 This approach is suitable for low data volumes and data subject to real time
@@ -639,7 +891,7 @@ In a time triggered scheme each node has a separate slot for writing to the bus.
 Meanwhile, other nodes can read the bus in the same slot or process a computation task.
 
 
-\section{Code Mobility}
+\subsection{Code Mobility}
 Code mobility between nodes includes local mobility on the same board and
 remote mobility between different boards. Executable agents generally have
 larger volume than control data. Sending at regular time intervals is not assumed,
@@ -652,7 +904,7 @@ The gateway is to contain a zigbee stack implementation to enable
 access to the personal area network.
 
 
-\section{Addressing Scheme}
+\subsection{Addressing Scheme}
 Simple local addressing requires unique identifiers for
 each node. The requirement is that this be compatible with the time-triggered protocol
 implementation. For remote communication, board addresses have to be compatible
@@ -660,14 +912,45 @@ with the configuration of the zigbee network. Since, each node will have a stati
 number of agent execution environments, the address has to contain its
 identifier as as well.  
 
+\chapter{Implementation timetable}
+
+Please refer to \href{http://nes2012group4.herokuapp.com/}{ttp://nes2012group4.herokuapp.com/} for implementation timetable.
+\begin{comment}
+Interpreter for agent language:
+\begin{itemize}
+\item Agent language lexical analysis
+\item Interpreter for agent language
+%\item Agent language semantic analysis
+\end{itemize}
 
 
-\chapter{Appendix 1}
-\chapter{Appendix 2}
+Compiler for agent language:
+\begin{itemize}
+\item Agent language lexical analysis
+\item Agent language syntax analysis
+\item Agent language semantic analysis
+\end{itemize}
+}
 
-	\section{Standards}
-	\section{Training}
+Platform for mobile agents:
 
+\begin{itemize}
+\item Agent structure representation
+\item Implementation of Agent structure
+\item Implementation of Agent functions
+\item Implementation of drivers
+\item Implementation of scheduler
+\item Implementation of communication protocols
+
+\end{itemize}
+
+
+%\chapter{Appendix 1}
+%\chapter{Appendix 2}
+
+%	\section{Standards}
+%	\section{Training}
+\end{comment}
 % add other chapters and sections to suit
 \end{document}
 
