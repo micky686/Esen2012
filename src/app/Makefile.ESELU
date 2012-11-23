@@ -1,0 +1,96 @@
+# (c) 2007 by Bernhard Froemel <bf@catechsoftworks.biz>
+
+#add PHONIES
+PHONY	+= flash_all flash_node debug_node install
+
+# deprecated goal
+install:
+	@echo "You mean make flash_all!"
+
+# This target requires that the environment variable N is set
+# to a specific node: e.g. # N=0 make flash_node
+#old ese board:
+#flash_node: node${N}/node${N}.elf
+#	#switch programming target
+#	$(MUXR) --port=${N}
+#	#enable programmer
+#	$(MUXR) --global-disable=0
+#	#install program on selected target
+#	$(PROGR) --erase --program --file node${N}/node${N}.elf --jtag $(INTERFACE)
+#	#resetting programmer and node
+#	$(MUXR) --reset16
+#	$(MUXR) --target-disable=1
+#	$(MUXR) --target-disable=0
+#	#disable programmer
+#	$(MUXR) --global-disable=1
+#new ese board:
+# # jtagprog -p /dev/ttyACM0 -m0 --infile=node0.elf erase prog-flash-pageload prog-eeprom-bytewise
+flash_node: node${N}/node${N}.elf
+	jtagprog -p ${PRGMIF} -m${N} --infile=node${N}/node${N}.elf erase prog-flash-pageload prog-eeprom-bytewise
+
+# correct the nodes
+FLASH_NODES	:= $(strip $(FLASH_NODES))
+_FLASH_NODES	:= $(foreach n, $(FLASH_NODES), ./node$(n)/node$(n).elf) 
+_FLASH_NODES	:= $(filter $(_FLASH_NODES), $(OUTPUT))
+# and now strip them again
+_FLASH_NODES	:= $(foreach n, $(_FLASH_NODES), $(subst node,,$(notdir $(n:.elf=))))
+
+flash_all: $(OUTPUT)
+ifneq "$(sort $(FLASH_NODES))" "$(sort $(_FLASH_NODES))"
+	$(error Required module is missing (nodeX). Either add it or correct your FLASH_NODES varriable in project.mk)
+endif
+	for i in `echo ${FLASH_NODES} | sed -e "s/ /\n/g"`; do N=$$i make flash_node; done
+
+# This target requires that the environment variable N is set
+# to a specific node: e.g. # N=0 make flash_node
+debug_node: flash_node
+#enable programmer
+        $(MUXR) --verbose --global-disable=0
+#open debug port
+        $(PROGR) --jtag $(INTERFACE) :$(DEBUGPORT)
+
+# extra targets
+#%.s:    %.c
+#	$(CC) $(CFLAGS) -S -o $@ $<
+#%.io:   %.is
+#	$(CC) $(ASFLAGS) -x assembler -c $< -o $@
+#%.is:   %.s
+#	$(IFSCONV_SCR) <$< >$@
+
+# include the C include dependencies (made weak to avoid errors)
+# if the include files don't exist (as they do at the very first call or a 
+# dependency change) then make will automatically try to create this 
+# missing dependency file(s)
+-include $(patsubst %.io,%.id,$(filter %.io,$(OBJ)))
+
+# calculate C include dependencies + append custom compile commands: 
+# - module specific CFLAGS (-> correct include directory)
+
+%.id: %.c
+	rm -f $@
+	CC=$(CC) SED=$(SED) ${SCR_DEPEND} `dirname $*.c` io id $(CFLAGS) $*.c > $@
+	echo "$(@:.id=.io):" >> $@
+	echo "	$(CC) $(CFLAGS) $(CFLAGS-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) -S -o $(@:.id=.s) $(@:.id=.c)" >> $@
+	echo "	$(IFSCONV_SCR) <$(@:.id=.s) >$(@:.id=.is)" >> $@
+	echo "	$(CC) $(ASFLAGS) -x assembler -c -o $(@:.id=.io) $(@:.id=.is)" >> $@
+	echo "	rm -f $(@:.id=.is) $(@:.id=.s)" >> $@
+
+# I call that at least strange behavior: if I do it that way it works
+# if I replace _mdep_bug with it's content in the prerequisite list
+# (properly escaped) it doesn't work.
+# note: .S overrides .c files here, but we check that one module has 
+# either a .S or a .c but not both.
+_mdepid_bug = $(filter %$(subst .mdep.id,,$(@F)).S,$(SRC-MDEP-$(patsubst _%,%,$(subst ..,,$(subst ./,,$(subst /,_,$(@D))))))) \
+            $(filter %$(subst .mdep.id,,$(@F)).c,$(SRC-MDEP-$(patsubst _%,%,$(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))))
+.SECONDEXPANSION:
+%.mdep.id: $$(_mdepid_bug) 
+	rm -f $@
+	CC=$(CC) SED=$(SED) ${SCR_MDEPEND} $(@:.id=) io id $(CFLAGS) $(CFLAGS-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) $< > $@
+	echo "$(@:.id=.io):" >> $@
+	echo "	$(CC) $(CFLAGS) $(CFLAGS-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) -S -o $(@:.id=.s) $<" >> $@
+	echo "	$(IFSCONV_SCR) <$(@:.id=.s) >$(@:.id=.is)" >> $@
+	echo "	$(CC) $(ASFLAGS) -x assembler -c -o $(@:.id=.io) $(@:.id=.is)" >> $@
+	echo "	rm -f $(@:.id=.is) $(@:.id=.s)" >> $@
+
+smemeval: $(OUTPUT)
+	@echo You are supposed to implement that yourself!
