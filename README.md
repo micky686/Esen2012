@@ -5,5 +5,5 @@ Directory structure:
 --------------------------------------------------------------------------------
 
 build - object files
-src   - project source
+src   - project source files
 docs  - specification and documentation
