@@ -1,0 +1,107 @@
+\documentclass[12pt,a4paper,titlepage,oneside]{article}
+\usepackage{ese_prot}
+
+\title{Beispiel 1}
+
+\author{ Vorname Nachname, \matrnr 6666666    \\
+         {\small e6666666@student.tuwien.ac.at}
+}
+
+\begin{document}
+
+% create titlepage
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Beispiel 1.1A}
+
+\subsection{Aufgabenstellung}
+
+Kopieren Sie die originale Aufgabenstellung in das Protokoll.
+
+\subsection{Kommentare zur Aufgabenstellung (optional)}
+
+Begründung für etwaige Abweichungen (muss mit Tutor abgesprochen
+sein)
+
+\subsection{Implementierung}
+
+Die Implementierung besteht aus folgenden Teilen ...
+
+Das Makro zum Auslesen der Speicherstellen wurde wie folgt
+implementiert:
+
+\begin{lstlisting}{}
+    /* Port B auf Output und einschalten */
+/*==========================================================================*/
+/*23456789012345678901234567890123456789012345678901234567890123456789012345*/
+/* lange Zeilen so wie der Text dieser Zeile der eigentlich für einen Kommentar viel zu lang ist, werden umgebrochen */
+/*==========================================================================*/
+
+   outp(0xFF,PORTB);
+   outp(0xFF,DDRB);
+\end{lstlisting}
+
+\subsection{Ergebnisse (optional)}
+
+Falls Messergebnisse (Kurven, etc.) in der Aufgabenstellung
+gefordert sind.
+
+Abbildung~\ref{figPlot} zeigt die Kennlinie ...
+
+\begin{figure}[htb]
+\epsfxsize=0.8\textwidth \hfill \epsfbox{figures/plot} \hfill\hbox{}
+\caption{Kennlinie ...} \label{figPlot}
+\end{figure}
+
+
+\subsection{Probleme und Fallstricke}
+
+Alle Probleme, die Sie hatten. Dieses Kapitel schon von Anfang an
+mitziehen, damit nicht Probleme nach der Lösung in Vergessenheit
+geraten. Zu gelösten Problemen immer die Lösung schreiben.
+
+\subsection{Arbeitsaufwand}
+
+Tabelle mit geplantem Aufwand (aus Designprotokoll) und
+tatsächlichem Aufwand aufgeschlüsselt nach Treiberfunktionen,
+Integration und Gesamtaufwand
+
+\subsubsection{Speicherresourcenanalyse}
+
+Die Ermittlung des statischen Speicherverbrauchs erfolgt über das
+.elf-File.
+
+Die Ermittlung des dynamischen Speicherverbrauchs erfolgt durch das
+Speicherresourcenanalyseprogramm auf der Homepage.
+
+\begin{tabular}{|l|l|ll|}
+\hline
+  Typ & Insgesamt & Verwendet & \\ \hline \hline
+
+  Flash ROM & 8192 Byte & 2315 Byte &(28\%) \\ \hline
+  SRAM & 256 Byte & statisch 6 Byte &(2,3\%) \\
+       &          & dynamisch 24 Byte &(9,4\%) \\
+       &          & insgesamt 30 Byte &(11,7\%) \\ \hline
+  EEPROM & 256 Byte & 0 Byte &(0\%) \\ \hline
+\end{tabular}
+
+\section{Listings}
+
+der von Ihnen implementierte Code, anbei als Beispiel die mem\_eval
+Listings.
+
+\subsection{mem\_eval.h}
+
+\lstinputlisting{testfiles/mem_eval.h}
+
+\newpage
+
+\subsection{mem\_eval.c}
+
+\lstinputlisting{testfiles/mem_eval.c}
+
+
+\end{document}
