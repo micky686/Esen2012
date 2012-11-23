@@ -885,6 +885,83 @@ with the configuration of the zigbee network. Since, each node will have a stati
 number of agent execution environments, the address has to contain its
 identifier as as well.  
 
+\subsection{Communication Interface}
+The interface for accessing the communication system is given below
+in Figures~\ref{fig:msg-struct} through~\ref{fig:comm_send_msg}. %%% Problem , does not compile this correctly
+\clearpage
+\begin{figure}[!htb]
+\lstset{language=C}
+\begin{lstlisting}[frame=single]
+typedef struct comm_msg_S {
+  int type;         /* Message type identifier */
+  int node;         /* Destination or origin node  
+                       depending on the context */
+  int board;        /* Destination or origin board 
+                       depending on the context */
+  long int len;     /* Payload length */
+  char *payload;    /* Payload data*/  
+} comm_msg_T;
+\end{lstlisting}
+\caption{Message Structure}
+\label{fig:msg-struct}
+\end{figure}
+
+\begin{figure}[!htb]
+\lstset{language=C}
+\begin{lstlisting}[frame=single]
+/**
+    Function: comm_register 
+              Registers a communication endpoint
+    Returns: Zero if successful
+    Parameters: board
+                Board id
+                node
+                Node id inside a board
+ */
+int comm_register(int board, int node);
+\end{lstlisting}
+\caption{Endpoint Registration}
+\label{fig:comm_reg}
+\end{figure}
+
+\begin{figure}[!htb]
+\lstset{language=C}
+\begin{lstlisting}[frame=single]
+/**
+   Function: comm_set_recvr
+             Sets a callback to process incoming messages
+   Parameters: recvr_callback 
+               Callback function that processes a received message
+   Returns: Zero if successful		  
+ */
+int comm_set_recvr(void (*recvr_callback)(comm_msg_T *msg));
+\end{lstlisting}
+\caption{Message Receiving}
+\label{fig:comm_set_recvr}
+\end{figure}
+
+\begin{figure}[!htb]
+\lstset{language=C}
+\begin{lstlisting}[frame=single]
+/** 
+   Function: comm_send_msg
+             Sends message over communication interface
+   Parameters: msg 
+               Pointer to message structure; 
+               structure will be copied by function
+               sent_cb 
+               Callback that is called when the message has been sent
+   Returns: Zero if message is accepted for sending 
+            or nonzero if rejected
+
+*/
+int comm_send_msg(comm_msg_T *msg, void (*sent_cb)(int)); 
+\end{lstlisting}
+\caption{Message Sending}
+\label{fig:comm_send_msg}
+\end{figure}
+
+
 \chapter{Implementation timetable}
 
 Figure \ref{fig:ganttdiag} shows the implementation timetable.
