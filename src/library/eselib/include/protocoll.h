@@ -20,7 +20,7 @@
 #define F_CPU 14745600
 #include <avr/delay.h>
 
-#include "timer2.h"
+#include "timer.h"
 
 #if defined (__AVR_ATmega128__)
 

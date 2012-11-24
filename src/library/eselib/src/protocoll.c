@@ -96,13 +96,17 @@ SIGNAL(SIG_INTERRUPT7)
   	int_occured=1;
 }
 
+void timer2_handler(void) {
+}
+
 /**
  * Simple delay function. 
  */
 void wait_ms(uint8_t timeout)
 {
-	configure_timer2(ONESHOT,timeout);      //delay generated trough timer 2
-	while(timer2_done!=1);                 
+  //delay generated trough timer 2
+  configure_timer2(ONESHOT,timeout, timer2_handler); 
+  while(timer2_done!=1);                 
 }
 
 /*
