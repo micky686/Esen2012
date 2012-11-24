@@ -41,6 +41,9 @@ ifneq "$(sort $(FLASH_NODES))" "$(sort $(_FLASH_NODES))"
 endif
 	for i in `echo ${FLASH_NODES} | sed -e "s/ /\n/g"`; do N=$$i make flash_node; done
 
+erase_node: 
+	    jtagprog -p ${PRGMIF} -m${N} erase
+	    
 # This target requires that the environment variable N is set
 # to a specific node: e.g. # N=0 make flash_node
 debug_node: flash_node

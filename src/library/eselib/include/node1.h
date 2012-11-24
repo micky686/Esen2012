@@ -29,4 +29,11 @@
 #define HEATER_ON()         do {DDRB |= 1<<HEATER_PIN;  \
     PORTB &= ~(1<<HEATER_PIN); } while (0)
 
+/* These leds are low active */
+#define LEDS_PORT_ND0                                        PORTA
+#define LEDS_DDR_ND0                                         DDRA
+/* Sets pin to logic 1 in a byte */
+#define LEDS_PIN_ND0(pin)                                   _BV(pin)
+
+
 #endif /*NODE1_H_*/

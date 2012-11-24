@@ -14,7 +14,7 @@ OBJ-ESEL-$(MNAME)-y	+=
 
 # put the module specific used library modules in here (need 
 # to be defined in library/eselib/Makefile.eselib)
-OBJ-ESEL-MDEP-$(MNAME)-y +=
+OBJ-ESEL-MDEP-$(MNAME)-y += protocoll
 
 # put the used scade models in here (need to be defined in 
 # library/scade/Makefile.scade)

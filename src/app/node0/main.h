@@ -1,7 +1,6 @@
 /** 
  * blinking_leds
  *
- * (c) 2007 by Bernhard Froemel <bf@catechsoftworks.biz>
  **/
  
 #ifndef __MAIN_H__
