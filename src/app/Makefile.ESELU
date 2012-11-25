@@ -48,7 +48,7 @@ erase_node:
 # to a specific node: e.g. # N=0 make flash_node
 debug_node: flash_node
 #enable programmer
-        $(MUXR) --verbose --global-disable=0
+	 $(MUXR) --verbose --global-disable=0
 #open debug port
         $(PROGR) --jtag $(INTERFACE) :$(DEBUGPORT)
 

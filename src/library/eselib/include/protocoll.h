@@ -15,12 +15,11 @@
 #include <stdio.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <avr/signal.h>
 
 #define F_CPU 14745600
-#include <avr/delay.h>
+#include <util/delay.h>
 
-#include "timer.h"
+#include "timer2.h"
 
 #if defined (__AVR_ATmega128__)
 
@@ -62,7 +61,10 @@
 extern void protocol_init(uint8_t timeout, void (*receive_msg)(uint8_t msg_header, uint8_t *msg_body));
 extern int8_t send_msg(uint8_t message_header, uint8_t *msg_body);
 
-
+void disable_int7(void);
+void enable_int7(void);
+void init_timer3(uint8_t bit_time);
+void stop_timer3(void);
 
 
 

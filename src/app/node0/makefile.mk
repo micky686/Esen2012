@@ -12,7 +12,7 @@ OBJ-M-$(MNAME)-y	+= main
 OBJ-ESEL-$(MNAME)-y	+= 
 
 # put module specific used library modules in here
-OBJ-ESEL-MDEP-$(MNAME)-y +=
+OBJ-ESEL-MDEP-$(MNAME)-y += protocoll timer2
 
 # put used scade models in here (need to be defined in 
 # library/scade/Makefile.scade)
