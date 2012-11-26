@@ -11,9 +11,9 @@
 \geometry{margin=1in} % for example, change the margins to 2 inches all round
 \usepackage{longtable}
 \usepackage{booktabs} % for much better looking tables
-%\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{array} % for better arrays (eg matrices) in maths
 \usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
-%\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
 \usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
 %\usepackage{graphicx} % support the \includegraphics command and options
 \usepackage{graphicx}
@@ -61,6 +61,27 @@ Miljenko Jakovljevi\'c, Matrikelnumber 0426673 }
 %\makeatletter
 %\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
 %\makeatother
+
+\makeatletter
+
+\newcommand*{\@rowstyle}{}
+
+\newcommand*{\rowstyle}[1]{% sets the style of the next row
+  \gdef\@rowstyle{#1}%
+  \@rowstyle\ignorespaces%
+}
+
+\newcolumntype{=}{% resets the row style
+  >{\gdef\@rowstyle{}}%
+}
+
+\newcolumntype{+}{% adds the current row style to the next column
+  >{\@rowstyle}%
+}
+
+\makeatother
+
+
 
 \begin{document}
 \maketitle
@@ -482,13 +503,41 @@ end point of a reproduction respectively cloning operation the scheduler needs t
 \subsection{Agent language (Assembler level)}
 \noindent
 To develop a mobile agent \textit{Agent language} will be used. Language is tied to agent internal structure and support necessary operation for code mobility and message exchange. While writing the program for agent user should not be aware of hardware services presented on a given platform, but have common knowledge about all available services and what operations are allowed to do with the services (have list of services and available operations). It is the responsibility of the platform to provide required service to the agent (perform measurement, IO operation) or to manifest an error if the service is not available on the given platform. All current variables are allowed to store only in registers of agent structure (Fig. ~\ref{agent}).
-\\
+
+
 \noindent
 The language supports the following groups of operations: arithmetic, control flow, code mobility, message exchange , access to hardware services.
 
+
+\begin{tabular}{|l|c|l|c|}
+\hline
+\multicolumn{4}{|c|}{\textbf{Addressing registers of agent structure}}\\
+\hline
+\multicolumn{2}{|c|}{\textbf{General purpose registers}} & \multicolumn{2}{c|}{\textbf{Character registers}}\\
+\hline
+Register & \texttt{rrrr} & Char Register & \texttt{rrrr}\\
+\hline
+\texttt{reg_0} & \texttt{0000} & \texttt{reg_str_0} & \texttt{1000}\\
+\hline
+\texttt{reg_1} & \texttt{0001} & \texttt{reg_str_1} & \texttt{1001}\\
+\hline
+\texttt{reg_2} & \texttt{0010} & \texttt{reg_str_2} & \texttt{1010}\\
+\hline
+\texttt{reg_3} & \texttt{0011} &   &  \\
+\hline
+\texttt{reg_4} & \texttt{0100} &   &  \\
+\hline
+\texttt{reg_5} & \texttt{0101} &   &  \\
+\hline
+\texttt{reg_6} & \texttt{0110} &   &  \\
+\hline
+%\texttt{reg_7} & \texttt{0111} &   &  \\
+%\hline
+\end{tabular}
+
 \subsubsection{Arithmetic operations of agent assembly language}
 \noindent
-Addition
+\textbf{Addition}
 
 \noindent
 Add the content of reg1 and reg2 (or value) and put the result into acc.\\
@@ -496,20 +545,124 @@ Add the content of reg1 and reg2 (or value) and put the result into acc.\\
 \texttt{add reg1, reg2}
 
 \noindent
-\texttt{add reg1, value}
+\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+
+\textbf{Syntax}  & \textbf{Operands}   & \textbf{Program counter} & \textbf{Flags}\\
+
+\texttt{add reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, reg_0 $\leq$ reg_r $\leq$ reg_6} & \texttt{PC = PC + 1} & \texttt{C} \\
+
+\multicolumn{2}{l}{\textbf{Operation}} & & \\
+
+\multicolumn{2}{l}{\texttt{acc $\leftarrow$ reg_d + reg_r}} & & \\
+
+\end{tabular}
+
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+\multicolumn{2}{|l|}{} & reg_d & reg_r\\
+\hline
+\texttt{0000} & \texttt{0011} & \texttt{dddd} & \texttt{rrrr}\\
+
+\end{tabular}
+
+\vspace{0.5in}
+\noindent
+\texttt{add reg_r, value}
+\vspace{0.2in}
+
+\noindent
+\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+
+\textbf{Syntax}  & \textbf{Operands}   & \textbf{Program counter} & \textbf{Flags}\\
+
+\texttt{add reg_r, value} & \texttt{reg_0 $\leq$ reg_r $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
+
+\multicolumn{2}{l}{\textbf{Operation}} & & \\
+
+\multicolumn{2}{l}{\texttt{acc $\leftarrow$ reg_r + value}} & & \\
+
+\end{tabular}
+
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+ & reg_r & \multicolumn{2}{c|}{value}\\
+\hline
+\texttt{0101} & \texttt{rrrr} & \texttt{vvvv} & \texttt{vvvv}\\
+
+\end{tabular}
+
+\vspace{0.5in}
+
+\noindent
+\textbf{Subtraction}
+
+\noindent
+Subtract reg_s (or value) from reg_m and put the result into acc.\\
+\noindent
+\texttt{sub reg_m, reg_s}
+
+\noindent
+\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+
+\textbf{Syntax}  & \textbf{Operands}   & \textbf{Program counter} & \textbf{Flags}\\
+
+\texttt{sub reg_m, reg_s} & \texttt{reg_0 $\leq$ reg_m $\leq$ reg_6, reg_0 $\leq$ reg_s $\leq$ reg_6} & \texttt{PC = PC + 1} & \texttt{C} \\
+
+\multicolumn{2}{l}{\textbf{Operation}} & & \\
+
+\multicolumn{2}{l}{\texttt{acc $\leftarrow$ reg_m - reg_s}} & & \\
+
+\end{tabular}
+
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+\multicolumn{2}{|l|}{} & reg_m & reg_s\\
+\hline
+\texttt{0000} & \texttt{0110} & \texttt{mmmm} & \texttt{ssss}\\
+
+\end{tabular}
+
+\vspace{0.5in}
+\noindent
+\texttt{sub reg_m, value}
 \vspace{0.1in}
 
 \noindent
-Subtraction
+\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+
+\textbf{Syntax}  & \textbf{Operands}   & \textbf{Program counter} & \textbf{Flags}\\
+
+\texttt{sub reg_m, value} & \texttt{reg_0 $\leq$ reg_m $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
+
+\multicolumn{2}{l}{\textbf{Operation}} & & \\
+
+\multicolumn{2}{l}{\texttt{acc $\leftarrow$ reg_m - value}} & & \\
+
+\end{tabular}
 
 \noindent
-Subtract reg2 (or value) from reg1 and put the result into acc.\\
-\noindent
-\texttt{sub reg1, reg2}
+16-bit opcode:
 
 \noindent
-\texttt{sub reg1, value}
-\vspace{0.1in}
+\begin{tabular}{|c|c|c|c|}
+ & reg_m & \multicolumn{2}{c|}{value}\\
+\hline
+\texttt{0110} & \texttt{mmmm} & \texttt{vvvv} & \texttt{vvvv}\\
+
+\end{tabular}
+
+\vspace{0.5in}
+
+
 
 \noindent
 Division
