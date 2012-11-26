@@ -18,6 +18,7 @@
 %\usepackage{graphicx} % support the \includegraphics command and options
 \usepackage{graphicx}
 \usepackage{color}
+\usepackage{caption}
 \usepackage[pagebackref=true]{hyperref}
 \hypersetup{
     bookmarks=true,    % show bookmarks bar?
@@ -30,7 +31,7 @@
     citecolor=black,       % color of links to bibliography
     filecolor=black,        % color of file links
     urlcolor=purple,        % color of external links
-    linktoc=page            % only page is linked
+%    linktoc=page            % only page is linked
 }
 \def\myversion{1.0 }
 \title{%
@@ -42,8 +43,6 @@
 %\vspace{1cm}
 Code mobility in \\Networked Embedded System\\
 \vspace{1cm}
-%\vspace{1cm}
-%\title{About Chinese Food}
 \LARGE{Release 0.0.1\\}
 %\vspace{0.5cm}
 %\LARGE{Version \myversion approved\\}
@@ -58,15 +57,17 @@ Miljenko Jakovljevi\'c, Matrikelnumber 0426673 }
 \date{}
 \today
 }
-\usepackage{etoolbox}
-\makeatletter
-\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
-\makeatother
+%\usepackage{etoolbox}
+%\makeatletter
+%\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
+%\makeatother
 
 \begin{document}
 \maketitle
+
 \tableofcontents
-\renewcommand{\familydefault}{\sfdefault}
+
+%\renewcommand{\familydefault}{\sfdefault}
 \clearpage
 
 \chapter{Introduction}
@@ -76,7 +77,7 @@ Miljenko Jakovljevi\'c, Matrikelnumber 0426673 }
 The specification defines the goals that should meet the project "Code mobility in Networked Embedded system". It is written by project members listed on the title page to precisely identify the goals to meet at the end of the project.
 \\
 \noindent
-The purpose of the project is to build code mobility platform on Embedded system engineering board \cite{Gallaher}. Our goal is to develop the system that allows users to build and execute simple agent program on top of  hardware ESE platform. To achieve the goal we propose to develop three layered structure: agent layer, platform layer, communication layer. Developer of the agent program should not aware of location of the services available on the platform and details about method to access the particular service. Given list of services agent is executed on a platform that is
+The purpose of the project is to build code mobility platform on Embedded system engineering board \cite{gallaher}. Our goal is to develop the system that allows users to build and execute simple agent program on top of  hardware ESE platform. To achieve the goal we propose to develop three layered structure: agent layer, platform layer, communication layer. Developer of the agent program should not aware of location of the services available on the platform and details about method to access the particular service. Given list of services agent is executed on a platform that is
 
 	%\section{Scope}
 
@@ -307,7 +308,7 @@ Identify and describe the process that will be used to update the SRS, as needed
 
 The following figure depicts the general outline of the code mobility project.
 
-\begin{figure}[!htbp]
+\begin{figure}[!htb]
 \includegraphics[scale=0.4]{figures/global.png}
 \caption{Overview}
 \end{figure}
@@ -327,7 +328,8 @@ the platform should allow the concurrent execution of the agents. Therefore some
 data protection for the agent memory is required. This is achieved by assigning each of the agents an own 
 memory segment and not allowing any other agent to access any other memory but its own. If some collaboration 
 between the agents is required this must be requested via the communication service. The metadata of an agent 
-as its code and memory segment will be stored in a structure that is shown in the figure below. \newline
+as its code and memory segment will be stored in a structure that is shown in the figure below. 
+
 
 \begin{figure}[!htbp]
 \begin{center}
@@ -345,12 +347,12 @@ of the agent language. Additonally there are 3 char general purpose registers. T
 command will be written to the accumulator. There is also a program counter which is used for the execution of the
 agent and the numerical agent language representation is stored as well. The agent structure also contains a buffer
 for receiving messages from other agents and variable to store the id of the received message.
-\newline
-\\
+
+
 \noindent
 In order to reproduce the agent on another board or node the agent’s structure needs to be serialized and transmitted via the communication layer.
-\newline
-\\
+
+
 \noindent
 Additionally the virtualization platform has to provide the agent developer with some means to deploy the agent
 executable to the virtualization platform, during compilation of the platform. During the initialization of the
@@ -371,9 +373,11 @@ The agent language provides means for:
 \end{itemize}
 
 
+\noindent
 If a function of the agent language returns a value, this value will be stored in the accumulator, 
-where it can be used later on for further operations e.g. comparison etc. \newline
-\\
+where it can be used later on for further operations e.g. comparison etc. 
+
+
 \noindent
 The basic workflow of the execution layer as soon it is called by the scheduler is to read the next 
 agent language opcode (all agent opcodes have a fixed length) as identified by the program counter, 
@@ -393,14 +397,16 @@ The virtualization platform provides access to the hardware attached to a node v
 device drivers. The methods of the device drivers are made public to the execution layer which in turns 
 allows the agents to access these methods. As the hardware supported by a node differs from node to node 
 the virtualization platform should be able to discover during its initialization which hardware is supported 
-on the node where it’s running. \newline
-\\
+on the node where it’s running. 
+
+
 \noindent
 This will be achieved by defining a global set of function pointers within the virtualization platform. 
 This set should contain all possible methods of all available device drivers. During initialization the platform 
 will assign the according function pointer to a method provided by the device driver if the device is supported, 
-otherwise the according function pointer will stay null. \newline
-\\
+otherwise the according function pointer will stay null. 
+
+
 \noindent
 All device drivers should support the method init_driver, which will be called by the platform during its initialization. 
 Even if a hardware device is not supported on a given node, there should be at least a dummy device driver for it present, 
@@ -411,27 +417,31 @@ to device drivers without necessity to change the platform code.
 \section{Communication Layer}
 
 The agents should be able to communicate with other agents on the same node or on the same board. Therefore the agent 
-language provides means to request the sending or receiving of a message.  \newline
-\\
+language provides means to request the sending or receiving of a message.  
+
+
 \noindent
 The sending function is blocking the further execution of the agent until the message is sent respectively received. 
 When an agent wants to send a message this message is proceeded to the communications service which takes care of the 
 actual transmission. While the sending procedure is ongoing the further execution of the sending agent is blocked. 
 Its status in the agent structure is set to “blocked”. As soon as the communication service signalizes a successful 
 message transmission or a failure the result of the sending function is written to the accumulator and the agent will 
-be made available for further execution.  \newline
-\\
+be made available for further execution.  
+
+
 \noindent
 When an agent sends a message to another agent, the receiving platform stores the id of the message and its content 
 to the receiver agent structure. The receiving agent is able to retrieve the last message from its buffer. 
 However only one message can be stored within the receiving agent structure and the next message will overwrite the 
-content and possible the id of the last message.  \newline
-\\
+content and possible the id of the last message.  
+
+
 \noindent
 The communication service provides no guarantees that sending of a message will succeed; it works on a best effort 
 approach. Therefore the agent developer has to make sure by reading the return value of a sending operation whether 
-the message was successfully sent or not and should initialize a retransmission in case of failure. \newline
-\\
+the message was successfully sent or not and should initialize a retransmission in case of failure. 
+
+
 \noindent
 Every message sent should be identified by an id, in order to allow the transmission of messages with different semantics.
 
@@ -444,20 +454,20 @@ the node address which should result in sending the message to all agents identi
 The main task of the scheduler which is part of the virtualization platform is to identify the next agent to be executed 
 and to utilize the execution layer to perform the execution of the according agent. The decision which agent to be chosen 
 should be made on a static priority based scheduling policy.
-\newline
-\\
+
+
 \noindent
 Every agent is assigned a priority (0..3) by the agent developer which is stored within the agent structure. 
 The highest priority is 3 and the lowest priority is 0. Based on the priorities of the currently running agents 
 the scheduler creates a static list by which the order of the agent execution is defined. The scheduler instructs 
 the execution layer to execute exactly priority + 1 opcodes for a given agent. Eventually the control returns to 
 the scheduler and the next agent from the list is picked. The list is iterated cyclically.
-\newline
-\\
+
+
 \noindent
 If an agent which is to be scheduled next is currently blocked by a sending operation, then its execution should be omitted. 
-\newline
-\\
+
+
 \noindent
 As an agent can reproduce it self to another node or board or clone itself within the same platform the scheduling 
 list requires adaptation as soon as new agent is deployed on a platform. Whenever a given platform is the destination 
@@ -474,159 +484,230 @@ The language supports the following groups of operations: arithmetic, control fl
 
 \subsubsection{Arithmetic operations of agent assembly language}
 \noindent
-Addition\\
+Addition
+
 \noindent
 Add the content of reg1 and reg2 (or value) and put the result into acc.\\
 \noindent
-\texttt{add reg1, reg2}\\
-\texttt{add reg1, value}\\
-
+\texttt{add reg1, reg2}
 
 \noindent
-Subtraction\\
+\texttt{add reg1, value}
+\vspace{0.1in}
+
+\noindent
+Subtraction
+
 \noindent
 Subtract reg2 (or value) from reg1 and put the result into acc.\\
 \noindent
-\texttt{sub reg1, reg2}\\
-\texttt{sub reg1, value}\\
-
+\texttt{sub reg1, reg2}
 
 \noindent
-Division\\
+\texttt{sub reg1, value}
+\vspace{0.1in}
+
+\noindent
+Division
+
 \noindent
 Divide reg1 by reg2 (or value) and put the result into acc.\\
 \noindent
-\texttt{div reg1, reg2}\\
-\texttt{div reg1, value}\\
-
+\texttt{div reg1, reg2}
 
 \noindent
-Multiplication\\
+\texttt{div reg1, value}
+\vspace{0.1in}
+
+\noindent
+Multiplication
 \noindent
 Multiply reg1 and reg2 (or value) and put the result into acc.\\
 \noindent
-\texttt{mul reg1, reg2}\\
-\texttt{mul reg1, value}\\
+\texttt{mul reg1, reg2}
+
 \noindent
+\texttt{mul reg1, value}
+
 
 \subsubsection{Control flow operations and comparison in agent assembly language}
 \noindent
-Jump if greater\\
+Jump if greater
+
 \noindent
-Jump to addr in code segment of agent structure if the value of acc. is 1.\\
+Jump to addr in code segment of agent structure if the value of acc. is 1.
+
 \noindent
-\texttt{jmpgr  addr}\\
+\texttt{jmpgr  addr}
+\vspace{0.1in}
 
 
 \noindent
-Jump if equal\\
-\noindent
-Jump to addr in code segment of agent structure if the value of acc. is 0.\\
-\noindent
-\texttt{jmpeq  addr}\\
-
+Jump if equal
 
 \noindent
-Jump if less\\
-\noindent
-Jump to addr in code segment of agent structure if the value of acc. is -1.\\
-\texttt{jmpls  addr}\\
-
+Jump to addr in code segment of agent structure if the value of acc. is 0.
 
 \noindent
-Comparison\\
+\texttt{jmpeq  addr}
+\vspace{0.1in}
+
 \noindent
-Compare reg1 and reg2 (or value).\\ If reg1 $>$ reg2 put 1 into acc,\\ if reg1 $=$ reg2 put 0 into acc,\\ if reg1 $<$ reg2 put -1 into acc.\\
+Jump if less
+
 \noindent
-\texttt{compare reg1, reg2}\\
-\texttt{compare reg1, value}\\
+Jump to addr in code segment of agent structure if the value of acc. is -1.
+
+\noindent
+\texttt{jmpls  addr}
+\vspace{0.1in}
+
+\noindent
+Comparison
+
+\noindent
+Compare reg1 and reg2 (or value).
+
+\noindent
+If reg1 $>$ reg2 put 1 into acc,
+
+\noindent
+if reg1 $=$ reg2 put 0 into acc,
+
+\noindent
+if reg1 $<$ reg2 put -1 into acc.
+
+\noindent
+\texttt{compare reg1, reg2}
+
+\noindent
+\texttt{compare reg1, value}
 
 
 \subsubsection{Code mobility operations of agent assembly language}
 \noindent
-Move code\\
+Move code
+
 \noindent
-Move agent structure to platform that possess required service\\
+Move agent structure to platform that possess required service
+
 \noindent
-\texttt{move service}\\
+\texttt{move service}
+\vspace{0.1in}
 
 
 \noindent
-Clone code\\
+Clone code
+
 \noindent
-Replicate agent structure on the given platform\\
+Replicate agent structure on the given platform
+
 \noindent
-\texttt{clone}\\
+\texttt{clone}
+\vspace{0.1in}
 
 
 \noindent
-Die\\
+Die
+
 \noindent
-Destroy agent structure and free corresponding memory\\
+Destroy agent structure and free corresponding memory
+
 \noindent
-\texttt{die}\\
+\texttt{die}
 
 \subsubsection{Message exchange}
 \noindent
-Send\\
-\noindent
-Send acc. value to platform.\\
-\noindent
-\texttt{sendmsg platform}\\
+Send
 
 \noindent
-Receive\\
+Send acc. value to platform.
+
 \noindent
-Pull message from platform to acc.\\
+\texttt{sendmsg platform}
+\vspace{0.1in}
+
 \noindent
-\texttt{pullmsg}\\
+Receive
+
+\noindent
+Pull message from platform to acc.
+
+\noindent
+\texttt{pullmsg}
 
 \subsubsection{Store, move and wait operations}
 \noindent
-Store\\
-\noindent
-Store value in register\\
-Store character in register\\
-\noindent
-\texttt{store reg, value}\\
-\texttt{storecr reg, char}\\
+Store
 
 \noindent
-Move\\
-\noindent
-Move value from reg2 to reg1\\
-\noindent
-\texttt{mv reg1, reg2}\\
+Store value in register
 
 \noindent
-Wait\\
-\noindent
-Wait until event??\\
-\noindent
-\texttt{wait }\\
+Store character in register
 
 \noindent
-Assign priority value\\
+\texttt{store reg, value}
+
 \noindent
-Assign priority of the agent to value in range 0..3\\
+\texttt{storecr reg, char}
+\vspace{0.1in}
+
+
 \noindent
-\texttt{priority value}\\
+Move
+
+\noindent
+Move value from reg2 to reg1
+
+\noindent
+\texttt{mv reg1, reg2}
+\vspace{0.1in}
+
+\noindent
+Wait
+
+\noindent
+Wait until event??
+
+\noindent
+\texttt{wait }
+\vspace{0.1in}
+
+\noindent
+Assign priority value
+
+\noindent
+Assign priority of the agent to value in range 0..3
+
+\noindent
+\texttt{priority value}
+
 
 \subsubsection{Access to hardware services}
 \noindent
-Set\\
-\noindent
-Set service to reg or value\\
-\noindent
-\texttt{setservice reg}\\
-\texttt{setservice value}\\
+Set
 
 \noindent
-Get\\
+Set service to reg or value
+
 \noindent
-Put corresponding value from the service to the acc.\\
+\texttt{setservice reg}
+
 \noindent
-\texttt{getsetvice }\\
+\texttt{setservice value}
+\vspace{0.1in}
+
+
+\noindent
+Get
+
+\noindent
+Put corresponding value from the service to the acc.
+
+\noindent
+\texttt{getsetvice }
+\vspace{0.1in}
 
 
 \begin{comment}
@@ -870,7 +951,6 @@ b) remote mobility: destination is the gateway node 4.
 The gateway is to contain a zigbee stack implementation to enable 
 access to the personal area network.
 
-
 \subsection{Addressing Scheme}
 Simple local addressing requires unique identifiers for
 each node. The requirement is that this be compatible with the time-triggered protocol
@@ -1004,5 +1084,9 @@ Platform for mobile agents:
 %	\section{Training}
 \end{comment}
 % add other chapters and sections to suit
+
+	\bibliography{nes}
+
+	\bibliographystyle{plain}
 \end{document}
 
