@@ -19,7 +19,7 @@
 \usepackage{graphicx}
 \usepackage{color}
 \usepackage{caption}
-\usepackage[pagebackref=true]{hyperref}
+\usepackage{hyperref}
 \hypersetup{
     bookmarks=true,    % show bookmarks bar?
     pdftitle={Specification},    % title
@@ -75,9 +75,9 @@ Miljenko Jakovljevi\'c, Matrikelnumber 0426673 }
 	\section{Purpose}
 
 The specification defines the goals that should meet the project "Code mobility in Networked Embedded system". It is written by project members listed on the title page to precisely identify the goals to meet at the end of the project.
-\\
+\vspace{0.1in}
 \noindent
-The purpose of the project is to build code mobility platform on Embedded system engineering board \cite{gallaher}. Our goal is to develop the system that allows users to build and execute simple agent program on top of  hardware ESE platform. To achieve the goal we propose to develop three layered structure: agent layer, platform layer, communication layer. Developer of the agent program should not aware of location of the services available on the platform and details about method to access the particular service. Given list of services agent is executed on a platform that is
+The purpose of the project is to build code mobility platform on Embedded system engineering board \cite{galler}. Our goal is to develop the system that allows users to build and execute simple agent program on top of  hardware ESE platform. To achieve the goal we propose to develop three layered structure: agent layer, platform layer, communication layer. Developer of the agent program should not aware of location of the services available on the platform and details about method to access the particular service. Given list of services agent is executed on a platform that is
 
 	%\section{Scope}
 
@@ -85,13 +85,17 @@ The purpose of the project is to build code mobility platform on Embedded system
 
 By \emph{code mobility} we mean the capability of code to change the location where it is executed.
 
+\vspace{0.1in}
+\noindent
 \emph{Strong} code mobility is the ability to allow migration of both code and execution state to the destination, \emph{weak} code mobility allows code transfer but it does not involve the transfer of the execution state.
 
+\vspace{0.1in}
+\noindent
 \emph{Platform} is a component that provides corresponding hardware services to 
 
 	\section{Background}
-\noindent
 
+\noindent
 The research has been done to use code mobility in distributed environment \cite{Bart1} and various application has been developed including \cite{Bart2} web application platform that allows people without major programming experience to develop the application as work-flow specification in graphical form. The use of code mobility is to "move the knowledge close to the resources" \cite{Picco} and enable higher flexibility of accessing remote resources.
 	%\section{References}
 
@@ -1085,8 +1089,9 @@ Platform for mobile agents:
 \end{comment}
 % add other chapters and sections to suit
 
-	\bibliography{nes}
+	\bibliography{spec}
 
 	\bibliographystyle{plain}
+
 \end{document}
 
