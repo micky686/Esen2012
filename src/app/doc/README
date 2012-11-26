@@ -1,0 +1,2 @@
+The makefile in this directory will take the necessary steps to produce a esp_prot.pdf document. There is also a spellcheck.sh script which can be called with single tex files to check spelling (You should do that before you submit!). 
+Also the makefile supports the target 'spell' which will check ese_prot.tex and all tex files within the tex subdirectory.

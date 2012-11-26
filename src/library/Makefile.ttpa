@@ -1,0 +1,9 @@
+TTPA_MONOBJ	= mon_statem.o mon_uart.o ms_request.o
+TTPA_SIGOBJ	= linkedlist.o ttpasignal.o
+TTPA_MSTOBJ	= bus_swuart.o ifs.o ifs_bitvec.o ifs_rodl.o ifs_weaks.o \
+ifs_filetab.o ifs_init.o ifs_exechrec.o ms.io ms_master.io ttpa.o ttpa_fb.o \
+ttpa_lifesign.o ttpa_master.io ttpa_sysfiles.io schedule.o main.o
+TTPA_SLVOBJ	= bus_swuart.o bus_swuart_slave.o ifs.o ifs_bitvec.o ifs_rodl.o \
+ifs_weaks.o ifs_filetab.o ifs_init.o ifs_exechrec.io ms.io ms_slave.io \
+ttpa.o ttpa_fb.o ttpa_lifesign.o ttpa_slave.o ttpa_sysfiles.io ms_request.o \
+schedule.o main.o
