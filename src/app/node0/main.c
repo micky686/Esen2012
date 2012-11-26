@@ -11,24 +11,30 @@
 #include "util/delay.h"
 
 void rcv_handler(uint8_t msg_length, uint8_t *msg_body);
-void wr_to_bargraph(uint8 val);
+void wr_to_bargraph(uint8_t val);
 
 
 int main(void) {
-  uint8 i;
+  uint8_t i;
+  uint8_t m[1];
 
   DDRF |= (1 << PF3);
   PORTF &= ~(1 << PF3);
   DDRF |= (1 << PF2);
   PORTF &= ~(1 << PF2);  
   
-  protocol_init(255,rcv_handler);
+  wr_to_bargraph(1);
 
-  i = 0;
-  while(TRUE) {    
-    send_msg(1, &i);
+  protocol_init(2,rcv_handler);
+  sei();
+
+  i = 1;
+  while(TRUE) {
+    m[0] = i;    
+    send_msg(0x42,m);
+    wr_to_bargraph(i);
     i++;
-    _delay_ms(100);    
+    _delay_ms(1000);    
   }
 
   while(TRUE);
@@ -74,7 +80,7 @@ void rcv_handler(uint8_t msg_length, uint8_t *msg_body) {
   */
 } 
 
-void wr_to_bargraph(uint8 val) {
-  LEDS_DDR_ND0 |= val; 
-  LEDS_PORT_ND0 &= ~(val);
+void wr_to_bargraph(uint8_t val) {
+  LEDS_DDR_ND0 = val; 
+  LEDS_PORT_ND0 = ~(val);
 }
