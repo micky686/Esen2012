@@ -19,7 +19,9 @@ int main(void) {
   DDRF |= (1 << PF2);
   PORTF &= ~(1 << PF2);  
 
+  wr_to_bargraph(5);
   protocol_init(4,rcv_handler);
+  sei();
 
   while(TRUE);
   return 1;
@@ -56,11 +58,11 @@ int main2(void)
 }
 
 void rcv_handler(uint8_t msg_length, uint8_t *msg_body) {
-  if (msg_length > 0) {
+  //if (msg_length > 0) {
     wr_to_bargraph(msg_body[0]);
-  } else {
+  //} else {
     //debug
-  }
+  //}
 } 
 
 void wr_to_bargraph(char val) {

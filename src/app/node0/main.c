@@ -16,6 +16,7 @@ void wr_to_bargraph(uint8_t val);
 
 int main(void) {
   uint8_t i;
+  uint8_t m[1];
 
   DDRF |= (1 << PF3);
   PORTF &= ~(1 << PF3);
@@ -25,13 +26,15 @@ int main(void) {
   wr_to_bargraph(1);
 
   protocol_init(2,rcv_handler);
+  sei();
 
   i = 1;
-  while(TRUE) {    
-    //send_msg(1, &i);
+  while(TRUE) {
+    m[0] = i;    
+    send_msg(0x42,m);
     wr_to_bargraph(i);
     i++;
-    _delay_ms(10);    
+    _delay_ms(1000);    
   }
 
   while(TRUE);
