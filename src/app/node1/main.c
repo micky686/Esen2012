@@ -19,7 +19,7 @@ int main(void) {
   DDRF |= (1 << PF2);
   PORTF &= ~(1 << PF2);  
 
-  protocol_init(255,rcv_handler);
+  protocol_init(4,rcv_handler);
 
   while(TRUE);
   return 1;
@@ -64,6 +64,7 @@ void rcv_handler(uint8_t msg_length, uint8_t *msg_body) {
 } 
 
 void wr_to_bargraph(char val) {
-  LEDS_DDR_ND0 |= val; 
-  LEDS_PORT_ND0 &= ~(val);
+  LEDS_DDR_ND0 = val; 
+  LEDS_PORT_ND0 = ~(val);
 }
+
