@@ -19,7 +19,6 @@ int main(void) {
   DDRF |= (1 << PF2);
   PORTF &= ~(1 << PF2);  
 
-  wr_to_bargraph(5);
   protocol_init(4,rcv_handler);
   sei();
 

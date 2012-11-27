@@ -19,7 +19,7 @@ volatile uint8_t checksum=0;
 volatile uint8_t help;
 volatile uint8_t length;
 volatile uint8_t msg_id = 0;
-volatile uint8_t message[15];
+volatile uint8_t message[PROTCL_MAX_MESSAGE];
 volatile uint8_t *msg_pointer;
 volatile uint8_t msg_index;
 volatile uint8_t node_id=0;
@@ -183,6 +183,17 @@ void disable_int7(void)
 
  }
 
+/**
+   Function: 
+   send_msg  
+   - Sends data to a node over serial line. 
+   - Global interrupt flag needs to be enabled. 
+   Parameters: 
+   message_header - format 0brrrrllll
+   - rrrr -destination node id
+   - llll  body length plus 1; 
+   msg_body - payload; maximum length is 14;   
+ */
 int8_t send_msg(uint8_t message_header, uint8_t *msg_body)
 {
 uint8_t anzahl_versuche = 0;

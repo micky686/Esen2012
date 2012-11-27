@@ -48,7 +48,7 @@
 #define SET_BUS_HIGH (HW0_PORT |= (1<<HW0_TX))
 #define SET_BUS_LOW  (HW0_PORT &= ~(1<<HW0_TX))
 
-
+#define  PROTCL_MAX_MESSAGE            15
 # define BAUD                57600
 # define MODE_8E1            0x26       /*8 bits, even parity, 1 stop bit*/
 
