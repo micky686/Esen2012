@@ -85,7 +85,6 @@ Miljenko Jakovljevi\'c, Matrikelnumber 0426673 }
 
 \begin{document}
 \maketitle
-
 \tableofcontents
 
 %\renewcommand{\familydefault}{\sfdefault}
@@ -540,18 +539,18 @@ Register & \texttt{rrrr} & Char Register & \texttt{rrrr}\\
 \textbf{Addition}
 
 \noindent
-Add the content of reg1 and reg2 (or value) and put the result into acc.\\
+Add the content of \texttt{reg_d} and \texttt{reg_r} (or \texttt{value}) and put the result into \texttt{acc}.\\
 \noindent
-\texttt{add reg1, reg2}
+\framebox{\texttt{add reg_d, reg_r}}
 
 \noindent
 \begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
 
-\textbf{Syntax}  & \textbf{Operands}   & \textbf{Program counter} & \textbf{Flags}\\
+Syntax  & Operands   & Program counter & Flags\\
 
 \texttt{add reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, reg_0 $\leq$ reg_r $\leq$ reg_6} & \texttt{PC = PC + 1} & \texttt{C} \\
 
-\multicolumn{2}{l}{\textbf{Operation}} & & \\
+\multicolumn{2}{l}{Operation} & & \\
 
 \multicolumn{2}{l}{\texttt{acc $\leftarrow$ reg_d + reg_r}} & & \\
 
@@ -570,17 +569,17 @@ Add the content of reg1 and reg2 (or value) and put the result into acc.\\
 
 \vspace{0.5in}
 \noindent
-\texttt{add reg_r, value}
+\framebox{\texttt{add reg_r, value}}
 \vspace{0.2in}
 
 \noindent
 \begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
 
-\textbf{Syntax}  & \textbf{Operands}   & \textbf{Program counter} & \textbf{Flags}\\
+Syntax  & Operands   & Program counter & Flags\\
 
 \texttt{add reg_r, value} & \texttt{reg_0 $\leq$ reg_r $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
 
-\multicolumn{2}{l}{\textbf{Operation}} & & \\
+\multicolumn{2}{l}{Operation} & & \\
 
 \multicolumn{2}{l}{\texttt{acc $\leftarrow$ reg_r + value}} & & \\
 
@@ -593,7 +592,7 @@ Add the content of reg1 and reg2 (or value) and put the result into acc.\\
 \begin{tabular}{|c|c|c|c|}
  & reg_r & \multicolumn{2}{c|}{value}\\
 \hline
-\texttt{0101} & \texttt{rrrr} & \texttt{vvvv} & \texttt{vvvv}\\
+\texttt{0011} & \texttt{rrrr} & \texttt{vvvv} & \texttt{vvvv}\\
 
 \end{tabular}
 
@@ -603,18 +602,18 @@ Add the content of reg1 and reg2 (or value) and put the result into acc.\\
 \textbf{Subtraction}
 
 \noindent
-Subtract reg_s (or value) from reg_m and put the result into acc.\\
+Subtract \texttt{reg_s} (or \texttt{value}) from \texttt{reg_m} and put the result into \texttt{acc}.\\
 \noindent
-\texttt{sub reg_m, reg_s}
+\framebox{\texttt{sub reg_m, reg_s}}
 
 \noindent
 \begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
 
-\textbf{Syntax}  & \textbf{Operands}   & \textbf{Program counter} & \textbf{Flags}\\
+Syntax  & Operands   & Program counter & Flags\\
 
 \texttt{sub reg_m, reg_s} & \texttt{reg_0 $\leq$ reg_m $\leq$ reg_6, reg_0 $\leq$ reg_s $\leq$ reg_6} & \texttt{PC = PC + 1} & \texttt{C} \\
 
-\multicolumn{2}{l}{\textbf{Operation}} & & \\
+\multicolumn{2}{l}{Operation} & & \\
 
 \multicolumn{2}{l}{\texttt{acc $\leftarrow$ reg_m - reg_s}} & & \\
 
@@ -633,17 +632,17 @@ Subtract reg_s (or value) from reg_m and put the result into acc.\\
 
 \vspace{0.5in}
 \noindent
-\texttt{sub reg_m, value}
+\framebox{\texttt{sub reg_m, value}}
 \vspace{0.1in}
 
 \noindent
 \begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
 
-\textbf{Syntax}  & \textbf{Operands}   & \textbf{Program counter} & \textbf{Flags}\\
+Syntax  & Operands   & Program counter & Flags\\
 
 \texttt{sub reg_m, value} & \texttt{reg_0 $\leq$ reg_m $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
 
-\multicolumn{2}{l}{\textbf{Operation}} & & \\
+\multicolumn{2}{l}{Operation} & & \\
 
 \multicolumn{2}{l}{\texttt{acc $\leftarrow$ reg_m - value}} & & \\
 
@@ -665,137 +664,456 @@ Subtract reg_s (or value) from reg_m and put the result into acc.\\
 
 
 \noindent
-Division
+\textbf{Division}
 
 \noindent
 Divide reg1 by reg2 (or value) and put the result into acc.\\
 \noindent
-\texttt{div reg1, reg2}
+\framebox{\texttt{div reg_d, reg_r}}
 
 \noindent
-\texttt{div reg1, value}
+\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+
+Syntax  & Operands   & Program counter & Flags\\
+
+\texttt{div reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, reg_0 $\leq$ reg_r $\leq$ reg_6} & \texttt{PC = PC + 1} & \texttt{C} \\
+
+\multicolumn{2}{l}{Operation} & & \\
+
+\multicolumn{2}{l}{\texttt{acc $\leftarrow$ reg_d / reg_r}} & & \\
+
+\end{tabular}
+
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+\multicolumn{2}{|l|}{} & reg_d & reg_r\\
+\hline
+\texttt{0000} & \texttt{1001} & \texttt{dddd} & \texttt{rrrr}\\
+
+\end{tabular}
+
+\vspace{0.5in}
+\noindent
+\framebox{\texttt{div reg_d, value}}
 \vspace{0.1in}
 
 \noindent
-Multiplication
-\noindent
-Multiply reg1 and reg2 (or value) and put the result into acc.\\
-\noindent
-\texttt{mul reg1, reg2}
+\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+
+Syntax  		  & Operands   								     & Program counter       & Flags\\
+
+\texttt{div reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
+
+\multicolumn{2}{l}{Operation} 									      & 		     & \\
+
+\multicolumn{2}{l}{\texttt{acc $\leftarrow$ reg_d / value}} & & \\
+
+\end{tabular}
 
 \noindent
-\texttt{mul reg1, value}
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+ & reg_d & \multicolumn{2}{c|}{value}\\
+\hline
+\texttt{1001} & \texttt{dddd} & \texttt{vvvv} & \texttt{vvvv}\\
+
+\end{tabular}
+
+\vspace{0.2in}
+
+\noindent
+\textbf{Multiplication}
+
+
+\noindent
+Multiply \texttt{reg1} and \texttt{reg2} (or \texttt{value}) and put the result into \texttt{acc}.\\
+\noindent
+\framebox{\texttt{mul reg_d, reg_r}}
+
+\noindent
+\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+
+Syntax  & Operands   & Program counter & Flags\\
+
+\texttt{mul reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, reg_0 $\leq$ reg_r $\leq$ reg_6} & \texttt{PC = PC + 1} & \texttt{C} \\
+
+\multicolumn{2}{l}{Operation} & & \\
+
+\multicolumn{2}{l}{\texttt{acc $\leftarrow$ reg_d * reg_r}} & & \\
+
+\end{tabular}
+
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+\multicolumn{2}{|l|}{} & reg_d & reg_r\\
+\hline
+\texttt{0000} & \texttt{1100} & \texttt{dddd} & \texttt{rrrr}\\
+
+\end{tabular}
+
+\vspace{0.5in}
+\noindent
+\framebox{\texttt{mul reg1, value}}
+\vspace{0.1in}
+
+\noindent
+\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+
+Syntax  		  & Operands   								     & Program counter       & Flags\\
+
+\texttt{mul reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
+
+\multicolumn{2}{l}{Operation} 									      & 		     & \\
+
+\multicolumn{2}{l}{\texttt{acc $\leftarrow$ reg_d * value}} & & \\
+
+\end{tabular}
+
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+ & reg_d & \multicolumn{2}{c|}{value}\\
+\hline
+\texttt{1100} & \texttt{dddd} & \texttt{vvvv} & \texttt{vvvv}\\
+
+\end{tabular}
 
 
 \subsubsection{Control flow operations and comparison in agent assembly language}
 \noindent
-Jump if greater
+\textbf{Jump if greater}
 
 \noindent
-Jump to addr in code segment of agent structure if the value of acc. is 1.
+Jump to  \texttt{offset} in code segment of agent structure if the value of \texttt{acc}. is 1.
 
 \noindent
-\texttt{jmpgr  addr}
-\vspace{0.1in}
-
-
-\noindent
-Jump if equal
-
-\noindent
-Jump to addr in code segment of agent structure if the value of acc. is 0.
-
-\noindent
-\texttt{jmpeq  addr}
+\framebox{\texttt{jmpgr  offset}}
 \vspace{0.1in}
 
 \noindent
-Jump if less
+\begin{tabular}{+p{1.3in}+p{2.2in}+p{2.3in}}
+Syntax  		  & Operands   								     & Program counter       \\
+
+\texttt{jmpgr  offset} & \texttt{-128 $\leq$ offset $\leq$ +127} & \texttt{PC = PC + offset +1} if \texttt{acc = 1}, \texttt{PC = PC + 1} otherwise \\
+
+\end{tabular}
 
 \noindent
-Jump to addr in code segment of agent structure if the value of acc. is -1.
+16-bit opcode:
 
 \noindent
-\texttt{jmpls  addr}
+\begin{tabular}{|c|c|c|c|}
+ \multicolumn{2}{|c|}{} & \multicolumn{2}{c|}{offset}\\
+\hline
+\texttt{1111} & \texttt{0011} & \texttt{vvvv} & \texttt{vvvv}\\
+
+\end{tabular}
+
+\vspace{0.4in}
+\noindent
+\textbf{Jump if equal}
+
+\noindent
+Jump to \texttt{offset} in code segment of agent structure if the value of acc. is 0.
+
+\noindent
+\framebox{\texttt{jmpeq  offset}}
 \vspace{0.1in}
 
 \noindent
-Comparison
+\begin{tabular}{+p{1.3in}+p{2.2in}+p{2.3in}}
+Syntax  		  & Operands   								     & Program counter       \\
+
+\texttt{jmpeq  offset} & \texttt{-128 $\leq$ offset $\leq$ +127} & \texttt{PC = PC + offset +1} if \texttt{acc = 0}, \texttt{PC = PC + 1} otherwise \\
+
+\end{tabular}
 
 \noindent
-Compare reg1 and reg2 (or value).
+16-bit opcode:
 
 \noindent
-If reg1 $>$ reg2 put 1 into acc,
+\begin{tabular}{|c|c|c|c|}
+ \multicolumn{2}{|c|}{} & \multicolumn{2}{c|}{offset}\\
+\hline
+\texttt{1111} & \texttt{0110} & \texttt{vvvv} & \texttt{vvvv}\\
+
+\end{tabular}
+
+
+\vspace{0.4in}
+\noindent
+\textbf{Jump if less}
 
 \noindent
-if reg1 $=$ reg2 put 0 into acc,
+Jump to \texttt{offset} in code segment of agent structure if the value of acc. is -1.
 
 \noindent
-if reg1 $<$ reg2 put -1 into acc.
+\framebox{\texttt{jmpls  offset}}
+\vspace{0.1in}
 
 \noindent
-\texttt{compare reg1, reg2}
+\begin{tabular}{+p{1.3in}+p{2.2in}+p{2.4in}}
+Syntax  		  & Operands   								     & Program counter       \\
+
+\texttt{jmpls  offset} & \texttt{-128 $\leq$ offset $\leq$ +127} & \texttt{PC = PC + offset +1} if \texttt{acc = -1}, \texttt{PC = PC + 1} otherwise \\
+
+\end{tabular}
 
 \noindent
-\texttt{compare reg1, value}
+16-bit opcode:
 
+\noindent
+\begin{tabular}{|c|c|c|c|}
+ \multicolumn{2}{|c|}{} & \multicolumn{2}{c|}{offset}\\
+\hline
+\texttt{1111} & \texttt{1100} & \texttt{vvvv} & \texttt{vvvv}\\
+
+\end{tabular}
+
+\vspace{0.4in}
+\noindent
+\textbf{Comparison}
+
+\noindent
+Compare \texttt{reg1} and \texttt{reg2} (or \texttt{value}).
+
+%\noindent
+%If reg1 $>$ reg2 put 1 into acc,
+
+%\noindent
+%if reg1 $=$ reg2 put 0 into acc,
+
+%\noindent
+%if reg1 $<$ reg2 put -1 into acc.
+
+\noindent
+\framebox{\texttt{compare reg_d, reg_r}}
+
+\noindent
+\begin{tabular}{+p{1.8in}+p{2.2in}+p{1.3in}}
+
+Syntax  & Operands   & Program counter \\
+
+\texttt{compare reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, reg_0 $\leq$ reg_r $\leq$ reg_6} & \texttt{PC = PC + 1} \\
+
+\multicolumn{3}{l}{Operation} \\
+
+\multicolumn{2}{l}{\texttt{acc $\leftarrow$ 1} if (reg_d - reg_r $>$ 0)}  & \\
+\multicolumn{2}{l}{\texttt{acc $\leftarrow$ 0} if (reg_d - reg_r $=$ 0)}  & \\
+\multicolumn{2}{l}{\texttt{acc $\leftarrow$ -1} if (reg_d - reg_r $<$ 0)}  & \\
+\end{tabular}
+
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+\multicolumn{2}{|l|}{} & reg_d & reg_r\\
+\hline
+\texttt{0000} & \texttt{1010} & \texttt{dddd} & \texttt{rrrr}\\
+
+\end{tabular}
+
+\vspace{0.4in}
+\noindent
+\framebox{\texttt{compare reg_d, value}}
+
+\noindent
+\begin{tabular}{+p{1.9in}+p{2.2in}+p{1.3in}}
+
+Syntax  & Operands   & Program counter \\
+
+\texttt{compare reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} \\
+
+\multicolumn{3}{l}{Operation} \\
+
+\multicolumn{2}{l}{\texttt{acc $\leftarrow$ 1} if (reg_d - value $>$ 0)}  & \\
+\multicolumn{2}{l}{\texttt{acc $\leftarrow$ 0} if (reg_d - value $=$ 0)}  & \\
+\multicolumn{2}{l}{\texttt{acc $\leftarrow$ -1} if (reg_d - value $<$ 0)}  & \\
+\end{tabular}
+
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+ & reg_r & \multicolumn{2}{c|}{value}\\
+\hline
+\texttt{1010} & \texttt{rrrr} & \texttt{vvvv} & \texttt{vvvv}\\
+
+\end{tabular}
+
+\vspace{0.5in}
 
 \subsubsection{Code mobility operations of agent assembly language}
 \noindent
-Move code
+\textbf{Move code}
 
 \noindent
 Move agent structure to platform that possess required service
 
 \noindent
-\texttt{move service}
+\framebox{\texttt{move service}}
 \vspace{0.1in}
 
+\begin{tabular}{+p{1.3in}+p{2.8in}+p{1.3in}}
+
+Syntax  & Operands   & Program counter \\
+
+\texttt{move service} & \texttt{service_0 $\leq$ service $\leq$ service_10} & \texttt{PC = PC + 1} \\
+
+\multicolumn{3}{l}{Operation} \\
+
+\multicolumn{3}{l}{Serialize and transmit agent structure to the platform that possess required service}  \\
+
+\end{tabular}
+
+\vspace{0.1in}
+\noindent
+16-bit opcode:
 
 \noindent
-Clone code
+\begin{tabular}{|c|c|c|c|}
+ & reg_r & \multicolumn{2}{c|}{service}\\
+\hline
+\texttt{1111} & \texttt{0001} & \texttt{ssss} & \texttt{ssss}\\
+
+\end{tabular}
+
+\vspace{0.5in}
+\noindent
+\textbf{Clone code}
 
 \noindent
 Replicate agent structure on the given platform
 
 \noindent
-\texttt{clone}
+\framebox{\texttt{clone}}
 \vspace{0.1in}
 
+\begin{tabular}{+p{1.3in}+p{1.3in}}
+
+Syntax    & Program counter \\
+
+\texttt{clone}  & \texttt{PC = PC + 1} \\
+
+\end{tabular}
+
+\vspace{0.1in}
+\noindent
+16-bit opcode:
 
 \noindent
-Die
+\begin{tabular}{|c|c|c|c|}
+  \multicolumn{4}{|c|}{}\\
+\hline
+\texttt{1111} & \texttt{0010} & \texttt{0000} & \texttt{0000}\\
+
+\end{tabular}
+
+\vspace{0.4in}
+\noindent
+\textbf{Die}
 
 \noindent
 Destroy agent structure and free corresponding memory
 
 \noindent
-\texttt{die}
+\framebox{\texttt{die}}
+
+\vspace{0.1in}
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+  \multicolumn{4}{|c|}{}\\
+\hline
+\texttt{1111} & \texttt{0100} & \texttt{0000} & \texttt{0000}\\
+\end{tabular}
 
 \subsubsection{Message exchange}
 \noindent
-Send
+\textbf{Send}
 
 \noindent
-Send acc. value to platform.
+Send message of predefined \texttt{type} to \texttt{platform}.
 
 \noindent
-\texttt{sendmsg platform}
+\framebox{\texttt{sendmsg type, platform}}
 \vspace{0.1in}
 
-\noindent
-Receive
 
 \noindent
-Pull message from platform to acc.
+\begin{tabular}{+p{1.9in}+p{2.5in}+p{1.3in}}
+
+Syntax  & Operands   & Program counter \\
+
+\texttt{sendmsg platform} & \texttt{platform_0 $\leq$ platform $\leq$ platform_3} & \texttt{PC = PC + 1}\\
+\multicolumn{3}{l}{Operation} \\
+\multicolumn{3}{l}{Send \texttt{mess_type} to \texttt{platform}} \\
+
+\end{tabular}
 
 \noindent
-\texttt{pullmsg}
+16-bit opcode:
 
+\noindent
+\begin{tabular}{|c|c|c|c|}
+ \multicolumn{2}{|c|}{} & type & platform\\
+\hline
+\texttt{1111} & \texttt{1000} & \texttt{tttt} & \texttt{pppp}\\
+
+\end{tabular}
+
+
+\vspace{0.5in}
+\noindent
+\textbf{Receive}
+
+\noindent
+Pull message from \texttt{platform} to acc.
+
+\noindent
+\framebox{\texttt{pullmsg}}
+
+\noindent
+\begin{tabular}{+p{1.9in}+p{1.3in}}
+
+Syntax   & Program counter \\
+
+\texttt{pullmsg}  & \texttt{PC = PC + 1} \\
+
+\multicolumn{2}{l}{Operation} \\
+
+\multicolumn{2}{l}{ \texttt{acc $\leftarrow$} msg_type, msg_platform} \\
+
+\end{tabular}
+
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+ \multicolumn{4}{|c|}{} \\
+\hline
+\texttt{1111} & \texttt{1010} & \texttt{0000} & \texttt{0000}\\
+\end{tabular}
+
+\vspace{0.1in}
 \subsubsection{Store, move and wait operations}
 \noindent
-Store
+\textbf{Store}
 
 \noindent
 Store value in register
@@ -804,68 +1122,229 @@ Store value in register
 Store character in register
 
 \noindent
-\texttt{store reg, value}
+\framebox{\texttt{store reg_d, value}}
 
 \noindent
-\texttt{storecr reg, char}
+\begin{tabular}{+p{1.8in}+p{2.2in}+p{1.3in}}
+
+Syntax  		  & Operands   								     & Program counter       \\
+
+\texttt{store reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1}  \\
+
+\multicolumn{2}{l}{Operation} 									      & 		     \\
+
+\multicolumn{2}{l}{\texttt{reg_d $\leftarrow$ value}} & \\
+
+\end{tabular}
+
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+ & reg_d & \multicolumn{2}{c|}{value}\\
+\hline
+\texttt{1101} & \texttt{dddd} & \texttt{vvvv} & \texttt{vvvv}\\
+
+\end{tabular}
+
+\vspace{0.4in}
+\noindent
+\framebox{\texttt{storecr reg_str, char}}
 \vspace{0.1in}
 
+\noindent
+\begin{tabular}{+p{1.8in}+p{2.2in}+p{1.3in}}
+
+Syntax  		  & Operands   						    & Program counter       \\
+
+\texttt{storecr reg_str, char} & \texttt{reg_str_0 $\leq$ reg_str $\leq$ reg_str_2} & \texttt{PC = PC + 1}  \\
+
+\multicolumn{2}{l}{Operation} 									      & 		     \\
+
+\multicolumn{2}{l}{\texttt{reg_str $\leftarrow$ value}} & \\
+
+\end{tabular}
 
 \noindent
-Move
+16-bit opcode:
 
 \noindent
-Move value from reg2 to reg1
+\begin{tabular}{|c|c|c|c|}
+ & reg_str & \multicolumn{2}{c|}{value}\\
+\hline
+\texttt{1011} & \texttt{rrrr} & \texttt{vvvv} & \texttt{vvvv}\\
+
+\end{tabular}
+
+\vspace{0.4in}
+\noindent
+\textbf{Move}
 
 \noindent
-\texttt{mv reg1, reg2}
-\vspace{0.1in}
+Move value from reg_r to reg_d
 
 \noindent
-Wait
+\framebox{\texttt{mv reg_d, reg_r}}
 
 \noindent
-Wait until event??
+\begin{tabular}{+p{1.8in}+p{2.2in}+p{1.3in}}
+
+Syntax  		  & Operands   								     & Program counter       \\
+
+\texttt{mv reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, reg_0 $\leq$ reg_r $\leq$ reg_6} & \texttt{PC = PC + 1}  \\
+
+\multicolumn{2}{l}{Operation} 									      & 		     \\
+
+\multicolumn{2}{l}{\texttt{reg_d $\leftarrow$ reg_r}} & \\
+
+\end{tabular}
 
 \noindent
-\texttt{wait }
-\vspace{0.1in}
+16-bit opcode:
 
 \noindent
-Assign priority value
+\begin{tabular}{|c|c|c|c|}
+ \multicolumn{2}{|c|}{value} & reg_d & reg_r\\
+\hline
+\texttt{0000} & \texttt{1101} & \texttt{dddd} & \texttt{rrrr}\\
+
+\end{tabular}
+
+\vspace{0.5in}
+
+\noindent
+\textbf{Wait}
+
+\noindent
+Wait for ms
+
+
+\noindent
+\framebox{\texttt{wait delay_ms}}
+
+\noindent
+\begin{tabular}{+p{1.8in}+p{2.2in}+p{1.3in}}
+
+Syntax  		  & Operands   								     & Program counter       \\
+
+\texttt{wait delay_ms} & \texttt{0 $\leq$ delay_ms $\leq$ 0xFF} & \texttt{PC = PC + 1}  \\
+
+
+\end{tabular}
+
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+ \multicolumn{2}{|c|}{} & \multicolumn{2}{c|}{delay}\\
+\hline
+\texttt{0000} & \texttt{0101} & \texttt{dddd} & \texttt{dddd}\\
+
+\end{tabular}
+\vspace{0.4in}
+
+\noindent
+\textbf{Assign priority value}
+
 
 \noindent
 Assign priority of the agent to value in range 0..3
 
 \noindent
-\texttt{priority value}
+\framebox{\texttt{priority value}}
 
 
+\noindent
+\begin{tabular}{+p{1.8in}+p{2.2in}+p{1.3in}}
+
+Syntax  		  & Operands   								     & Program counter       \\
+
+\texttt{priority value} & \texttt{0 $\leq$ value $\leq$ 3} & \texttt{PC = PC + 1}  \\
+
+\multicolumn{2}{l}{Operation} 									      & 		     \\
+
+\multicolumn{2}{l}{\texttt{priority $\leftarrow$ value}} & \\
+
+\end{tabular}
+
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+ \multicolumn{2}{|c|}{} &  \multicolumn{2}{c|}{priority}\\
+\hline
+\texttt{0000} & \texttt{1000} & \texttt{pppp} & \texttt{pppp}\\
+
+\end{tabular}
+
+\vspace{0.4in}
 \subsubsection{Access to hardware services}
 \noindent
-Set
+\textbf{Set}
 
 \noindent
 Set service to reg or value
 
 \noindent
-\texttt{setservice reg}
+\framebox{\texttt{setservice service, reg}}
 
 \noindent
-\texttt{setservice value}
+\begin{tabular}{+p{1.9in}+p{2.9in}+p{1.2in}}
+
+Syntax  		  & Operands   								     & Program counter       \\
+
+\texttt{setservice service, reg} & \texttt{service_0 $\leq$ service $\leq$ service_10, reg_0 $\leq$ reg $\leq$ reg_6} & \texttt{PC = PC + 1}  \\
+
+\end{tabular}
+
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+ & reg & \multicolumn{2}{c|}{service}\\
+\hline
+\texttt{0111} & \texttt{rrrr} & \texttt{ssss} & \texttt{ssss}\\
+
+\end{tabular}
 \vspace{0.1in}
-
+%\noindent
+%\framebox{\texttt{setservice value}}
+%\vspace{0.1in}
 
 \noindent
-Get
+\textbf{Get}
 
 \noindent
 Put corresponding value from the service to the acc.
 
 \noindent
-\texttt{getsetvice }
+\framebox{\texttt{getservice}}
 \vspace{0.1in}
 
+\noindent
+\begin{tabular}{+p{1.9in}+p{1.2in}}
+
+Syntax  		 & Program counter       \\
+
+\texttt{getservice} & \texttt{PC = PC + 1}  \\
+
+\end{tabular}
+
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+ \multicolumn{4}{|c|}{}\\
+\hline
+\texttt{0000} & \texttt{0111} & \texttt{0000} & \texttt{0000}\\
+
+\end{tabular}
+\vspace{0.1in}
 
 \begin{comment}
 , comparison of operands, jump and loop constructs, as well as operations related to code mobility ( move to service, clone, die). Developer of agent program should not be aware of present services on the 
