@@ -9,6 +9,7 @@
 /*======================================================================*/
 
 #include "protocoll.h"
+#include "global.h"
 
 volatile uint8_t send_timeout = 0;
 
@@ -54,6 +55,7 @@ PORTG&=~(1<<PG4);
    }
 
 	/* der richtige targetnode ?? wir empfangen die nachricht*/
+        /* correct destination, read next byte*/
 	else if ((timestamp>1)&&(node_id==msg_id))
 
 	{ 
@@ -64,6 +66,7 @@ PORTG&=~(1<<PG4);
 	}
 
 	/* der falsche targetnode?? wir tun nur warten; timestamp verringern*/
+        /*  if false destination, wait */
 	else if ((timestamp>1)&&(node_id!=msg_id))
 	{ help=UDR0;
           timestamp--;
@@ -73,6 +76,7 @@ PORTG&=~(1<<PG4);
 	/*das Checksummenbyte?? wenn am richtigen node berprfen wir die*/
 	/* die checksumme, und falls sie bereinstimmt rufen wir die */
 	/* recieve function, und wir enablen den transmitter*/
+        /* if at end of message, check crc byte */
 	else if (timestamp==1)
 	{ help=UDR0;
             
@@ -83,6 +87,7 @@ PORTG&=~(1<<PG4);
 	       msg_pointer = message; 
 	       receive_handler(length, (uint8_t *) msg_pointer);
 	      }
+	      
 	    }
 
 	  timestamp--;              /* letztes byte, andere drfen wieder*/
@@ -189,7 +194,7 @@ void disable_int7(void)
    - Sends data to a node over serial line. 
    - Global interrupt flag needs to be enabled. 
    Parameters: 
-   message_header - format 0brrrrllll
+   message_header - format 0b rrrr llll
    - rrrr -destination node id
    - llll  body length plus 1; 
    msg_body - payload; maximum length is 14;   
@@ -292,6 +297,7 @@ void protocol_init(uint8_t timeout, void (*receive_msg)(uint8_t msg_header, uint
   send_timeout = timeout;
   node_id=timeout;
   receive_handler = receive_msg;
-
-
+  
+  LED_DDR |= (1 << LED_RED);
+  LED_PORT_REG &= ~(1 << LED_RED);
 }

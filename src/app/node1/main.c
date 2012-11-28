@@ -9,8 +9,10 @@
 #include "node1.h"
 #include "protocoll.h"
 
-void wr_to_bargraph(char val);
 void rcv_handler(uint8_t msg_length, uint8_t *msg_body);
+
+void init_bargraph();
+void wr_to_bargraph(uint8_t val);
 
 int main(void) {
 
@@ -19,7 +21,9 @@ int main(void) {
   DDRF |= (1 << PF2);
   PORTF &= ~(1 << PF2);  
 
-  protocol_init(4,rcv_handler);
+  init_bargraph();
+
+  protocol_init(7,rcv_handler);
   sei();
 
   while(TRUE);
@@ -57,15 +61,23 @@ int main2(void)
 }
 
 void rcv_handler(uint8_t msg_length, uint8_t *msg_body) {
-  //if (msg_length > 0) {
+  if (msg_length > 0) {
+    PORTF ^= (1 << LED_GREEN);
     wr_to_bargraph(msg_body[0]);
-  //} else {
-    //debug
-  //}
+  } else {
+    PORTF ^= (1 << LED_RED);
+  }
 } 
 
-void wr_to_bargraph(char val) {
-  LEDS_DDR_ND0 = val; 
+
+void init_bargraph() {
+  LEDS_DDR_ND0 = 0xff; 
+  LEDS_PORT_ND0 = 0xff;
+}
+
+void wr_to_bargraph(uint8_t val) {
   LEDS_PORT_ND0 = ~(val);
 }
+
+
 
