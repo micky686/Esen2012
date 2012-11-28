@@ -337,7 +337,7 @@ The following figure depicts the general outline of the code mobility project.
 \caption{Overview}
 \end{figure}
 
-On each of the 4 nodes, which can be found the ESE board, a virtualization platform will be deployed. 
+On each of the 4 nodes, which can be found on the ESE board, a virtualization platform will be deployed. 
 This virtualization platform will be able to execute up to 4 agents concurrently. The agents will be 
 programmed in a simplistic assembler like agent language. On the platform there will be an execution 
 layer which is able to execute the agent language. The agents will be able to access the hardware attached
@@ -406,12 +406,42 @@ where it can be used later on for further operations e.g. comparison etc.
 The basic workflow of the execution layer as soon it is called by the scheduler is to read the next 
 agent language opcode (all agent opcodes have a fixed length) as identified by the program counter, 
 to decode it and to perform the function which is described by the opcode. Eventually the program 
-counter value is changed and the control is returned back to the scheduler. The execution layer is 
+counter value is changed and the control is returned back to the scheduler. 
+
+\begin{figure}[!htbp]
+\begin{center}
+\includegraphics[scale=0.4]{figures/exelayer.png}
+\caption{Execution Layer}
+\end{center}
+\label{exelayer}
+\end{figure}
+
+
+
+The execution layer is 
 called by the method execute which takes the following input parameters:
 \begin{itemize}
  \item Pointer to a specific agent structure
  \item Number of opcodes to execute
 \end{itemize}
+
+\begin{figure}[!htb]
+\lstset{language=C}
+\begin{lstlisting}[frame=single]
+/**
+	Function : execute
+		excutes the next opcodes of an agent
+	Returns : 
+		the amount of successfully executed opcoded
+	Parameters : 
+		agent : agent status structure
+		opcode: amount of opcodes to be executed
+**/
+uint8_t execute(agent_t* agent, uint8_t opcode)
+\end{lstlisting}
+\caption{Executing agent language opcode}
+\label{fig:excopc}
+\end{figure}
 
 
 
@@ -430,13 +460,55 @@ This set should contain all possible methods of all available device drivers. Du
 will assign the according function pointer to a method provided by the device driver if the device is supported, 
 otherwise the according function pointer will stay null. 
 
+\begin{figure}[!htb]
+\lstset{language=C}
+\begin{lstlisting}[frame=single]
+typedef struct {
+
+	void (*init_bargraph)(void);
+	void (*set_bargraph)(uint8_t value);
+
+	void (*clk_init)(void);
+	uint32_t (*clk_get_time)(void);
+
+	void (*init_cooler)(void);
+	void (*set_cooler)(uint8_t duty_cycle);
+
+	void (*DISPLAY_init)(void);
+	void (*DISPLAY_drawBg)(uint16_t rgb);
+	uint8_t (*DISPLAY_drawElement)(uint8_t row, uint8_t col,
+		uint16_t rgb, DisplayObject_t object);
+	
+	void (*DISPLAY_drawBorder)(void);
+	
+	uint8_t (*DISPLAY_drawPoints)(uint8_t player_id, 
+		uint8_t points);
+
+	void (*heater_init)(void);
+	void (*heater_set)(uint8_t duty_cycle);
+
+	void (*init_pushbutton0)(void (*callback)(void));
+	void (*init_pushbutton1)(void (*callback)(void));
+
+	void (*therm_init)(void);
+	int16_t (*therm_get_temp)(uint8_t name);
+
+} drivers_t;
+\end{lstlisting}
+\caption{Device drivers methods}
+\label{fig:devicedrivers}
+\end{figure}
 
 \noindent
-All device drivers should support the method init_driver, which will be called by the platform during its initialization. 
+All device drivers should support init methods, which will be called by the platform during its initialization. 
 Even if a hardware device is not supported on a given node, there should be at least a dummy device driver for it present, 
 providing an empty init method. A real device driver should register its methods to the global function pointers during its 
 init_driver method execution. Choosing this approach we would reach some form of modularity which would allow us to exchange 
 to device drivers without necessity to change the platform code.
+
+\noindent
+If an interaction with a device driver is blocking, then the calling agent will be put to status blocking unless there is an answer from
+the device driver.
 
 \section{Communication Layer}
 
@@ -486,6 +558,14 @@ The highest priority is 3 and the lowest priority is 0. Based on the priorities 
 the scheduler creates a static list by which the order of the agent execution is defined. The scheduler instructs 
 the execution layer to execute exactly priority + 1 opcodes for a given agent. Eventually the control returns to 
 the scheduler and the next agent from the list is picked. The list is iterated cyclically.
+
+\begin{figure}[!htbp]
+\begin{center}
+\includegraphics[scale=0.4]{figures/scheduler.png}
+\caption{Scheduler}
+\end{center}
+\label{scheduler}
+\end{figure}
 
 
 \noindent
