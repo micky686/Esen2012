@@ -4,8 +4,9 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{algorithm}
+\usepackage{array}
 %\usepackage{algpseudocode}
-
+    \renewcommand{\arraystretch}{1.8}
 % The title
 \title[Code Mobility]{Code Mobility}
 
@@ -65,6 +66,7 @@
 		\begin{description}
 			\item	Mobile agents
 			\item	Meta-level knowledge
+			\item   Layered architecture
 			\item	{\it Strong} and {\it weak} code mobility
 		\end{description}
 	\end{block}
@@ -73,7 +75,7 @@
 		\begin{description}
 			\item	Move code close to resources 
 			\item	Enable client customization of remote resources
-			\item	
+			\item	Performance gains
 		\end{description}
 	\end{block}	
 
@@ -90,15 +92,15 @@
 \subsection{Design challenges for the project}
 \begin{frame}
 \frametitle{Design challenges for the project}
+\begin{tabular}{ll}
+Processing gap & \\
 
-Processing gap
+Performance & \\
 
-Performance 
+Memory management & \\
 
-Memory management
-
-Communication design
-	
+Communication design & \\
+\end{tabular}
 
 \end{frame}
 
@@ -107,17 +109,24 @@ Communication design
 	\frametitle{Requirements}
 % 	\framesubtitle{}
 %To develop a solution that allow to trasfer code from one platform to another
-Design such a system that allows:
+
 \begin{itemize}
 	\item Agents:
-		up to 4 agents on one platform
-		 
+	\begin{itemize}
+		\item simple language 
+		\item support mobility and message exchange
+	\end{itemize} 
 	\item Platform:
-		execute agents concurrently
-		
+	\begin{itemize}
+		\item execute agents concurrently
+		\item provide hardware services to agents
+	\end{itemize}	
 	\item Communication:
-		transfer agents {\it strong mobility}
-		transfer messages between platforms
+	\begin{itemize}
+		\item transfer agents \& state {\it strong mobility}
+		\item transfer messages between platforms
+		\item cross board communication via Zigbee
+	\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -129,7 +138,7 @@ Design such a system that allows:
 	%Three level archtecture
 \begin{columns}[c]
 \column{1.5in}
-	3 layered archtecture:
+	3 layered architecture:
 		\begin{itemize}
 		\item Agent level
 		\item Platform level
@@ -143,6 +152,18 @@ Design such a system that allows:
 \end{frame}
 
 \subsection{Agents}
+
+\begin{frame}
+	\frametitle{Agent language that support:}
+	\begin{itemize}
+	\item Arithmetical operations, branching and looping
+	\item Message exchange
+	\item Replication and code mobility
+	\end{itemize}
+% 	\framesubtitle{}
+
+\end{frame}
+
 \begin{frame}
 	\frametitle{Agents}
 \includegraphics<1>[width=4in]{img/agent-1}
@@ -199,12 +220,21 @@ Design such a system that allows:
 \section{Project management}
 \begin{frame}
 	\frametitle{Milestones}
-	\begin{itemize}
-	\item Phase 1. Product outline and information gathering 
-	\item Phase 2. Application requirements and specification
-	\item Phase 3. Implementation
-	\item Phase 4. Validation and analysis
-	\end{itemize}
+%	\begin{itemize}
+%	\item Phase 1. Product outline and information gathering 
+%	\item Phase 2. Application requirements and specification
+%	\item Phase 3. Implementation
+%	\item Phase 4. Validation and analysis
+%	\end{itemize}
+
+\begin{tabular}{ll}
+
+\includegraphics[]{img/milestone} & Phase 1. Product outline and information gathering\\
+\includegraphics[]{img/milestone} & Phase 2. Application requirements and specification\\
+\includegraphics[]{img/milestone} & Phase 3. Implementation\\
+\includegraphics[]{img/milestone} & Phase 4. Validation and analysis\\
+\end{tabular}
+
 % 	\framesubtitle{}
 
 \end{frame}
@@ -219,7 +249,7 @@ Design such a system that allows:
 	\frametitle{Gantt diagram}
 
 \begin{center}
-\includegraphics[height=3.0in]{img/gantt}
+\includegraphics[height=2.7in]{img/gantt}
 
 \end{center}
 \end{frame}
@@ -229,9 +259,17 @@ Design such a system that allows:
 \begin{frame}
 	\frametitle{Tools}
 
-	Version control  git github 
-	Project management  redmine  
-	Code generation  SCADE 
+\begin{tabular}{lcl}
+
+Version control & \includegraphics[width=0.07\textwidth]{img/gitlogo} & git\\
+Documentation \& code repository & \includegraphics[width=0.07\textwidth]{img/github-logo} & github\\
+File sharing & \includegraphics[width=0.1\textwidth]{img/aws-logo} & amazon s3\\
+Project management & \includegraphics[width=0.07\textwidth]{img/redmine-logo} & redmine\\
+Code generation & \includegraphics[width=0.07\textwidth]{img/scade-logo} & SCADE\\
+Editors & \includegraphics[width=0.07\textwidth]{img/emacs-logo} & Emacs\\
+        & & gedit\\
+
+\end{tabular}
 
 \end{frame}
 
