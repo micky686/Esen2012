@@ -1,0 +1,137 @@
+============Slide 1 ==================
+Title page
+
+Greeting
+Introduce project 
+(20-30 s)
+
+===========Slide 2 ===================
+Outline
+
+Give short outline of the presentation
+
+(1 min)
+
+===========Slide 3 ===================
+Motivation
+
+(20-30 s)
+
+===========Slide 4 ===================
+Code mobility overview
+
+What is code mobility?
+dynamically change bindings between code fragments and
+location where it is executed.
+
+Crucial concept: mobile agent (that piece of software that is able to move)
+
+How the mobile agent can move is moved is also important concept in code mobility
+And here weak and strong code mobility arises
+
+(1.5 min)
+
+=============Slide 5 =================
+Level of abstraction
+
+Reading about code mobility in literature:
+object
+
+Our goal: to lower the level of abstraction downto hardware
+
+work with all the cocncerns
+
+(1 min)
+
+=============Slide 6 ================
+Design challenges for the project
+
+(20 sec)
+
+=============Slide 7 =================
+Requirements
+
+(1 min)
+
+=============Slides 8,9 ==============
+General overview
+
+
+(1.5 min)
+
+=============Slide 10 ================
+Agent language
+
+Overview of operations
+According to goal: move to lower level
+
+(1 min)
+
+=============Slides 11,12,13,14 =======
+Agents
+
+Example of agent language
+
+(2 min)
+
+=============Slide 15 =================
+Platform
+
+(1 min)
+
+=============Slide 16 =================
+Scheduler
+
+(1 min)
+
+=============Slide 17 =================
+Execution layer
+
+(1.5 min)
+
+=============Slide 18 =================
+Communication
+
+(1 min)
+
+=============Slides 19,20 =============
+Communication cont.
+
+Mesh network 1, 2
+
+(1.5 min)
+
+=============Slide 21 =================
+Archtecture revisited
+
+3 Board communication
+
+(30 sec)
+
+=============Slide 22 =================
+Milestones
+
+Phases
+
+(30 sec)
+
+=============Slide 23 =================
+Workpackages
+
+TODO
+
+(30 sec)
+
+=============Slide 24 =================
+Gantt diagram
+
+
+
+(30 sec)
+
+=============Slide 25 =================
+Tools
+
+Redmine, github, eclipse.
+
+(1 min)
