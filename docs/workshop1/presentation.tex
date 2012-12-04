@@ -227,19 +227,30 @@ Communication design & \\
 
 \subsection{Communication}
 \begin{frame}
-	\frametitle{Communication}
+	\frametitle{Transmission Packets}
         
         \begin{figure}
           \includegraphics<1>[width=0.5\textwidth]{img/packet-low-level.png} \\
           \includegraphics<1>[width=0.5\textwidth]{img/packet-upper-level.png}
-          \caption{Lower and Upper Level Communication Packet}
-        \end{figure}
-        
-
-        
+          \caption{Lower and Upper Layer}
+        \end{figure}              
 % 	\framesubtitle{}
+\end{frame}
+
+\begin{frame} % when one board crashes
+  \frametitle{Network Topology}
+  \framesubtitle{Fault Tolerant Routing}
+  \includegraphics<1>[width=0.4\textwidth]{img/mesh-routing1.png} 
+  \includegraphics<1>[width=0.4\textwidth]{img/mesh-routing2.png} \\
+
+  \begin{tabular}{ll}
+    \includegraphics[height=0.2in]{img/pink.png} & Zigbee Network Coordinator\\
+    \includegraphics[height=0.2in]{img/green} & Zigbee Network Router
+  \end{tabular}
 
 \end{frame}
+
+
 
 \section{Project management}
 \begin{frame}
