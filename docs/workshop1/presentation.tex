@@ -33,7 +33,7 @@
  \Large{Konstantin Selyunin}\\
   \small{\texttt{e1228206@student.tuwien.ac.at}}\\
  \Large{Miljenko Jakovljevi\'c}\\
-  \small{\texttt{e1228206@student.tuwien.ac.at}}\\
+  \small{\texttt{micky686@gmail.com}}\\
   \Large{Igor Pelesi\'c}\\
   \small{\texttt{e0006828@student.tuwien.ac.at}}\\
 }
@@ -224,52 +224,74 @@ Communication design & \\
 \end{frame}
 
 
-\subsection{Communication}
+\subsection{Communication Protocol}
 \begin{frame}
-	\frametitle{Communication}
-        
+  \frametitle{Communication Requirements}
+  %\framesubtitle{Requirements}
+  \begin{figure}
+    \includegraphics[width=0.6\textwidth]{img/zigbee.pdf}
+    %%\caption{Communication Points}
+  \end{figure}
+  \begin{itemize}
+  \item Inter-node and Inter-board communication
+  \item Correct sending of large amounts of agent code %large, of agent code, bf upper level protocol
+  \item Timely delivery of control messages % for control messages
+  \item Bridging between local and wireless network
+%%  \item Addressing and Routing  % zigbee level
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Transmission Layers}
         \begin{figure}
-          \includegraphics<1>[width=0.5\textwidth]{img/packet-low-level.png} \\
+          \includegraphics<1>[width=0.5\textwidth]{img/packet-low-level.png} 
           \includegraphics<1>[width=0.5\textwidth]{img/packet-upper-level.png}
-          \caption{Lower and Upper Level Communication Packet}
-        \end{figure}
-        
-
-        
+          \caption{Lower-and Upper Level Datagram}
+        \end{figure}              
+        \begin{itemize}
+        \item Lower level: priority based CSMA/CA protocol % over serial line
+        \item Upper level: routing and frame composition
+        \item Network bridge: Zigbee access on application layer  
+        \end{itemize}
 % 	\framesubtitle{}
+\end{frame}
 
+\begin{frame} % when one board crashes
+  \frametitle{Network Topology}
+  \framesubtitle{Fault Tolerant Routing}
+  \includegraphics<1>[width=0.5\textwidth]{img/mesh-routing1.png} 
+  \includegraphics<1>[width=0.5\textwidth]{img/mesh-routing2.png} \\
+
+  \begin{tabular}{ll}
+    \includegraphics[height=0.1in]{img/pink.png} & Zigbee Network Coordinator\\
+    \includegraphics[height=0.1in]{img/green} & Zigbee Network Router \\
+    \includegraphics[height=0.1in]{img/blue} & Disabled Node
+  \end{tabular}
 \end{frame}
 
 
-\begin{frame}
-	\frametitle{Communication cont.}
-        
-        \begin{figure}
-          \includegraphics<1>[width=0.8\textwidth]{img/mesh-routing1.png}
-          \includegraphics<2>[width=0.8\textwidth]{img/mesh-routing2.png}
-          \caption{Cross-board communication}
-        \end{figure}
-\end{frame}
+%% \begin{frame}
+%% 	\frametitle{Communication cont.}
+%%         
+%%         \begin{figure}
+%%           \includegraphics<1>[width=0.8\textwidth]{img/mesh-routing1.png}
+%%           \includegraphics<2>[width=0.8\textwidth]{img/mesh-routing2.png}
+%%           \caption{Cross-board communication}
+%%         \end{figure}
+%% \end{frame}
 
 
-\begin{frame}
-	\frametitle{Architecture revisited}
-        
-        \begin{figure}
-          \includegraphics<1>[width=\textwidth]{img/zigbee.pdf}
-        \end{figure}
-\end{frame}
+%% \begin{frame}
+%% 	\frametitle{Architecture revisited}
+%%         
+%%         \begin{figure}
+%%           \includegraphics<1>[width=\textwidth]{img/zigbee.pdf}
+%%         \end{figure}
+%% \end{frame}
 
 \section{Project management}
 \begin{frame}
 	\frametitle{Milestones}
-%	\begin{itemize}
-%	\item Phase 1. Product outline and information gathering 
-%	\item Phase 2. Application requirements and specification
-%	\item Phase 3. Implementation
-%	\item Phase 4. Validation and analysis
-%	\end{itemize}
-
 \begin{tabular}{ll}
 
 \includegraphics[height=0.3in]{img/milestone_03} & Phase 1. Product outline and information gathering\\
