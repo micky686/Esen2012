@@ -188,51 +188,6 @@ int8_t send_msg(uint8_t message_header, uint8_t *msg_body) {
 	uint8_t ready = OFF;
 	init_state = 0;
 	PORTF &= ~(1 << PF2);
-	/*
-	while (ready == OFF)
-	{
-		anzahl_versuche++;
-
-		switch (init_state) {
-
-		case 0:
-			while (!(SW_PIN & (1 << SW_RX)))
-				;
-			init_state = 1;
-
-		case 1:
-			enable_int7();
-			init_timer3(12);
-			while (timer3_done != 1)
-				;
-
-			if (int_occured == 1) {
-				init_state = 0;
-				break;
-			} else {
-				init_state = 2;
-			}
-
-		case 2:
-			SET_BUS_LOW;
-			wait_ms(send_timeout);
-			SET_BUS_HIGH;
-			init_timer3(1);
-			while (timer3_done != 1)
-				;
-			if (SW_PIN & (1 << SW_RX)) {
-				ready = ON;
-			} else {
-				init_state = 0;
-			}
-			break;
-
-		default:
-			break;
-
-		}
-
-	}*/
 	
 	while (ready == OFF) {
 		anzahl_versuche++;
@@ -259,14 +214,6 @@ int8_t send_msg(uint8_t message_header, uint8_t *msg_body) {
 			}
 		
 		case 2:
-			/*SET_BUS_LOW;
-			_delay_ms(10);
-			//init_timer3(12);
-			//while (timer3_done != 1);
-			SET_BUS_HIGH;
-			//init_timer3(120);
-			//while (timer3_done != 1);
-			ready=ON;*/
 			SET_BUS_LOW;
 			wait_ms(send_timeout);
 			SET_BUS_HIGH;
