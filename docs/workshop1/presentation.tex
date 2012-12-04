@@ -5,6 +5,7 @@
 \usepackage{hyperref}
 \usepackage{algorithm}
 \usepackage{array}
+\usepackage{verbatim}
 \usepackage{hyperref}
 \hypersetup{
     bookmarks=true,    % show bookmarks bar?
@@ -35,7 +36,7 @@
  \Large{Miljenko Jakovljevi\'c}\\
   \small{\texttt{micky686@gmail.com}}\\
   \Large{Igor Pelesi\'c}\\
-  \small{\texttt{e0006828@student.tuwien.ac.at}}\\
+  \small{\texttt{igor.pelesic@gmail.com}}\\
 }
 
 % Use Warsaw theme
@@ -62,20 +63,18 @@
 \end{frame}
 
 \section{Introduction}
-\subsection{Motivation}
-\begin{frame}[fragile]
-	\frametitle{Motivation}
-% 	\framesubtitle{}
+
+
+\subsection{Code mobility overview}
+\begin{frame}
+	\frametitle{Code mobility overview}
+	Our goal:
 	\begin{itemize}
 		\item Design code mobility system on ESE Board
 		\item Hardware drivers \& mobile agents \& communication
 		\item Master project management skills
 	\end{itemize}
-\end{frame}
 
-\subsection{Code mobility overview}
-\begin{frame}
-	\frametitle{Code mobility overview}
  		\framesubtitle{Concept of code mobility}
 	\begin{block}{Concept of code mobility}
 		\begin{description}
@@ -102,7 +101,7 @@
 \includegraphics[width=3in]{img/abstraction-3-eps-converted-to.pdf}
 \end{centering}
 \end{frame}
-
+\begin{comment}
 \subsection{Design challenges for the project}
 \begin{frame}
 \frametitle{Design challenges for the project}
@@ -117,6 +116,7 @@ Communication design & \\
 \end{tabular}
 
 \end{frame}
+\end{comment}
 
 \subsection{Requirements}
 \begin{frame}
@@ -166,7 +166,7 @@ Communication design & \\
 \end{frame}
 
 \subsection{Agents}
-
+\begin{comment}
 \begin{frame}
 	\frametitle{Agent language that support:}
 	\begin{itemize}
@@ -177,6 +177,7 @@ Communication design & \\
 % 	\framesubtitle{}
 
 \end{frame}
+\end{comment}
 
 \begin{frame}
 	\frametitle{Agents}
@@ -264,7 +265,8 @@ Communication design & \\
 
   \begin{tabular}{ll}
     \includegraphics[height=0.1in]{img/pink.png} & Zigbee Network Coordinator\\
-    \includegraphics[height=0.1in]{img/green} & Zigbee Network Router \\
+    \includegraphics[height=0.1in]{img/green} & Zigbee Network Router
+ \\
     \includegraphics[height=0.1in]{img/blue} & Disabled Node
   \end{tabular}
 \end{frame}
@@ -307,6 +309,7 @@ Communication design & \\
 \begin{frame}
 	\frametitle{Workpackages}
 % 	\framesubtitle{}
+\scalebox{0.6}{
 	\begin{tabular}{lllll}
 	 & Name & Dates & Interdependencies & Deliverables\\\hline
 	WP1 & Documentation & all &25.10.12 - 15.01.13 & D1.1 Lab protocol\\\hline
@@ -318,7 +321,7 @@ Communication design & \\
 	WP4 & Communication     & D2.1	& 			& Protocol\\\hline
 	WP5 & Platform		& WP2, WP4	& 10.12 - 21.12 & D3.1 Platform \\\hline
 	\end{tabular}
-
+}
 \end{frame}
 
 
