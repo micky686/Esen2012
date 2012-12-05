@@ -68,13 +68,6 @@
 \subsection{Code mobility overview}
 \begin{frame}
 	\frametitle{Code mobility overview}
-	Our goal:
-	\begin{itemize}
-		\item Design code mobility system on ESE Board
-		\item Hardware drivers \& mobile agents \& communication
-		\item Master project management skills
-	\end{itemize}
-
  		\framesubtitle{Concept of code mobility}
 	\begin{block}{Concept of code mobility}
 		\begin{description}
@@ -91,7 +84,9 @@
 			\item	Performance gains
 		\end{description}
 	\end{block}	
+\cite{10.1109/32.685258, BartocciCMV06} 
 
+%\cite{BartocciCMV06}
 \end{frame}
 
 \subsection{Level of abstraction}
@@ -159,7 +154,7 @@ Communication design & \\
 		\item communication \& drivers
 		\end{itemize}
 \column{2in}
-\includegraphics<1>[height=2in]{img/overview_1-eps-converted-to.pdf}
+%\includegraphics<1>[height=2in]{img/overview_1-eps-converted-to.pdf}
 \includegraphics<2>[height=2in]{img/overview_2-eps-converted-to.pdf}
 
 \end{columns}
@@ -285,8 +280,10 @@ Communication design & \\
     \caption{Network after rerouting}
   \end{figure}
   \begin{tabular}{llll}
-    \includegraphics[height=0.1in]{img/pink.png} & Network Coordinator & \includegraphics[height=0.1in]{img/blue} & Failed Node \\
-    \includegraphics[height=0.1in]{img/green} & Network Router & \includegraphics[height=0.1in]{img/route} & Message Route \\
+    \includegraphics[height=0.1in]{img/pink.png} & Network Coordinator & \includegraphics[height=0.1in]{img/blue} & Failed Node
+ \\
+    \includegraphics[height=0.1in]{img/green} & Network Router & \includegraphics[height=0.1in]{img/route} & Message Route 
+\\
   \end{tabular}
 \end{frame}
 
@@ -355,5 +352,67 @@ Editors & \includegraphics[width=0.07\textwidth]{img/emacs-logo} & Emacs\\
 
 \end{frame}
 
+
+\begin{frame}
+	\frametitle{References}
+	\bibliography{presentation}
+	\bibliographystyle{alpha}
+
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Questions}
+
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Roles}
+\begin{center}
+\scalebox{0.6}{	
+	\begin{tabular}{ll}
+%	\textbf{Role}		& \textbf{Responsibilies}\\\hline
+	\hline
+	\multicolumn{2}{c}{Konstantin Selyunin}\\
+	Project manager & internal coordination\\
+			& defining tasks\\
+			& control meeting deadlines\\\hline
+	\multicolumn{2}{c}{Igor Pelesi\'c}\\
+	System architect & technical decisions\\
+			 & determine technical part of the project\\\hline
+	\multicolumn{2}{c}{Miljenko Jakovljevi\'c}\\
+	Documentation responsible & Lab protocol\\
+				  & documentation decisions\\
+	\end{tabular}
+}
+\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Goals}
+Our goals:
+	\begin{itemize}
+		\item Design, implement and evaluate code mobility system on ESE Board
+		\item Hardware drivers \& mobile agents \& communication
+		\item Master project management skills
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Use cases}
+
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Risk management}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{High-level agent language}
+
+\end{frame}
 % End of document
 \end{document}
