@@ -93,9 +93,11 @@ Execution layer
 Communication
 
 * Network Participants
+  zigbee gateway - dedicated node (30sec)
+  hardware communication infrastructure
 
 * Protocol Design
- + Requirements
+ + Requirements     (1.30 min)
   - Local internode communication
     (local network is on bus0)
   - Remote interboard communication
@@ -107,10 +109,12 @@ Communication
     (small amount of data such as sensor value) 
     (possibly at regular time intervalls)
     (possibly with implicit time value)
- + Principles
+ 
++ Principles : (from requirements and keeping development time low) (1.30min)
   - Layered design
-    (low level CSMA/CA)
+    (low level CSMA/CA - same as in wireless ieee 802.15.4)    
     (high level: message routing and frame composition)
+    (who does what)
   - Fairness in network access 
     (for timely message delivery)
     (solved on low level - packets - egalitarian network access)
@@ -121,16 +125,19 @@ Communication
     (zigbee accessed at application layer using library no no problem)
     (using subset of zigbee services)   
   [- Acknowledgement and retry
+    (implemented in zigbee on network layer)
+    (our local bus is short)
     (on high layer datagramm level)
     (we do not try to reimplement TCP)
     (light weight)
 
-* Transmission layers
+* Transmission layers  (1min)
   - high level 
     (embedded in low level)
     (offers more functionality)
+    (packet types)
 
-* Configuration of Zigbee Network
+* Configuration of Zigbee Network (30sec)
    - Node types
      (coordinator initiates, router, end device)
    - Mesh topology 

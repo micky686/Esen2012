@@ -228,7 +228,7 @@ Communication design & \\
 \subsection{Communication Protocol}
 \begin{frame}
   \frametitle{Communication Protocol}
-  \framesubtitle{Communication Participants}
+  \framesubtitle{Network Infrastructure}
   \begin{figure}
     \includegraphics[width=\textwidth]{img/zigbee.pdf}
   \end{figure}
@@ -236,20 +236,43 @@ Communication design & \\
 
 \begin{frame}
   \frametitle{Protocol Design}
-    \begin{block}{Requirements}
-      \begin{description}
-      \item Local \emph{on-board} communication
+    \begin{block}{Application Requirements}
+      \begin{description}        
+      \item Local communication \\
+        \begin{itemize}
+          \item \emph{serial line}
+        \end{itemize}
       \item Remote communication
+        \begin{itemize}
+          \item \emph{wireless}
+        \end{itemize}
       \item Sending agent code
       \item Sending application data
+
       \end{description}
     \end{block}
-    \begin{block}{Principles}
+\end{frame}
+\begin{frame}
+  \frametitle{Protocol Design cont.}
+    \begin{block}{Design Principles}
       \begin{description}
       \item Layered design
-      \item \emph{Fairness} in network access 
+        \begin{itemize}
+          \item Low level - CSMA/CA
+          \item High Level - Routing
+        \end{itemize}
       \item Composability with \emph{Zigbee} 
+%        \begin{itemize}
+%          \item \emph{IEEE 802.15.4}
+%        \end{itemize}
+      \item \emph{Fairness} in network access 
       \item Acknowledgement and retry  
+        \begin{itemize}
+        \item \emph{Unreliable network}
+        \item \emph{Congestion avoidance}
+        \item \emph{Complexity - e.g. TCP}
+        \end{itemize}
+        
       \end{description}
     \end{block}
 \end{frame}
