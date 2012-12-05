@@ -89,25 +89,62 @@ Execution layer
 
 (1.5 min)
 
-=============Slide 18 =================
+=============Slide 18 -  =================
 Communication
 
-(1 min)
+* Network Participants
+  zigbee gateway - dedicated node (30sec)
+  hardware communication infrastructure
 
-=============Slides 19,20 =============
-Communication cont.
+* Protocol Design
+ + Requirements     (1.30 min)
+  - Local internode communication
+    (local network is on bus0)
+  - Remote interboard communication
+    (over a gateway node)
+    (possible utilisation of dedicated bus1)
+  - Sending agent code
+    (large data volume) (could monopolize network bandwidth)
+  - Sending application data
+    (small amount of data such as sensor value) 
+    (possibly at regular time intervalls)
+    (possibly with implicit time value)
+ 
++ Principles : (from requirements and keeping development time low) (1.30min)
+  - Layered design
+    (low level CSMA/CA - same as in wireless ieee 802.15.4)    
+    (high level: message routing and frame composition)
+    (who does what)
+  - Fairness in network access 
+    (for timely message delivery)
+    (solved on low level - packets - egalitarian network access)
+    (and distinction of message types: agent code, data, control messages)
+  - Composability with Zigbee
+    (bridging between local protocol and zigbee network)
+    (adressing scheme) 
+    (zigbee accessed at application layer using library no no problem)
+    (using subset of zigbee services)   
+  [- Acknowledgement and retry
+    (implemented in zigbee on network layer)
+    (our local bus is short)
+    (on high layer datagramm level)
+    (we do not try to reimplement TCP)
+    (light weight)
 
-Mesh network 1, 2
+* Transmission layers  (1min)
+  - high level 
+    (embedded in low level)
+    (offers more functionality)
+    (packet types)
 
-(1.5 min)
-
-=============Slide 21 =================
-Archtecture revisited
-
-3 Board communication
-
-(30 sec)
-
+* Configuration of Zigbee Network (30sec)
+   - Node types
+     (coordinator initiates, router, end device)
+   - Mesh topology 
+     (each node is capable of routing)
+     (many connections)
+   - Flexible rerouting
+     (example)
 =============Slide 22 =================
 Milestones
 
