@@ -221,6 +221,7 @@ Communication design & \\
 
 
 \subsection{Communication Protocol}
+<<<<<<< HEAD
 \begin{frame}
   \frametitle{Communication Protocol}
   \framesubtitle{Communication Participants}
@@ -237,14 +238,61 @@ Communication design & \\
       \item Remote communication
       \item Sending agent code
       \item Sending application data
+=======
+\begin{frame}
+  \frametitle{Communication Protocol}
+  \framesubtitle{Network Infrastructure}
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/zigbee.pdf}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Protocol Design}
+    \begin{block}{Application Requirements}
+      \begin{description}        
+      \item Local communication \\
+        \begin{itemize}
+          \item \emph{serial line}
+        \end{itemize}
+      \item Remote communication
+        \begin{itemize}
+          \item \emph{wireless}
+        \end{itemize}
+      \item Sending agent code
+      \item Sending application data
+
+>>>>>>> 801733e80908eb37657d152d4a2dd7948d8aa954
       \end{description}
     \end{block}
-    \begin{block}{Principles}
+\end{frame}
+\begin{frame}
+  \frametitle{Protocol Design cont.}
+    \begin{block}{Design Principles}
       \begin{description}
       \item Layered design
+<<<<<<< HEAD
       \item \emph{Fairness} in network access 
       \item Composability with \emph{Zigbee} 
       \item Acknowledgement and retry  
+=======
+        \begin{itemize}
+          \item Low level - CSMA/CA
+          \item High Level - Routing
+        \end{itemize}
+      \item Composability with \emph{Zigbee} 
+%        \begin{itemize}
+%          \item \emph{IEEE 802.15.4}
+%        \end{itemize}
+      \item \emph{Fairness} in network access 
+      \item Acknowledgement and retry  
+        \begin{itemize}
+        \item \emph{Unreliable network}
+        \item \emph{Congestion avoidance}
+        \item \emph{Complexity - e.g. TCP}
+        \end{itemize}
+        
+>>>>>>> 801733e80908eb37657d152d4a2dd7948d8aa954
       \end{description}
     \end{block}
 \end{frame}
