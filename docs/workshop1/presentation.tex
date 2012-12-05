@@ -27,7 +27,7 @@
 \title[Code Mobility]{Code Mobility}
 
 % The date
-\date{\today}
+\date{06. December 2012}
 
 % The author
 \author[Selyunin,Pelesi\'c,Jakovljevi\'c]{
@@ -68,13 +68,6 @@
 \subsection{Code mobility overview}
 \begin{frame}
 	\frametitle{Code mobility overview}
-	Our goal:
-	\begin{itemize}
-		\item Design code mobility system on ESE Board
-		\item Hardware drivers \& mobile agents \& communication
-		\item Master project management skills
-	\end{itemize}
-
  		\framesubtitle{Concept of code mobility}
 	\begin{block}{Concept of code mobility}
 		\begin{description}
@@ -91,7 +84,9 @@
 			\item	Performance gains
 		\end{description}
 	\end{block}	
+\cite{10.1109/32.685258, BartocciCMV06} 
 
+%\cite{BartocciCMV06}
 \end{frame}
 
 \subsection{Level of abstraction}
@@ -159,8 +154,8 @@ Communication design & \\
 		\item communication \& drivers
 		\end{itemize}
 \column{2in}
-\includegraphics<1>[height=2in]{img/overview_1-eps-converted-to.pdf}
-\includegraphics<2>[height=2in]{img/overview_2-eps-converted-to.pdf}
+%\includegraphics<1>[height=2in]{img/overview_1-eps-converted-to.pdf}
+\includegraphics[height=2in]{img/overview_2-eps-converted-to.pdf}
 
 \end{columns}
 \end{frame}
@@ -226,11 +221,33 @@ Communication design & \\
 
 
 \subsection{Communication Protocol}
+
+\begin{comment}
+\begin{frame}
+  \frametitle{Communication Protocol}
+  \framesubtitle{Communication Participants}
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/zigbee.pdf}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Protocol Design}
+    \begin{block}{Requirements}
+      \begin{description}
+      \item Local \emph{on-board} communication
+      \item Remote communication
+      \item Sending agent code
+      \item Sending application data
+	\end{description}
+\end{frame}
+\end{comment}
+
 \begin{frame}
   \frametitle{Communication Protocol}
   \framesubtitle{Network Infrastructure}
   \begin{figure}
-    \includegraphics[width=\textwidth]{img/zigbee.pdf}
+    \includegraphics[width=0.9\textwidth]{img/zigbee.pdf}
   \end{figure}
 \end{frame}
 
@@ -241,7 +258,6 @@ Communication design & \\
       \item Local and remote communication 
       \item Sending agent code 
       \item Sending application data
-
       \end{description}
     \end{block}
 \end{frame}
@@ -264,8 +280,7 @@ Communication design & \\
         \item \emph{Unreliable network}
         \item \emph{Congestion avoidance}
         \item \emph{Complexity - e.g. TCP}
-        \end{itemize}
-        
+        \end{itemize}        
       \end{description}
     \end{block}
 \end{frame}
@@ -301,8 +316,10 @@ Communication design & \\
     \caption{Network after rerouting}
   \end{figure}
   \begin{tabular}{llll}
-    \includegraphics[height=0.1in]{img/pink.png} & Network Coordinator & \includegraphics[height=0.1in]{img/blue} & Failed Node \\
-    \includegraphics[height=0.1in]{img/green} & Network Router & \includegraphics[height=0.1in]{img/route} & Message Route \\
+    \includegraphics[height=0.1in]{img/pink.png} & Network Coordinator & \includegraphics[height=0.1in]{img/blue} & Failed Node
+ \\
+    \includegraphics[height=0.1in]{img/green} & Network Router & \includegraphics[height=0.1in]{img/route} & Message Route 
+\\
   \end{tabular}
 \end{frame}
 
@@ -328,7 +345,7 @@ Communication design & \\
 % 	\framesubtitle{}
 \scalebox{0.6}{
 	\begin{tabular}{lllll}
-	 & Name & Dates & Interdependencies & Deliverables\\\hline
+	 & Name & Interdependencies & Dates & Deliverables\\\hline
 	WP1 & Documentation & all &25.10.12 - 15.01.13 & D1.1 Lab protocol\\\hline
 	    & 			&	&			& D1.2 specification\\\hline
 	    & 			&	&			& D1.3 workshop1\\\hline
@@ -365,11 +382,75 @@ Project management & \includegraphics[width=0.07\textwidth]{img/redmine-logo} & 
 		& \multicolumn{2}{l}{\tiny{\href{http://nes2012group4.herokuapp.com/}{http://nes2012group4.herokuapp.com/}}}\\
 Code generation & \includegraphics[width=0.07\textwidth]{img/scade-logo} & SCADE\\
 Editors & \includegraphics[width=0.07\textwidth]{img/emacs-logo} & Emacs\\
-        & & gedit\\
 
 \end{tabular}
 
 \end{frame}
 
+
+\begin{frame}
+	\frametitle{References}
+	\bibliography{presentation}
+	\bibliographystyle{alpha}
+
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Questions}
+
+\end{frame}
+
+\begin{comment}
+\begin{frame}
+	\frametitle{Roles}
+\begin{center}
+\scalebox{0.6}{	
+	\begin{tabular}{ll}
+%	\textbf{Role}		& \textbf{Responsibilies}\\\hline
+	\hline
+	\multicolumn{2}{c}{Konstantin Selyunin}\\
+	Project manager & internal coordination\\
+			& defining tasks\\
+			& control meeting deadlines\\\hline
+	\multicolumn{2}{c}{Igor Pelesi\'c}\\
+	System architect & technical decisions\\
+			 & determine technical part of the project\\\hline
+	\multicolumn{2}{c}{Miljenko Jakovljevi\'c}\\
+	Documentation responsible & Lab protocol\\
+				  & documentation decisions\\
+	\end{tabular}
+}
+\end{center}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Goals}
+Our goals:
+	\begin{itemize}
+		\item Design, implement and evaluate code mobility system on ESE Board
+		\item Hardware drivers \& mobile agents \& communication
+		\item Master project management skills
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Use cases}
+
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Risk management}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{High-level agent language}
+
+\end{frame}
+\end{comment}
 % End of document
 \end{document}
