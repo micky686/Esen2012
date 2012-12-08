@@ -48,6 +48,8 @@ LIBS :=
 OBJ :=
 # output files
 OUTPUT :=
+#defines
+DEFINES := 
 
 # include description for each module
 include $(CONFIG_DIR)/modcfg.mk
@@ -85,9 +87,9 @@ all: $(OUTPUT)
 
 %.d: %.c
 	rm -f $@
-	CC=$(CC) SED=$(SED) ${SCR_DEPEND} `dirname $*.c` o d $(CFLAGS) $*.c > $@
+	CC=$(CC) SED=$(SED) ${SCR_DEPEND} `dirname $*.c` o d $(DEFINES-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) $(CFLAGS-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) $*.c > $@
 	echo "$(@:.d=.o):" >> $@
-	echo "	$(CC) $(CFLAGS) $(CFLAGS-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) -c -o $(@:.d=.o) $(@:.d=.c)" >> $@
+	echo "	$(CC) $(CFLAGS) $(DEFINES-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) $(CFLAGS-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) -c -o $(@:.d=.o) $(@:.d=.c)" >> $@
 
 %.h:
 ifeq "$(filter distclean cleandep,$(MAKECMDGOALS))" ""
@@ -134,9 +136,9 @@ _mdep_bug = $(filter %$(subst .mdep.d,,$(@F)).S,$(SRC-MDEP-$(patsubst _%,%,$(sub
 .SECONDEXPANSION:
 %.mdep.d: $$(_mdep_bug) 
 	rm -f $@
-	CC=$(CC) SED=$(SED) ${SCR_MDEPEND} $(@:.d=) o d $(CFLAGS) $(CFLAGS-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) $< > $@
+	CC=$(CC) SED=$(SED) ${SCR_MDEPEND} $(@:.d=) o d $(CFLAGS) $(DEFINES-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) $(CFLAGS-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) $< > $@
 	echo "$(@:.d=.o):" >> $@
-	echo "	$(CC) $(CFLAGS) $(CFLAGS-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) $(CFLAGS-ESEL-MDEP-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) -c -o $(@:.d=.o) $<" >> $@
+	echo "	$(CC) $(CFLAGS) $(DEFINES-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) $(CFLAGS-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) $(CFLAGS-ESEL-MDEP-$(patsubst _%,%, $(subst ..,,$(subst ./,,$(subst /,_,$(@D)))))) -c -o $(@:.d=.o) $<" >> $@
 	
 
 # include target specific extensions (like special install targets, aso.)

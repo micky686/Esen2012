@@ -10,13 +10,10 @@
 
 #include "platform.h"
 
-config_platform_t conf;
-char drivers[][50] = {"driver1", "driver2"};
-conf.drivers = drivers;
-conf.agent0_active=1;
-conf.agent0_prio=3;
-conf.agent0_code="code";
-
-conf_p = conf;
+platform_configuration = {
+		 .agent0_active=1;
+		 .agent0_prio=3;
+		 .agent0_code="code";
+ }
 
 #endif
