@@ -11,6 +11,9 @@ endif
 OBJ-$(MNAME)	+= $(foreach m, $(OBJ-ESEL-$(MNAME)-y), $(ESELIB_DIR)/src/$(m).o)
 OBJ-$(MNAME)	+= $(foreach m, $(OBJ-ESEL-MDEP-$(MNAME)-y), $(d)/$(m).mdep.o)
 SRC-MDEP-$(MNAME) += $(foreach m, $(OBJ-ESEL-MDEP-$(MNAME)-y), $(filter %.c %.S,$(wildcard $(ESELIB_DIR)/src/$(m).*)))
+OBJ-$(MNAME)	+= $(foreach m, $(OBJ-PLATFORM-$(MNAME)-y), $(PLATFORM_DIR)/src/$(m).o)
+OBJ-$(MNAME)	+= $(foreach m, $(OBJ-PLATFORM-MDEP-$(MNAME)-y), $(d)/$(m).mdep.o)
+SRC-MDEP-$(MNAME) += $(foreach m, $(OBJ-PLATFORM-MDEP-$(MNAME)-y), $(filter %.c %.S,$(wildcard $(PLATFORM_DIR)/src/$(m).*)))
 OBJ-$(MNAME)	+= $(foreach m, $(OBJ-SCDL-$(MNAME)-y), $(SCADE_DIR)/src/$(m).o)
 
 # TTPA extension

@@ -6,13 +6,16 @@ include $(MSTDPRE)
 
 
 # node modules must be added here
-OBJ-M-$(MNAME)-y	+= main
+OBJ-M-$(MNAME)-y	+=
 
 # put global used library modules in here
 OBJ-ESEL-$(MNAME)-y	+= 
 
 # put module specific used library modules in here
-OBJ-ESEL-MDEP-$(MNAME)-y += protocoll timer2
+OBJ-ESEL-MDEP-$(MNAME)-y += protocoll timer2 bargraph
+
+# put platform specific used library modules in here
+OBJ-PLATFORM-MDEP-$(MNAME)-y += platform
 
 # put used scade models in here (need to be defined in 
 # library/scade/Makefile.scade)

@@ -11,14 +11,14 @@
 
 
 /********************************************************/
-/*Prozedur: void init_bargraph(void)                  */
+/*Prozedur: void bargraph_init(void)                  */
 /*Beschreibung: Initialisiert die Bargraph.*/
 /*Parameter: BARGRAPH_DDR: Data Direction Register auf Datenausgang einstellen*/
 /*BARGRAPH_PORT: Ausgangstreiber auf high stellen. (LEDs sind lowaktiv)*/
 /********************************************************/
 
 
-void init_bargraph(void)
+void bargraph_init(void)
 {
 	BARGRAPH_DDR = 0xff;
 	BARGRAPH_PORT = 0xff;
