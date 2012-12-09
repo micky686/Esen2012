@@ -7,13 +7,14 @@
 
 #include "platform.h"
 
-void init_drivers(platform_t* platform){
+volatile platform_t platform;
+
+void init_drivers(void){
 
 #ifdef BARGRAPH
 	bargraph_init();
-	platform->drivers.set_bargraph = &set_bargraph;
+	platform.drivers.set_bargraph = &set_bargraph;
 #endif
-
 
 #ifdef PROTOCOLL
 
@@ -53,13 +54,14 @@ void init_drivers(platform_t* platform){
 
 }
 
+
 /*
  * Initialize the platform with the provided configuration and
  * setup all requested drivers.
  */
-void platform_init(config_platform_t conf, platform_t* platform){
+void platform_init(void){
 
-	init_drivers(platform);
+	init_drivers();
 
 
 }
@@ -67,16 +69,16 @@ void platform_init(config_platform_t conf, platform_t* platform){
 
 
 
-void run_platform(platform_t* platform){
+void run_platform(void){
 
 
 }
 
 int main(void) {
 
-  platform_t platform;
-  platform_init(platform_configuration, &platform);
-  run_platform(&platform);
+
+  platform_init();
+  run_platform();
 
   while(TRUE);
   return 1;

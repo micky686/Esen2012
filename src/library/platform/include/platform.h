@@ -10,34 +10,29 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "global.h"
 #include "bargraph.h"
 #include "DISPLAY.h"
 
-#define DRV_LEN 30
+#include "hw_layer.h"
 
-typedef struct config_platform{
+#define ACTIVATE_AGENT(idx) { \
+	platform.agents[idx].id=idx; \
+	platform.agents[idx].status=ready; \
+}
 
-	uint8_t agent0_active;
-	uint8_t agent0_prio;
-	char* agent0_code;
+#define SET_AGENT_PRIO(id, prio) { \
+	platform.agents[id].priority = prio; \
+}
 
-	uint8_t agent1_active;
-	uint8_t agent1_prio;
-	char* agent1_code;
+#define SET_AGENT_CODE(id, inpcode) { \
+	size_t len = strlen(#inpcode); \
+	platform.agents[id].code = (char*)malloc(len); \
+	strncpy(platform.agents[id].code, (char*)#inpcode, len); \
+}
 
-	uint8_t agent2_active;
-	uint8_t agent2_prio;
-	char* agent2_code;
-
-	uint8_t agent3_active;
-	uint8_t agent3_prio;
-	char* agent3_code;
-
-} config_platform_t;
-
-static config_platform_t platform_configuration;
 
 typedef struct drivers {
 
@@ -62,12 +57,14 @@ typedef struct drivers {
 
 } drivers_t;
 
+enum agent_status { stopped, ready, blocked };
+typedef enum agent_status agent_status_t;
 
 typedef struct agent{
 
 	uint8_t id;
 	uint8_t priority;
-	uint8_t status;
+	agent_status_t status;
 
 	int reg_0;
 	int reg_1;
@@ -96,11 +93,11 @@ typedef struct platform{
 
 } platform_t;
 
-extern platform_t platform;
+extern volatile platform_t platform;
 
-void init_drivers(platform_t* platform);
-void platform_init(config_platform_t conf, platform_t* platform);
-void run_platform(platform_t* platform);
+void init_drivers(void);
+void platform_init(void);
+void run_platform(void);
 
 
 #endif /* PLATFORM_H_ */

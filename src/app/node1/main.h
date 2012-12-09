@@ -10,10 +10,6 @@
 
 #include "platform.h"
 
-platform_configuration = {
-		 .agent0_active=1;
-		 .agent0_prio=3;
-		 .agent0_code="code";
- }
+ACTIVATE_AGENT(0);
 
 #endif
