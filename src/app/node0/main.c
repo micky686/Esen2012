@@ -1,7 +1,7 @@
 /*
  * main.c
  *
- *  Created on: Dec 8, 2012
+ *  Created on: Dec 9, 2012
  *      Author: igor
  */
 #include "platform.h"

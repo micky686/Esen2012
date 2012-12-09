@@ -6,7 +6,7 @@ include $(MSTDPRE)
 
 
 # node modules must be added here
-OBJ-M-$(MNAME)-y	+=
+OBJ-M-$(MNAME)-y	+=main
 
 # put global used library modules in here
 OBJ-ESEL-$(MNAME)-y	+= 
