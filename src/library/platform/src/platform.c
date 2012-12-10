@@ -6,6 +6,8 @@
  */
 
 #include "platform.h"
+#include "hw_layer.h"
+#include "scheduler.h"
 
 volatile platform_t platform;
 
@@ -54,6 +56,11 @@ void init_drivers(void){
 
 }
 
+void init_agents(){
+	ACTIVATE_AGENT(0);
+	SET_AGENT_PRIO(0, platform_config.agents_conf[0].prio);
+	SET_AGENT_CODE(0, platform_config.agents_conf[0].code);
+}
 
 /*
  * Initialize the platform with the provided configuration and
@@ -62,6 +69,7 @@ void init_drivers(void){
 void platform_init(void){
 
 	init_drivers();
+	init_agents();
 
 
 }
@@ -71,6 +79,7 @@ void platform_init(void){
 
 void run_platform(void){
 
+	schedule_next();
 
 }
 
