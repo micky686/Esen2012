@@ -939,6 +939,7 @@ Jump to \texttt{offset} in code segment of agent structure if the value of acc. 
 
 \noindent
 \framebox{\texttt{jmpls  offset}}
+
 \vspace{0.1in}
 
 \noindent
@@ -1125,23 +1126,24 @@ Destroy agent structure and free corresponding memory
 \subsubsection{Message exchange}
 \noindent
 \textbf{Send}
+Message exchange between agents
+\noindent
+
 
 \noindent
-Send message of predefined \texttt{type} to \texttt{platform}.
-
-\noindent
-\framebox{\texttt{sendmsg type, platform}}
+\framebox{\texttt{sendmsg reg, agent, platform}}
 \vspace{0.1in}
 
 
 \noindent
-\begin{tabular}{+p{1.9in}+p{2.5in}+p{1.3in}}
+\begin{tabular}{+p{2.3in}+p{3.0in}+p{1.2in}}
 
 Syntax  & Operands   & Program counter \\
 
-\texttt{sendmsg platform} & \texttt{platform_0 $\leq$ platform $\leq$ platform_3} & \texttt{PC = PC + 1}\\
+\texttt{sendmsg reg, agent, platform} & \texttt{platform_0 $\leq$ platform $\leq$ platform_3} & \texttt{PC = PC + 1}\\
+ & \texttt{agent_0 $\leq$ agent $\leq$ agent_3} & \\
 \multicolumn{3}{l}{Operation} \\
-\multicolumn{3}{l}{Send \texttt{mess_type} to \texttt{platform}} \\
+\multicolumn{3}{l}{Send value of the register \texttt{reg} to the agent \texttt{aa} on the platform \texttt{pp}} \\
 
 \end{tabular}
 
@@ -1149,10 +1151,10 @@ Syntax  & Operands   & Program counter \\
 16-bit opcode:
 
 \noindent
-\begin{tabular}{|c|c|c|c|}
- \multicolumn{2}{|c|}{} & type & platform\\
+\begin{tabular}{|c|c|c|c|c|}
+ \multicolumn{2}{|c|}{} & register & agent & platform\\
 \hline
-\texttt{1111} & \texttt{1000} & \texttt{tttt} & \texttt{pppp}\\
+\texttt{1111} & \texttt{1000} & \texttt{rrrr} &\texttt{aa} & \texttt{pp}\\
 
 \end{tabular}
 
@@ -1369,14 +1371,14 @@ Syntax  		  & Operands   								     & Program counter       \\
 Set service to reg or value
 
 \noindent
-\framebox{\texttt{setservice service, reg}}
+\framebox{\texttt{setservice service_id, reg}}
 
 \noindent
-\begin{tabular}{+p{1.9in}+p{2.9in}+p{1.2in}}
+\begin{tabular}{+p{2.0in}+p{2.95in}+p{1.2in}}
 
 Syntax  		  & Operands   								     & Program counter       \\
 
-\texttt{setservice service, reg} & \texttt{service_0 $\leq$ service $\leq$ service_10, reg_0 $\leq$ reg $\leq$ reg_6} & \texttt{PC = PC + 1}  \\
+\texttt{setservice service_id, reg} & \texttt{service_0 $\leq$ service_id $\leq$ service_255, reg_0 $\leq$ reg $\leq$ reg_6} & \texttt{PC = PC + 1}  \\
 
 \end{tabular}
 
@@ -1385,7 +1387,7 @@ Syntax  		  & Operands   								     & Program counter       \\
 
 \noindent
 \begin{tabular}{|c|c|c|c|}
- & reg & \multicolumn{2}{c|}{service}\\
+ & reg & \multicolumn{2}{c|}{service_id}\\
 \hline
 \texttt{0111} & \texttt{rrrr} & \texttt{ssss} & \texttt{ssss}\\
 
@@ -1402,15 +1404,15 @@ Syntax  		  & Operands   								     & Program counter       \\
 Put corresponding value from the service to the acc.
 
 \noindent
-\framebox{\texttt{getservice}}
+\framebox{\texttt{getservice service\_id}}
 \vspace{0.1in}
 
 \noindent
-\begin{tabular}{+p{1.9in}+p{1.2in}}
+\begin{tabular}{+p{1.9in}+p{3.0in}+p{1.2in}}
 
-Syntax  		 & Program counter       \\
+Syntax  & Operand  & Program counter       \\
 
-\texttt{getservice} & \texttt{PC = PC + 1}  \\
+\texttt{getservice service_id}& service_0 $\leq$ service_id $\leq$ service_255 & \texttt{PC = PC + 1}  \\
 
 \end{tabular}
 
@@ -1419,9 +1421,9 @@ Syntax  		 & Program counter       \\
 
 \noindent
 \begin{tabular}{|c|c|c|c|}
- \multicolumn{4}{|c|}{}\\
+ \multicolumn{2}{|c|}{} &\multicolumn{2}{c|}{service_id} \\
 \hline
-\texttt{0000} & \texttt{0111} & \texttt{0000} & \texttt{0000}\\
+\texttt{0000} & \texttt{0111} & \texttt{ssss} & \texttt{ssss}\\
 
 \end{tabular}
 \vspace{0.1in}
