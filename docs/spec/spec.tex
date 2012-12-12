@@ -610,7 +610,14 @@ Register & \texttt{rrrr} & Char Register & \texttt{rrrr}\\
 \hline
 \texttt{reg_6} & \texttt{0110} &   &  \\
 \hline
-%\texttt{reg_7} & \texttt{0111} &   &  \\
+\texttt{acc} & \texttt{1111} & &\\
+\hline
+%\texttt{reg_7L} & \texttt{0111} &   &  \\
+%\hline
+%\texttt{reg_7H} & \texttt{1011} &  &  \\
+%\hline
+%\texttt{reg_7} & \texttt{1100} & & \\
+
 %\hline
 \end{tabular}
 
@@ -624,11 +631,11 @@ Add the content of \texttt{reg_d} and \texttt{reg_r} (or \texttt{value}) and put
 \framebox{\texttt{add reg_d, reg_r}}
 
 \noindent
-\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+\begin{tabular}{+p{1.3in}+p{2.7in}+p{1.3in}+p{1in}}
 
 Syntax  & Operands   & Program counter & Flags\\
 
-\texttt{add reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, reg_0 $\leq$ reg_r $\leq$ reg_6} & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{add reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, acc, reg_0 $\leq$ reg_r $\leq$ reg_6, acc} & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} & & \\
 
@@ -653,11 +660,11 @@ Syntax  & Operands   & Program counter & Flags\\
 \vspace{0.2in}
 
 \noindent
-\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+\begin{tabular}{+p{1.3in}+p{2.6in}+p{1.3in}+p{1in}}
 
 Syntax  & Operands   & Program counter & Flags\\
 
-\texttt{add reg_r, value} & \texttt{reg_0 $\leq$ reg_r $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{add reg_r, value} & \texttt{reg_0 $\leq$ reg_r $\leq$ reg_6, acc, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} & & \\
 
@@ -687,11 +694,11 @@ Subtract \texttt{reg_s} (or \texttt{value}) from \texttt{reg_m} and put the resu
 \framebox{\texttt{sub reg_m, reg_s}}
 
 \noindent
-\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+\begin{tabular}{+p{1.3in}+p{2.7in}+p{1.3in}+p{1in}}
 
 Syntax  & Operands   & Program counter & Flags\\
 
-\texttt{sub reg_m, reg_s} & \texttt{reg_0 $\leq$ reg_m $\leq$ reg_6, reg_0 $\leq$ reg_s $\leq$ reg_6} & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{sub reg_m, reg_s} & \texttt{reg_0 $\leq$ reg_m $\leq$ reg_6, acc, reg_0 $\leq$ reg_s $\leq$ reg_6, acc} & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} & & \\
 
@@ -716,11 +723,11 @@ Syntax  & Operands   & Program counter & Flags\\
 \vspace{0.1in}
 
 \noindent
-\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+\begin{tabular}{+p{1.3in}+p{2.6in}+p{1.3in}+p{1in}}
 
 Syntax  & Operands   & Program counter & Flags\\
 
-\texttt{sub reg_m, value} & \texttt{reg_0 $\leq$ reg_m $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{sub reg_m, value} & \texttt{reg_0 $\leq$ reg_m $\leq$ reg_6, acc, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} & & \\
 
@@ -752,11 +759,11 @@ Divide reg1 by reg2 (or value) and put the result into acc.\\
 \framebox{\texttt{div reg_d, reg_r}}
 
 \noindent
-\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+\begin{tabular}{+p{1.3in}+p{2.7in}+p{1.3in}+p{1in}}
 
 Syntax  & Operands   & Program counter & Flags\\
 
-\texttt{div reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, reg_0 $\leq$ reg_r $\leq$ reg_6} & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{div reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, acc, reg_0 $\leq$ reg_r $\leq$ reg_6, acc} & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} & & \\
 
@@ -781,11 +788,11 @@ Syntax  & Operands   & Program counter & Flags\\
 \vspace{0.1in}
 
 \noindent
-\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+\begin{tabular}{+p{1.3in}+p{2.6in}+p{1.3in}+p{1in}}
 
 Syntax  		  & Operands   								     & Program counter       & Flags\\
 
-\texttt{div reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{div reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, acc, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} 									      & 		     & \\
 
@@ -816,11 +823,11 @@ Multiply \texttt{reg1} and \texttt{reg2} (or \texttt{value}) and put the result 
 \framebox{\texttt{mul reg_d, reg_r}}
 
 \noindent
-\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+\begin{tabular}{+p{1.3in}+p{2.7in}+p{1.3in}+p{1in}}
 
 Syntax  & Operands   & Program counter & Flags\\
 
-\texttt{mul reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, reg_0 $\leq$ reg_r $\leq$ reg_6} & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{mul reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, acc, reg_0 $\leq$ reg_r $\leq$ reg_6, acc} & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} & & \\
 
@@ -845,11 +852,11 @@ Syntax  & Operands   & Program counter & Flags\\
 \vspace{0.1in}
 
 \noindent
-\begin{tabular}{+p{1.3in}+p{2.2in}+p{1.3in}+p{1in}}
+\begin{tabular}{+p{1.3in}+p{2.6in}+p{1.3in}+p{1in}}
 
 Syntax  		  & Operands   								     & Program counter       & Flags\\
 
-\texttt{mul reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{mul reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, acc, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} 									      & 		     & \\
 
@@ -981,11 +988,11 @@ Compare \texttt{reg1} and \texttt{reg2} (or \texttt{value}).
 \framebox{\texttt{compare reg_d, reg_r}}
 
 \noindent
-\begin{tabular}{+p{1.8in}+p{2.2in}+p{1.3in}}
+\begin{tabular}{+p{1.8in}+p{2.7in}+p{1.3in}}
 
 Syntax  & Operands   & Program counter \\
 
-\texttt{compare reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, reg_0 $\leq$ reg_r $\leq$ reg_6} & \texttt{PC = PC + 1} \\
+\texttt{compare reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, acc, reg_0 $\leq$ reg_r $\leq$ reg_6, acc} & \texttt{PC = PC + 1} \\
 
 \multicolumn{3}{l}{Operation} \\
 
@@ -1010,11 +1017,11 @@ Syntax  & Operands   & Program counter \\
 \framebox{\texttt{compare reg_d, value}}
 
 \noindent
-\begin{tabular}{+p{1.9in}+p{2.2in}+p{1.3in}}
+\begin{tabular}{+p{1.9in}+p{2.6in}+p{1.3in}}
 
 Syntax  & Operands   & Program counter \\
 
-\texttt{compare reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} \\
+\texttt{compare reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, acc, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} \\
 
 \multicolumn{3}{l}{Operation} \\
 
@@ -1051,7 +1058,7 @@ Move agent structure to platform that possess required service
 
 Syntax  & Operands   & Program counter \\
 
-\texttt{move service} & \texttt{service_0 $\leq$ service $\leq$ service_10} & \texttt{PC = PC + 1} \\
+\texttt{move service} & \texttt{service_0 $\leq$ service $\leq$ service_255} & \texttt{PC = PC + 1} \\
 
 \multicolumn{3}{l}{Operation} \\
 
@@ -1142,6 +1149,8 @@ Syntax  & Operands   & Program counter \\
 
 \texttt{sendmsg reg, agent, platform} & \texttt{platform_0 $\leq$ platform $\leq$ platform_3} & \texttt{PC = PC + 1}\\
  & \texttt{agent_0 $\leq$ agent $\leq$ agent_3} & \\
+ & \texttt{reg_0 $\leq$ reg $\leq$ reg_6, acc} & \\
+ & \texttt{reg_str_0 $\leq$ reg $\leq$ reg_str_2} & \\
 \multicolumn{3}{l}{Operation} \\
 \multicolumn{3}{l}{Send value of the register \texttt{reg} to the agent \texttt{aa} on the platform \texttt{pp}} \\
 
@@ -1164,21 +1173,22 @@ Syntax  & Operands   & Program counter \\
 \textbf{Receive}
 
 \noindent
-Pull message from \texttt{platform} to acc.
+Pull message from \texttt{platform} to \texttt{register}.
 
 \noindent
-\framebox{\texttt{pullmsg}}
+\framebox{\texttt{pullmsg reg}}
 
 \noindent
-\begin{tabular}{+p{1.9in}+p{1.3in}}
+\begin{tabular}{+p{1.9in}+p{3.0in}+p{1.3in}}
 
-Syntax   & Program counter \\
+Syntax & Operation  & Program counter \\
 
-\texttt{pullmsg}  & \texttt{PC = PC + 1} \\
+\texttt{pullmsg} & \texttt{reg_0 $\leq$ reg $\leq$ reg_6, acc} & \texttt{PC = PC + 1} \\
+ & \texttt{reg_str_0 $\leq$ reg $\leq$ reg_str_2} & \\
 
-\multicolumn{2}{l}{Operation} \\
+\multicolumn{3}{l}{Operation} \\
 
-\multicolumn{2}{l}{ \texttt{acc $\leftarrow$} msg_type, msg_platform} \\
+\multicolumn{3}{l}{ \texttt{reg $\leftarrow$} message} \\
 
 \end{tabular}
 
@@ -1187,7 +1197,7 @@ Syntax   & Program counter \\
 
 \noindent
 \begin{tabular}{|c|c|c|c|}
- \multicolumn{4}{|c|}{} \\
+ \multicolumn{2}{|c|}{} & & \texttt{rrrr} \\
 \hline
 \texttt{1111} & \texttt{1010} & \texttt{0000} & \texttt{0000}\\
 \end{tabular}
@@ -1201,17 +1211,17 @@ Syntax   & Program counter \\
 Store value in register
 
 \noindent
-Store character in register
+Push \texttt{char} value in the \texttt{str_reg}
 
 \noindent
 \framebox{\texttt{store reg_d, value}}
 
 \noindent
-\begin{tabular}{+p{1.8in}+p{2.2in}+p{1.3in}}
+\begin{tabular}{+p{1.8in}+p{2.6in}+p{1.3in}}
 
 Syntax  		  & Operands   								     & Program counter       \\
 
-\texttt{store reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1}  \\
+\texttt{store reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, acc, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1}  \\
 
 \multicolumn{2}{l}{Operation} 									      & 		     \\
 
@@ -1236,7 +1246,7 @@ Syntax  		  & Operands   								     & Program counter       \\
 \vspace{0.1in}
 
 \noindent
-\begin{tabular}{+p{1.8in}+p{2.2in}+p{1.3in}}
+\begin{tabular}{+p{1.8in}+p{2.9in}+p{1.3in}}
 
 Syntax  		  & Operands   						    & Program counter       \\
 
@@ -1244,7 +1254,7 @@ Syntax  		  & Operands   						    & Program counter       \\
 
 \multicolumn{2}{l}{Operation} 									      & 		     \\
 
-\multicolumn{2}{l}{\texttt{reg_str $\leftarrow$ value}} & \\
+\multicolumn{2}{l}{\texttt{reg_str $\Leftarrow$ value}} & \\
 
 \end{tabular}
 
@@ -1270,11 +1280,11 @@ Move value from reg_r to reg_d
 \framebox{\texttt{mv reg_d, reg_r}}
 
 \noindent
-\begin{tabular}{+p{1.8in}+p{2.2in}+p{1.3in}}
+\begin{tabular}{+p{1.8in}+p{2.6in}+p{1.3in}}
 
 Syntax  		  & Operands   								     & Program counter       \\
 
-\texttt{mv reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, reg_0 $\leq$ reg_r $\leq$ reg_6} & \texttt{PC = PC + 1}  \\
+\texttt{mv reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, acc  reg_0 $\leq$ reg_r $\leq$ reg_6, acc} & \texttt{PC = PC + 1}  \\
 
 \multicolumn{2}{l}{Operation} 									      & 		     \\
 
@@ -1374,11 +1384,11 @@ Set service to reg or value
 \framebox{\texttt{setservice service_id, reg}}
 
 \noindent
-\begin{tabular}{+p{2.0in}+p{2.95in}+p{1.2in}}
+\begin{tabular}{+p{1.9in}+p{3.1in}+p{1.2in}}
 
 Syntax  		  & Operands   								     & Program counter       \\
 
-\texttt{setservice service_id, reg} & \texttt{service_0 $\leq$ service_id $\leq$ service_255, reg_0 $\leq$ reg $\leq$ reg_6} & \texttt{PC = PC + 1}  \\
+\texttt{setservice service_id, reg} & \texttt{service_0 $\leq$ service_id $\leq$ service_255, reg_0 $\leq$ reg $\leq$ reg_6, acc} & \texttt{PC = PC + 1}  \\
 
 \end{tabular}
 
