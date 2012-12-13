@@ -20,6 +20,9 @@ OBJ-ESEL-MDEP-$(MNAME)-y +=
 # library/scade/Makefile.scade)
 OBJ-SCDL-$(MNAME)-y	+=
 
+# put platform specific used library modules in here
+OBJ-PLATFORM-MDEP-$(MNAME)-y += platform exe_layer scheduler
+
 # and finally the required system libraries (e.g. you would 
 # put 'm' in there if you want to use the math library)
 LIB-LD-$(MNAME)		:= m
