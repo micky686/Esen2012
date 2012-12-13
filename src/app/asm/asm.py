@@ -3,10 +3,12 @@ import sys
 
 
 LABEL = r"[A-Za-z][A-Za-z0-9]{0,5}"
-MNEMONIC = r"add|sub|div|mul|jmpgr|jmpeq|jmpls|compare|move|clone|die|sendmsg|pullmsg|store|storecr|mv|wait|priority|setservice|getservice"
+MNEMONIC = r"add|sub|div|mul|jmpgr|jmpeq|jmpls|compare|move|clone|die|sendmsg|pullmsg|storecr|store|mv|wait|priority|setservice|getservice"
 REG = r"acc|reg_0|reg_1|reg_2|reg_3|reg_4|reg_5|reg_6|reg_str_0|reg_str_1|reg_str_2"
 VALUE = r"0x[0-9A-F]{1,2}|0b[01]{1,8}|[0-9]{1,3}"
-OPERAND = REG + "|" + VALUE 
+SERVICE = r"temp|bargraph|fan|heater|led_matrix"
+CHAR = r"[A-Za-z0-9_]"
+OPERAND = REG + "|" + VALUE + "|" + SERVICE + "|" + CHAR
 LEGAL_LABEL = "((?!" + MNEMONIC + "|" + OPERAND + ")" + LABEL +")"
 LABEL_LOOKUP = "(?:" + LEGAL_LABEL + "\s*:)?" + "\s*(" + MNEMONIC + ")" + "(?:\s+" + LEGAL_LABEL + ")?"
 OPERAND_LOOKUP = "(?:" + LEGAL_LABEL + "\s*:)?" + "\s*(" + MNEMONIC + ")" + "(?:\s+(" + OPERAND + "))?\s*(?:,\s*(" + OPERAND + "))?\s*(?:,\s*(" + OPERAND + "))?\s*"
@@ -23,6 +25,13 @@ reg = {"reg_0":"0000",\
 reg_str = {"reg_str_0":"1000",\
               "reg_str_1":"1001",\
               "reg_str_2":"1010"}
+
+service = {"temp":"0",\
+               "bargraph":"1",\
+               "fan":"2",\
+               "heater":"3",\
+               "led_matrix":"4",\
+               }
 
 command_opcode = {"add":"00000011",\
                "addv":"0011",\
@@ -96,6 +105,7 @@ def second_pass():
         #assemble line
         opcode = ""
         mnem = FIRST_PARS[i]["MNEMONIC"].lower()
+        # 2 operand reg-reg or reg-value commands
         if  mnem == "add" or mnem == "sub" or mnem == "mul" or mnem == "div" or mnem == "compare":
            if FIRST_PARS[i]["LABEL2"] != None:
                print "Error in line {}, illegal label ".format(FIRST_PARS[i]["LINE"])
@@ -105,16 +115,18 @@ def second_pass():
                opcode = command_opcode[mnem] + reg[FIRST_PARS[i]["OPERAND1"]]+reg[FIRST_PARS[i]["OPERAND2"]]
            elif re.compile(VALUE).match(FIRST_PARS[i]["OPERAND2"]) != None:
                opcode = command_opcode[mnem + "v"] + reg[FIRST_PARS[i]["OPERAND1"]] + convert_to_binary(FIRST_PARS[i]["OPERAND2"])
+        #0 operand 1 label commands
         if mnem == "jmpeq" or mnem == "jmpls" or mnem == "jmpgr":
             if FIRST_PARS[i]["OPERAND1"] != None or FIRST_PARS[i]["OPERAND2"] != None or FIRST_PARS[i]["OPERAND3"] != None:
                 print "Error in line {}, illegal operand".format(FIRST_PARS[i]["LINE"])
             elif FIRST_PARS[i]["LABEL2"] == None:
                 print "Error in line {}, illegal label".format(FIRST_PARS[i]["LINE"])
             else:
-            #find labels to generate offset!!!
-                offset = 1#dummy
-                offset = convert_to_binary(offset)
-                opcode = command_opcode[mnem] + offset
+            #TODO
+               # offset = 1dummy
+               # offset = convert_to_binary(offset)
+               # opcode = command_opcode[mnem] + offset
+        #0 operand commands
         if mnem == "clone" or mnem == "die":
             if FIRST_PARS[i]["OPERAND1"] != None or FIRST_PARS[i]["OPERAND2"] != None or FIRST_PARS[i]["OPERAND3"] != None:
                 print "Error in line {}, illegal operand".format(FIRST_PARS[i]["LINE"])
@@ -122,6 +134,48 @@ def second_pass():
                 print "Error in line {}, illegal label ".format(FIRST_PARS[i]["LINE"])
             else:
                 opcode = command_opcode[mnem]
+        #1 operand commands
+        if mnem == "move" or mnem == "pullmsg" or mnem == "wait" or mnem == "priority" or mnem == "getservice":
+            if FIRST_PARS[i]["OPERAND1"] == None or FIRST_PARS[i]["OPERAND2"] != None or FIRST_PARS[i]["OPERAND3"] != None:
+                print "Error in line {}, illegal operand".format(FIRST_PARS[i]["LINE"])
+            elif FIRST_PARS[i]["LABEL2"] != None:
+                print "Error in line {}, illegal label ".format(FIRST_PARS[i]["LINE"])
+            elif mnem == "move" or mnem == "getservice":
+                if FIRST_PARS[i]["OPERAND1"] not in service:
+                    print  "Error in line {}, illegal operand".format(FIRST_PARS[i]["LINE"])
+                else:
+                    opcode = command_opcode[mnem] + convert_to_binary(service[FIRST_PARS[i]["OPERAND1"]])
+            elif mnem == "pullmsg":
+                if FIRST_PARS[i]["OPERAND1"] in reg:
+                    opcode = command_opcode[mnem] + reg[FIRST_PARS[i]["OPERAND1"]]
+                elif FIRST_PARS[i]["OPERAND1"] in reg_str:
+                    opcode = command_opcode[mnem] + reg_str[FIRST_PARS[i]["OPERAND1"]]
+                else:
+                    print  "Error in line {}, illegal message destination".format(FIRST_PARS[i]["LINE"])
+            elif mnem == "wait":
+                if re.compile(VALUE).match(FIRST_PARS[i]["OPERAND1"]) != None:
+                    opcode = command_opcode[mnem] + convert_to_binary(FIRST_PARS[i]["OPERAND1"])
+                else:
+                    print  "Error in line {}, illegal delay value".format(FIRST_PARS[i]["LINE"])
+            elif mnem == "priority":
+                if re.compile("[0-3]").match(FIRST_PARS[i]["OPERAND1"]) != None:
+                    opcode = command_opcode[mnem] + convert_to_binary(FIRST_PARS[i]["OPERAND1"])
+                else:
+                    print "Error in line {}, illegal priority value".format(FIRST_PARS[i]["LINE"])
+        if mnem == "store" or mnem == "storecr":
+            if FIRST_PARS[i]["LABEL2"] != None:
+               print "Error in line {}, illegal label ".format(FIRST_PARS[i]["LINE"])
+            elif mnem == "store" and FIRST_PARS[i]["OPERAND1"] in reg:
+                opcode = command_opcode[mnem] + reg[FIRST_PARS[i]["OPERAND1"]] + convert_to_binary(FIRST_PARS[i]["OPERAND2"])
+            elif mnem == "storecr" and FIRST_PARS[i]["OPERAND1"] in reg_str:
+                opcode = command_opcode[mnem] + reg_str[FIRST_PARS[i]["OPERAND1"]] + convert_to_binary(str(ord(FIRST_PARS[i]["OPERAND2"])))
+            else:
+                print "Error in line {}, operands do not match mnemonic ".format(FIRST_PARS[i]["LINE"])
+        if mnem == "setservice"
+            #TODO
+        if mnem == "sendmsg"
+            #TODO
+        
         if mnem == "mv":
             if FIRST_PARS[i]["LABEL2"] != None:
                print "Error in line {}, illegal label ".format(FIRST_PARS[i]["LINE"])
@@ -129,6 +183,7 @@ def second_pass():
                print "Error in line {}, illegal operand".format(FIRST_PARS[i]["LINE"])
             else:
                 opcode = command_opcode[mnem] + reg[FIRST_PARS[i]["OPERAND1"]] + reg[FIRST_PARS[i]["OPERAND2"]]
+        
         print FIRST_PARS[i]
         print opcode
         binary.write(opcode)
@@ -137,10 +192,12 @@ def second_pass():
                           xstr(FIRST_PARS[i]["OPERAND3"]) + "\t\t" + xstr(FIRST_PARS[i]["LABEL2"]) + "\n")
         i+=1
 
+    binary.close()
+    listing.close()
        # if FIRST_PARS[i]["OPERAND1"] in command[FIRST_PARS[i]["MNEMONIC"]]["OPERAND1"]:
        #     opcode = opcode + command[FIRST_PARS[i]["MNEMONIC"]]["OPERAND1"][FIRST_PARS[0]["OPERAND1"]]
        # binary.write(opcode+"\n")
-
+        
 def convert_to_binary(value):
     bin_value = ""
     if re.compile("^0x([0-9a-fA-F]{1,2})$").match(value) != None:
