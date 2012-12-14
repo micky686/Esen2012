@@ -22,8 +22,8 @@
 
 //services
 #define SERVICE_BARGRAPH 0
+#define SERVICE_THERMOMETER 1
 
-//errors
 #define ERROR_NO_SERVICE_PRESENT 1
 
 
@@ -41,11 +41,17 @@
 #define BYTE1(opcode)   ((opcode & B1_MASK) >> 8)
 #define BYTE2(opcode)    (opcode & B2_MASK)
 
+#define BYTE_SIGN 0x80
+#define NEG_SIGN 0xff00
+#define POS_SIGN 0x00ff
+
+#define TEMP_MASK 0xfff8
+
 typedef struct {
 uint8_t id;
 uint8_t reg1;
 uint8_t reg2;
-int8_t value;
+int16_t value;
 uint8_t node_id;
 uint8_t agent_id;
 } opcode_t;

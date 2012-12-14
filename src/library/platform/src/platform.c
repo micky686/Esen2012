@@ -34,12 +34,14 @@ void init_drivers(void){
 
 
 #ifdef COOLER
+	init_cooler();
 
 #endif
 
 
 #ifdef HEATER
-
+	heater_init();
+	//heater_set(50);
 #endif
 
 
@@ -48,7 +50,8 @@ void init_drivers(void){
 #endif
 
 #ifdef THERMOMETER
-
+	therm_init();
+	platform.drivers.therm_get_temp = therm_get_temp;
 #endif
 
 
@@ -101,7 +104,7 @@ void reset_agent(uint8_t id){
 	}
 	agent->code_len = 0;
 	agent->pc = 0;
-	agent->error = 0;
+	agent->status_flag = 0;
 	agent->rec_msg_content = 0;
 	agent->rec_msg_id = 0;
 }

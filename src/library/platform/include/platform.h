@@ -14,6 +14,9 @@
 
 #include "global.h"
 #include "bargraph.h"
+#include "thermometer.h"
+#include "cooler.h"
+#include "heater.h"
 #include "DISPLAY.h"
 
 #define AGENT_MAX 4
@@ -65,7 +68,7 @@ typedef struct {
 	void (*init_pushbutton0)(void(*callback)(void));
 	void (*init_pushbutton1)(void(*callback)(void));
 
-	int16_t (*therm_get_temp)(uint8_t name);
+	uint16_t (*therm_get_temp)(uint8_t name);
 
 } drivers_t;
 
@@ -74,20 +77,25 @@ enum agent_status {
 };
 typedef enum agent_status agent_status_t;
 
+#define REG_ACC 0
+#define OVERFLOW 32
+#define OVERFLOW_MASK 0x80000000
+#define ERROR 0x000000FF
+#define SET_ERROR(flag, errno)	(flag |= (errno & ERROR))
+
 typedef struct {
 
 	uint8_t id;
 	uint8_t priority;
 	agent_status_t status;
 
-	int32_t regs[6];
+	int16_t regs[6];
 
 	char* reg_str_0;
 	char* reg_str_1;
 	char* reg_str_2;
 
-	uint32_t error;
-	int32_t acc;
+	uint32_t status_flag;
 	uint16_t pc;
 
 	uint16_t* code;

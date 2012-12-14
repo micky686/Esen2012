@@ -41,6 +41,7 @@ uint8_t execute_agent(agent_t *agent, uint8_t opcode_size) {
 opcode_t decode_opcode(uint16_t opcode) {
 
 	opcode_t result;
+	uint8_t temp;
 
 	uint8_t nibble1 = NIBBLE1(opcode);
 	uint8_t nibble2 = NIBBLE2(opcode);
@@ -71,6 +72,8 @@ opcode_t decode_opcode(uint16_t opcode) {
 			//getservice
 			//0000 0111 dddd dddd
 		case 7:
+			result.id = GETSERVICE;
+			result.value = BYTE2(opcode);
 
 			break;
 
@@ -118,7 +121,12 @@ opcode_t decode_opcode(uint16_t opcode) {
 			//1111 0011 vvvv vvvv
 		case 3:
 			result.id = JMP_O;
-			result.value = BYTE2(opcode);
+			temp = BYTE2(opcode);
+			if ((temp & BYTE_SIGN) != 0) {
+				result.value = temp | NEG_SIGN;
+			} else {
+				result.value = temp & POS_SIGN;
+			}
 			break;
 
 			//die
@@ -154,7 +162,12 @@ opcode_t decode_opcode(uint16_t opcode) {
 	case 3:
 		result.id = ADD_V;
 		result.reg1 = NIBBLE2(opcode);
-		result.value = BYTE2(opcode);
+		temp = BYTE2(opcode);
+		if ((temp & BYTE_SIGN) != 0) {
+			result.value = temp | NEG_SIGN;
+		} else {
+			result.value = temp & POS_SIGN;
+		}
 		break;
 
 		//sub reg_m, value
@@ -167,7 +180,12 @@ opcode_t decode_opcode(uint16_t opcode) {
 	case 7:
 		result.id = SETSERVICE;
 		result.reg1 = NIBBLE2(opcode);
-		result.value = BYTE2(opcode);
+		temp = BYTE2(opcode);
+		if ((temp & BYTE_SIGN) != 0) {
+			result.value = temp | NEG_SIGN;
+		} else {
+			result.value = temp & POS_SIGN;
+		}
 		break;
 
 		//div reg_d, value
@@ -190,7 +208,12 @@ opcode_t decode_opcode(uint16_t opcode) {
 	case 13:
 		result.id = STORE;
 		result.reg1 = NIBBLE2(opcode);
-		result.value = BYTE2(opcode);
+		temp = BYTE2(opcode);
+		if ((temp & BYTE_SIGN) != 0) {
+			result.value = temp | NEG_SIGN;
+		} else {
+			result.value = temp & POS_SIGN;
+		}
 		break;
 
 	default:
@@ -201,6 +224,7 @@ opcode_t decode_opcode(uint16_t opcode) {
 }
 
 void execute_opcode(agent_t *agent, opcode_t opcode) {
+	uint16_t tmp = 0;
 
 	switch (opcode.id) {
 	case SETSERVICE:
@@ -208,9 +232,9 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 		case SERVICE_BARGRAPH:
 			if (platform.drivers.set_bargraph != NULL) {
-				platform.drivers.set_bargraph(agent->regs[opcode.reg1]);
+				platform.drivers.set_bargraph((agent->regs[opcode.reg1] & 0x00ff));
 			} else {
-				agent->error = ERROR_NO_SERVICE_PRESENT;
+				SET_ERROR(agent->status_flag, ERROR_NO_SERVICE_PRESENT);
 			}
 			break;
 
@@ -219,17 +243,53 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 		}
 		break;
+		case GETSERVICE:
+			switch (opcode.value){
+			case SERVICE_THERMOMETER:
+				if (platform.drivers.therm_get_temp != NULL){
+					//tmp = (platform.drivers.therm_get_temp(THERMOMETER2)  >> 8);
+
+					tmp = (platform.drivers.therm_get_temp(THERMOMETER1) >>3);
+					tmp += (platform.drivers.therm_get_temp(THERMOMETER2) >>3);
+					tmp += (platform.drivers.therm_get_temp(THERMOMETER3) >>3);
+					//tmp += ((platform.drivers.therm_get_temp(THERMOMETER2) & 0x7ff0) >>3);
+					//tmp += ((platform.drivers.therm_get_temp(THERMOMETER1) & 0x7ff0) >>3);
+					tmp /= 3;
+
+
+					agent->regs[REG_ACC] = tmp >> 5;
+
+
+				} else {
+					SET_ERROR(agent->status_flag, ERROR_NO_SERVICE_PRESENT);
+				}
+
+			default:
+				break;
+			}
+
+			break;
 
 	case STORE:
 		agent->regs[opcode.reg1] = opcode.value;
 		break;
 
 	case ADD_R:
-		agent->regs[0] = agent->regs[opcode.reg1] + agent->regs[opcode.reg2];
+		tmp = (~(agent->regs[opcode.reg1] ^ agent->regs[opcode.reg2] ) & 0x8000);
+		agent->regs[REG_ACC] = agent->regs[opcode.reg1] + agent->regs[opcode.reg2];
+		if (tmp != 0){
+			if (opcode.reg1 != REG_ACC){
+				agent->status_flag = (((agent->regs[REG_ACC] ^ agent->regs[opcode.reg1]) & 0x8000) << 24);
+			} else {
+				agent->status_flag = (((agent->regs[REG_ACC] ^ agent->regs[opcode.reg2]) & 0x8000) << 24);
+			}
+		} else {
+			agent->status_flag &= ~OVERFLOW_MASK;
+		}
 		break;
 
 	case ADD_V:
-		agent->regs[0] = agent->regs[opcode.reg1] + opcode.value;
+		agent->regs[REG_ACC] = agent->regs[opcode.reg1] + opcode.value;
 		break;
 
 	case JMP_O:

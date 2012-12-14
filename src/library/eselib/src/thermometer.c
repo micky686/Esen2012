@@ -48,7 +48,7 @@ static uint16_t temperatur;
 /* Variable: name: uebergebene sensoradresse                   */
 /**************************************************************/
 
-int16_t therm_get_temp(uint8_t name){
+uint16_t therm_get_temp(uint8_t name){
   uint8_t status; 
  
   send_start(); //startbyte 
