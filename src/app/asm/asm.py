@@ -66,13 +66,14 @@ SOURCE_FILE = r""
 FIRST_PARS = {}
 
 def asm_tool():
-    if len(sys.argv) < 2:
-        print "\tspecify agent file to assemble"
-        return None
-    if check_files(sys.argv[1]) == None:
-        return None
-    first_pass()
-    second_pass()
+    try:
+        if check_files(sys.argv[1]) == None:
+           return None
+        first_pass()
+        second_pass()
+    except (IOError, IndexError):
+        print "\t specify correct filename"
+    
 
 
 def first_pass():
