@@ -247,17 +247,12 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 			switch (opcode.value){
 			case SERVICE_THERMOMETER:
 				if (platform.drivers.therm_get_temp != NULL){
-					//tmp = (platform.drivers.therm_get_temp(THERMOMETER2)  >> 8);
 
 					tmp = (platform.drivers.therm_get_temp(THERMOMETER1) >>3);
 					tmp += (platform.drivers.therm_get_temp(THERMOMETER2) >>3);
 					tmp += (platform.drivers.therm_get_temp(THERMOMETER3) >>3);
-					//tmp += ((platform.drivers.therm_get_temp(THERMOMETER2) & 0x7ff0) >>3);
-					//tmp += ((platform.drivers.therm_get_temp(THERMOMETER1) & 0x7ff0) >>3);
 					tmp /= 3;
-
-
-					agent->regs[REG_ACC] = tmp >> 5;
+					agent->regs[REG_ACC] = tmp;
 
 
 				} else {

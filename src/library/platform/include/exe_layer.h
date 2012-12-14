@@ -23,9 +23,13 @@
 //services
 #define SERVICE_BARGRAPH 0
 #define SERVICE_THERMOMETER 1
+#define SERVICE_COOLER 2
+#define SERVICE_HEATER 3
+#define SERVICE_LED 4
+#define SERVICE_LCD 5
+#define SERVICE_BUTTONS 6
 
 #define ERROR_NO_SERVICE_PRESENT 1
-
 
 #define N1_MASK 0xF000
 #define N2_MASK 0x0F00

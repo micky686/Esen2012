@@ -59,6 +59,12 @@ void init_drivers(void){
 
 #endif
 
+#ifdef LEDMATRIX
+	init_dotmatrix();
+	char buf[] = "ABCD";
+	dotmatrix_send(buf);
+#endif
+
 }
 
 void init_agents(){
