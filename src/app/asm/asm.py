@@ -58,11 +58,6 @@ command_opcode = {"add":"00000011",\
                "priority":"00001000",\
                "setservice":"0111",\
                "getservice":"00000111"}
-
-command = {\
-        "add":{"OPERAND1":reg, "OPERAND2":[reg, "value"], "OPERAND3":None, "LABEL2":None},\
-        "sub":{"OPERAND1":reg, "OPERAND2":[reg, "value"], "OPERAND3":None, "LABEL2":None},\
-            }
                
 #LEGAL LINE:
 #LABEL:? MNEMONIC (?: OPERAND1? (?:, OPERAND2?)) | (LABEL2)
@@ -183,8 +178,11 @@ def second_pass():
                  print "Error in line {}, illegal label ".format(FIRST_PARS[i]["LINE"])
             elif FIRST_PARS[i]["OPERAND1"] in reg and re.compile("[0-3]").match(FIRST_PARS[i]["OPERAND2"]) != None and \
                     re.compile("[0-3]").match(FIRST_PARS[i]["OPERAND3"]) != None:
-                opcode = command_opcode[mnem] + reg[FIRST_PARS[i]["OPERAND1"]] + bin(int(FIRST_PARS[i]["OPERAND2"]))[2:] + \
-                         bin(int(FIRST_PARS[i]["OPERAND3"]))[2:]
+                agent =  bin(int(FIRST_PARS[i]["OPERAND2"]))[2:]
+                dest_agent = agent if len(agent) == 2 else "0" + agent
+                platform = bin(int(FIRST_PARS[i]["OPERAND3"]))[2:]
+                dest_platform = platform if len(platform) == 2 else "0" + platform
+                opcode = command_opcode[mnem] + reg[FIRST_PARS[i]["OPERAND1"]] + dest_agent + dest_platform
             else:
                 print  "Error in line {}, illegal operand".format(FIRST_PARS[i]["LINE"])
         
