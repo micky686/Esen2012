@@ -123,9 +123,9 @@ def second_pass():
                 print "Error in line {}, illegal label".format(FIRST_PARS[i]["LINE"])
             else:
             #TODO
-               # offset = 1dummy
+                offset = 1#rewrite
                # offset = convert_to_binary(offset)
-               # opcode = command_opcode[mnem] + offset
+                opcode = command_opcode[mnem] + offset
         #0 operand commands
         if mnem == "clone" or mnem == "die":
             if FIRST_PARS[i]["OPERAND1"] != None or FIRST_PARS[i]["OPERAND2"] != None or FIRST_PARS[i]["OPERAND3"] != None:
@@ -171,10 +171,22 @@ def second_pass():
                 opcode = command_opcode[mnem] + reg_str[FIRST_PARS[i]["OPERAND1"]] + convert_to_binary(str(ord(FIRST_PARS[i]["OPERAND2"])))
             else:
                 print "Error in line {}, operands do not match mnemonic ".format(FIRST_PARS[i]["LINE"])
-        if mnem == "setservice"
-            #TODO
-        if mnem == "sendmsg"
-            #TODO
+        if mnem == "setservice":
+            if FIRST_PARS[i]["LABEL2"] != None:
+                print "Error in line {}, illegal label ".format(FIRST_PARS[i]["LINE"])
+            elif FIRST_PARS[i]["OPERAND1"] in service and FIRST_PARS[i]["OPERAND2"] in reg:
+                opcode = command_opcode[mnem] + reg[FIRST_PARS[i]["OPERAND2"]] + convert_to_binary(service[FIRST_PARS[i]["OPERAND1"]])
+            else:
+                print  "Error in line {}, illegal operand".format(FIRST_PARS[i]["LINE"])
+        if mnem == "sendmsg":
+            if FIRST_PARS[i]["LABEL2"] != None:
+                 print "Error in line {}, illegal label ".format(FIRST_PARS[i]["LINE"])
+            elif FIRST_PARS[i]["OPERAND1"] in reg and re.compile("[0-3]").match(FIRST_PARS[i]["OPERAND2"]) != None and \
+                    re.compile("[0-3]").match(FIRST_PARS[i]["OPERAND3"]) != None:
+                opcode = command_opcode[mnem] + reg[FIRST_PARS[i]["OPERAND1"]] + bin(int(FIRST_PARS[i]["OPERAND2"]))[2:] + \
+                         bin(int(FIRST_PARS[i]["OPERAND3"]))[2:]
+            else:
+                print  "Error in line {}, illegal operand".format(FIRST_PARS[i]["LINE"])
         
         if mnem == "mv":
             if FIRST_PARS[i]["LABEL2"] != None:
@@ -184,8 +196,8 @@ def second_pass():
             else:
                 opcode = command_opcode[mnem] + reg[FIRST_PARS[i]["OPERAND1"]] + reg[FIRST_PARS[i]["OPERAND2"]]
         
-        print FIRST_PARS[i]
-        print opcode
+       # print FIRST_PARS[i]
+       # print opcode
         binary.write(opcode)
         listing.write(xstr(FIRST_PARS[i]["LABEL1"]) + "\t\t" + opcode + "\t\t" + xstr(FIRST_PARS[i]["MNEMONIC"]) + "\t\t" + \
                          xstr(FIRST_PARS[i]["OPERAND1"]) + "\t\t" + xstr(FIRST_PARS[i]["OPERAND2"]) + "\t\t" + \
@@ -194,9 +206,6 @@ def second_pass():
 
     binary.close()
     listing.close()
-       # if FIRST_PARS[i]["OPERAND1"] in command[FIRST_PARS[i]["MNEMONIC"]]["OPERAND1"]:
-       #     opcode = opcode + command[FIRST_PARS[i]["MNEMONIC"]]["OPERAND1"][FIRST_PARS[0]["OPERAND1"]]
-       # binary.write(opcode+"\n")
         
 def convert_to_binary(value):
     bin_value = ""
@@ -224,7 +233,7 @@ def check_files(filename):
     global SOURCE_FILE, FILENAME
     SOURCE_FILE = SOURCE_REGEX.group(0)
     FILENAME = SOURCE_REGEX.group(1)
-    print SOURCE_FILE + " to be assembled\n"
+   # print SOURCE_FILE + " to be assembled\n"
     return SOURCE_FILE
 
 def xstr(s):
