@@ -71,12 +71,11 @@ FIRST_PARS = {}
 
 def asm_tool():
     try:
-        if check_files(sys.argv[1]) == None:
-           return None
+        check_files(sys.argv[1])
         first_pass()
         second_pass()
     except (IOError, IndexError):
-        print "\t specify correct filename"
+        print "\tSpecify correct filename"
     
 
 
@@ -241,7 +240,7 @@ def check_files(filename):
     """check agent file for .ma extension, extract filename for listing, hex, binary generation"""
     SOURCE_REGEX = re.compile("([A-Za-z0-9_]+)\.ma").match(filename)
     if SOURCE_REGEX == None:
-        print "\tInvalid file!\n\tSpecify agent file with extension .ma"
+        print "\tInvalid file!\n\tShould be with .ma extension"
         return None
     global SOURCE_FILE, FILENAME
     SOURCE_FILE = SOURCE_REGEX.group(0)
