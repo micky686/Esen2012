@@ -65,8 +65,11 @@ FILENAME = r""
 SOURCE_FILE = r""
 FIRST_PARS = {}
 
-def asm_tool(filename):
-    if check_files(filename) == None:
+def asm_tool():
+    if len(sys.argv) < 2:
+        print "\tspecify agent file to assemble"
+        return None
+    if check_files(sys.argv[1]) == None:
         return None
     first_pass()
     second_pass()
@@ -226,7 +229,7 @@ def check_files(filename):
     """check agent file for .ma extension, extract filename for listing, hex, binary generation"""
     SOURCE_REGEX = re.compile("([A-Za-z0-9_]+)\.ma").match(filename)
     if SOURCE_REGEX == None:
-        print "\tInvalid file!\n\tSpecify agent file with extension .ma\t!\n"
+        print "\tInvalid file!\n\tSpecify agent file with extension .ma"
         return None
     global SOURCE_FILE, FILENAME
     SOURCE_FILE = SOURCE_REGEX.group(0)
@@ -240,5 +243,5 @@ def xstr(s):
     else:
         return s
 
-asm_tool(sys.argv[1])
+asm_tool()
 
