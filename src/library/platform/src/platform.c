@@ -79,6 +79,13 @@ void init_agents(){
 			platform.agents[id].status = ready;
 			platform.agents[id].priority = platform_config.agents_conf[i].prio;
 
+			if (platform.agents[id].reg_str == 0) {
+				platform.agents[id].reg_str = (char**) malloc(STR_REG_MAX * sizeof(char*));
+				platform.agents[id].reg_str[0] = (char*) malloc(1);
+				platform.agents[id].reg_str[1] = (char*) malloc(1);
+				platform.agents[id].reg_str[2] = (char*) malloc(1);
+			}
+
 			size_t len = strlen(platform_config.agents_conf[i].code);
 			platform.agents[id].code = (uint16_t*) malloc(len / OPCODE_LEN);
 			uint16_t ind = 0;
@@ -101,9 +108,24 @@ void reset_agent(uint8_t id){
 	agent->status = stopped;
 	agent->priority = 0;
 	memset(agent->regs, 0, sizeof(agent->regs));
-	agent->reg_str_0 = 0;
-	agent->reg_str_1 = 0;
-	agent->reg_str_2 = 0;
+
+	if (agent->reg_str[0] != 0) {
+		free(agent->reg_str[0]);
+	}
+
+	if (agent->reg_str[1] != 0) {
+			free(agent->reg_str[1]);
+	}
+
+	if (agent->reg_str[2] != 0) {
+			free(agent->reg_str[2]);
+	}
+
+	if (agent->reg_str != 0){
+		free(agent->reg_str);
+	}
+
+
 	if (agent->code != 0){
 		free(agent->code);
 		agent->code = 0;

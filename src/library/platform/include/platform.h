@@ -21,6 +21,7 @@
 
 #define AGENT_MAX 4
 #define OPCODE_LEN 16
+#define STR_REG_MAX 3
 
 #define PLATFORM_CONFIGURATION() \
 platform_config_t platform_config =
@@ -89,17 +90,17 @@ typedef struct {
 	uint8_t priority;
 	agent_status_t status;
 
-	int16_t regs[6];
-
-	char* reg_str_0;
-	char* reg_str_1;
-	char* reg_str_2;
-
 	uint32_t status_flag;
 	uint16_t pc;
 
-	uint16_t* code;
+	int16_t regs[7];
+
 	uint16_t code_len;
+	uint16_t regstr_len [3];
+
+	uint16_t* code;
+
+	char** reg_str;
 
 	char* rec_msg_id;
 	char* rec_msg_content;
