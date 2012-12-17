@@ -1302,6 +1302,41 @@ Syntax  		  & Operands   						    & Program counter       \\
 \end{tabular}
 
 \vspace{0.4in}
+
+\noindent
+Clear the \texttt{str_reg}
+\vspace{0.1in}
+\noindent
+
+\framebox{\texttt{clr reg_str}}
+\vspace{0.1in}
+
+\noindent
+\begin{tabular}{+p{1.8in}+p{2.9in}+p{1.3in}}
+
+Syntax  		  & Operands   						    & Program counter       \\
+
+\texttt{clr str_reg} & \texttt{reg_str_0 $\leq$ reg_str $\leq$ reg_str_2} & \texttt{PC = PC + 1}  \\
+
+\multicolumn{2}{l}{Operation} 									      & 		     \\
+
+\multicolumn{2}{l}{\texttt{clear str_reg}} & \\
+
+\end{tabular}
+
+\noindent
+16-bit opcode:
+
+\noindent
+\begin{tabular}{|c|c|c|c|}
+\multicolumn{3}{|c|}{} & {rrrr}\\
+\hline
+\texttt{0000} & \texttt{0010} & \texttt{0000} & \texttt{rrrr}\\
+
+\end{tabular}
+
+\vspace{0.4in}
+
 \noindent
 \textbf{Move}
 
@@ -1329,7 +1364,7 @@ Syntax  		  & Operands   								     & Program counter       \\
 
 \noindent
 \begin{tabular}{|c|c|c|c|}
- \multicolumn{2}{|c|}{value} & reg_d & reg_r\\
+ \multicolumn{2}{|c|}{} & reg_d & reg_r\\
 \hline
 \texttt{0000} & \texttt{1101} & \texttt{dddd} & \texttt{rrrr}\\
 
