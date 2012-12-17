@@ -3,9 +3,9 @@ import sys
 
 
 LABEL = r"[A-Za-z][A-Za-z0-9]{0,5}"
-MNEMONIC = r"add|sub|div|mul|jmpgr|jmpeq|jmpls|compare|move|clone|die|sendmsg|pullmsg|storecr|ldh|ldl|mv|wait|priority|setservice|getservice"
+MNEMONIC = r"add|sub|div|mul|jmpgr|jmpeq|jmpls|compare|move|clr|clone|die|sendmsg|pullmsg|storecr|ldh|ldl|mv|wait|priority|setservice|getservice"
 REG = r"reg_0|reg_1|reg_2|reg_3|reg_4|reg_5|reg_6|reg_str_0|reg_str_1|reg_str_2"
-VALUE = r"0x[0-9A-F]{1,2}|0b[01]{1,8}|[0-9]{1,3}"
+VALUE = r"0x[0-9A-F]{1,2}|0b[01]{1,8}|[+-]?[01]?[0-9]?[0-9]"
 SERVICE = r"temp|bargraph|fan|heater|led_matrix"
 CHAR = r"[A-Za-z0-9_]"
 OPERAND = REG + "|" + VALUE + "|" + SERVICE 
@@ -21,7 +21,7 @@ reg = {"reg_0":"0000",\
            "reg_4":"0100",\
            "reg_5":"0101",\
            "reg_6":"0110",\
-           "acc"  :"1111"}
+           }
 
 reg_str = {"reg_str_0":"1000",\
               "reg_str_1":"1001",\
@@ -57,6 +57,7 @@ command_opcode = {"add":"00000011",\
                "ldh":"1101",\
                "ldl":"0100", \
                "storecr":"1011",\
+               "clr":"000000100000",\
                "mv":"00001101",\
                "wait":"00000101",\
                "priority":"00001000",\
@@ -126,15 +127,17 @@ def second_pass():
                opcode = command_opcode[mnem + "v"] + reg[operand1] + convert_to_binary(operand2)
         #0 operand 1 label commands
         if mnem == "jmpeq" or mnem == "jmpls" or mnem == "jmpgr":
-            if operand1 != None or operand2 != None or operand3 != None:
-                print "Error in line %s, illegal operand" %line
-            elif label2 == None:
+            if label2 == None:
                 print "Error in line %s, illegal label" %line
-            else:
-            #TODO
-                offset = 1#rewrite
+            for lines in FIRST_PARS.iterkeys():
+                   if FIRST_PARS[1]["LABEL1"] == label2:
+                       print lines
+                 
+        #    if operand1 != None or operand2 != None or operand3 != None or operand1 != CHAR:
+         #       print "Error in line %s, illegal operand" %line     
+          #      offset = "1"#rewrite
                # offset = convert_to_binary(offset)
-                opcode = command_opcode[mnem] + offset
+           #     opcode = command_opcode[mnem] + offset
         #0 operand commands
         if mnem == "clone" or mnem == "die":
             if operand1 != None or operand2 != None or operand3 != None:
@@ -144,7 +147,7 @@ def second_pass():
             else:
                 opcode = command_opcode[mnem]
         #1 operand commands
-        if mnem == "move" or mnem == "pullmsg" or mnem == "wait" or mnem == "priority" or mnem == "getservice":
+        if mnem == "move" or mnem == "pullmsg" or mnem == "wait" or mnem == "priority" or mnem == "getservice" or mnem == "clr":
             if operand1 == None or operand2 != None or operand3 != None:
                 print "Error in line %s, illegal operand" %line
             elif label2 != None:
@@ -171,6 +174,13 @@ def second_pass():
                     opcode = command_opcode[mnem] + convert_to_binary(operand1)
                 else:
                     print "Error in line %s, illegal priority value" %line
+            elif mnem == "clr":
+                if operand1 not in reg_str:
+                    print "Error in line %s, illegal operand" %line
+                else:
+                    opcode = command_opcode[mnem] + reg_str[operand1]
+
+
         if mnem == "ldl" or mnem == "ldh" or mnem == "storecr":
             if label2 != None:
                print "Error in line %s, illegal label " %line
@@ -218,6 +228,7 @@ def second_pass():
 
     binary.close()
     listing.close()
+    print FIRST_PARS
         
 def convert_to_binary(value):
     bin_value = ""
@@ -225,9 +236,10 @@ def convert_to_binary(value):
           bin_value = bin(int(re.compile("^0x([0-9a-fA-F]{1,2})$").match(value).group(1), 16))[2:]
     elif re.compile("^0b([01]{1,8})$").match(value) != None:
           bin_value = re.compile("^0b([01]{1,8})$").match(value).group(1)
-    elif re.compile("^[+-]?([01]?[0-9]?[0-9])$").match(value) != None:
-          #negative numbers
-          bin_value = bin(int(re.compile("^[+-]?([01]?[0-9]?[0-9])$").match(value).group(1)))[2:]
+    elif re.compile("^(-[01]?[0-9]?[0-9])$").match(value) != None:
+          bin_value = bin(2**9 + int(re.compile("^(-[01]?[0-9]?[0-9])$").match(value).group(1)))[3:]
+    elif re.compile("^([+]?[01]?[0-9]?[0-9])$").match(value) != None:
+          bin_value = bin(int(re.compile("^([+]?[01]?[0-9]?[0-9])$").match(value).group(1)))[2:]
     else:
           print "invalid value"
           return None
