@@ -3,6 +3,7 @@ MET0:	ldh reg_1, 56
 ldl reg_2, 120
 ldf reg_3, 143
 
+jmpls LAB3
 
 LAB:ldl reg_0, -1
 LAB2:ldh reg_4, -5
@@ -19,3 +20,5 @@ clr reg_str_2
 
 
 jmpeq MET0
+
+add reg_0, reg_1
