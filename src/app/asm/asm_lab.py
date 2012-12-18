@@ -99,7 +99,6 @@ def first_pass():
     source.close()
     
 def second_pass():
-#    print FIRST_PARS
     binary = open(FILENAME + ".bin", "w+")
     listing = open(FILENAME + ".lst", "w+")
     i = 0
@@ -108,8 +107,8 @@ def second_pass():
         #assemble line
         opcode = ""
         mnem = FIRST_PARS[i]["MNEMONIC"].lower()
-        label1 = None if FIRST_PARS[i]["LABEL1"] == None else FIRST_PARS[i]["LABEL1"].lower()
-        label2 =  None if FIRST_PARS[i]["LABEL2"] == None else FIRST_PARS[i]["LABEL2"].lower()
+        label1 = None if FIRST_PARS[i]["LABEL1"] == None else FIRST_PARS[i]["LABEL1"]
+        label2 =  None if FIRST_PARS[i]["LABEL2"] == None else FIRST_PARS[i]["LABEL2"]
         operand1 = None if FIRST_PARS[i]["OPERAND1"] == None else FIRST_PARS[i]["OPERAND1"].lower()
         operand2 =  None if FIRST_PARS[i]["OPERAND2"] == None else FIRST_PARS[i]["OPERAND2"].lower()
         operand3 =  None if FIRST_PARS[i]["OPERAND3"] == None else FIRST_PARS[i]["OPERAND3"].lower()
@@ -127,17 +126,16 @@ def second_pass():
                opcode = command_opcode[mnem + "v"] + reg[operand1] + convert_to_binary(operand2)
         #0 operand 1 label commands
         if mnem == "jmpeq" or mnem == "jmpls" or mnem == "jmpgr":
-            if label2 == None:
-                print "Error in line %s, illegal label" %line
+            label = []
             for lines in FIRST_PARS.iterkeys():
-                   if FIRST_PARS[1]["LABEL1"] == label2:
-                       print lines
-                 
-        #    if operand1 != None or operand2 != None or operand3 != None or operand1 != CHAR:
-         #       print "Error in line %s, illegal operand" %line     
-          #      offset = "1"#rewrite
-               # offset = convert_to_binary(offset)
-           #     opcode = command_opcode[mnem] + offset
+                   if FIRST_PARS[lines]["LABEL1"] == label2:
+                       label.append(lines)
+            if len(label) != 1 or label2 == None:
+                print " Unresolved labels in line %s" %line
+            else:
+                offset = label[0] - i
+                opcode = command_opcode[mnem] + convert_to_binary(str(offset))
+
         #0 operand commands
         if mnem == "clone" or mnem == "die":
             if operand1 != None or operand2 != None or operand3 != None:
@@ -180,7 +178,6 @@ def second_pass():
                 else:
                     opcode = command_opcode[mnem] + reg_str[operand1]
 
-
         if mnem == "ldl" or mnem == "ldh" or mnem == "storecr":
             if label2 != None:
                print "Error in line %s, illegal label " %line
@@ -218,8 +215,6 @@ def second_pass():
             else:
                 opcode = command_opcode[mnem] + reg[operand1] + reg[operand2]
         
-#        print FIRST_PARS[i]
-#        print opcode
         binary.write(opcode)
         listing.write(xstr(FIRST_PARS[i]["LABEL1"]) + "\t\t" + opcode + "\t\t" + xstr(FIRST_PARS[i]["MNEMONIC"]) + "\t\t" + \
                          xstr(operand1) + "\t\t" + xstr(operand2) + "\t\t" + \
@@ -228,7 +223,7 @@ def second_pass():
 
     binary.close()
     listing.close()
-    print FIRST_PARS
+
         
 def convert_to_binary(value):
     bin_value = ""
@@ -257,7 +252,6 @@ def check_files(filename):
     global SOURCE_FILE, FILENAME
     SOURCE_FILE = SOURCE_REGEX.group(0)
     FILENAME = SOURCE_REGEX.group(1)
-   # print SOURCE_FILE + " to be assembled\n"
     return SOURCE_FILE
 
 def xstr(s):
