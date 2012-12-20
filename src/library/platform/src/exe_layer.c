@@ -417,7 +417,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case CLONE:
 		PRINTF("clone\n");
-		//TODO
+		agent->regs[REG_ACC] = clone_agent(agent);
 		break;
 
 	case DIE:

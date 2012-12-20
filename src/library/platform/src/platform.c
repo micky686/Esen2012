@@ -20,8 +20,8 @@ void init_drivers(void){
 	platform.drivers.set_bargraph = set_bargraph;
 #endif
 
-#ifdef PROTOCOLL
-
+#ifdef PROTOCOL0
+	protocol_init(platform_config.comm_timeout, recv_handler);
 #endif
 
 #ifdef TIMER2
@@ -87,7 +87,7 @@ void init_agents(){
 			}
 
 			size_t len = strlen(platform_config.agents_conf[i].code);
-			platform.agents[id].code = (uint16_t*) malloc(len / OPCODE_LEN);
+			platform.agents[id].code = (uint16_t*) malloc((len / OPCODE_LEN) * sizeof(uint16_t));
 			uint16_t ind = 0;
 			char opcode[OPCODE_LEN];
 			while (ind < len / OPCODE_LEN) {
@@ -109,22 +109,29 @@ void reset_agent(uint8_t id){
 	agent->priority = 0;
 	memset(agent->regs, 0, sizeof(agent->regs));
 
-	if (agent->reg_str[0] != 0) {
-		free(agent->reg_str[0]);
-	}
-
-	if (agent->reg_str[1] != 0) {
-			free(agent->reg_str[1]);
-	}
-
-	if (agent->reg_str[2] != 0) {
-			free(agent->reg_str[2]);
-	}
-
 	if (agent->reg_str != 0){
+
+		if (agent->reg_str[0] != 0) {
+			free(agent->reg_str[0]);
+			agent->reg_str[0] = 0;
+		}
+
+		if (agent->reg_str[1] != 0) {
+			free(agent->reg_str[1]);
+			agent->reg_str[1] = 0;
+		}
+
+		if (agent->reg_str[2] != 0) {
+			free(agent->reg_str[2]);
+			agent->reg_str[2] = 0;
+		}
+
 		free(agent->reg_str);
+		agent->reg_str = 0;
+
 	}
 
+	memset(agent->regstr_len, 0, sizeof(uint16_t) * STR_REG_MAX);
 
 	if (agent->code != 0){
 		free(agent->code);
@@ -133,8 +140,67 @@ void reset_agent(uint8_t id){
 	agent->code_len = 0;
 	agent->pc = 0;
 	agent->status_flag = 0;
-	agent->rec_msg_content = 0;
-	agent->rec_msg_id = 0;
+
+	if (agent->rec_msg_id != 0){
+		free(agent->rec_msg_id);
+		agent->rec_msg_id = 0;
+
+	}
+
+	if (agent->rec_msg_content != 0) {
+		free(agent->rec_msg_content);
+		agent->rec_msg_content = 0;
+	}
+
+}
+
+uint8_t clone_agent(agent_t *agent){
+	uint8_t i = 0;
+	uint8_t result = 1;
+
+	for (i = 0; i < AGENT_MAX; i++){
+		if (platform.agents[i].status == stopped){
+			reset_agent(i);
+
+			platform.agents[i].id = i;
+			platform.agents[i].status = ready;
+			platform.agents[i].priority = agent->priority;
+
+			if (platform.agents[i].reg_str == 0) {
+				platform.agents[i].reg_str = (char**) malloc(STR_REG_MAX * sizeof(char*));
+				platform.agents[i].reg_str[0] = (char*) malloc(agent->regstr_len[0]);
+				platform.agents[i].reg_str[1] = (char*) malloc(agent->regstr_len[1]);
+				platform.agents[i].reg_str[2] = (char*) malloc(agent->regstr_len[2]);
+			}
+
+			memcpy(platform.agents[i].reg_str[0], agent->reg_str[0], agent->regstr_len[0]);
+			platform.agents[i].regstr_len[0] = agent->regstr_len[0];
+
+			memcpy(platform.agents[i].reg_str[1], agent->reg_str[1], agent->regstr_len[1]);
+			platform.agents[i].regstr_len[1] = agent->regstr_len[1];
+
+			memcpy(platform.agents[i].reg_str[2], agent->reg_str[2], agent->regstr_len[2]);
+			platform.agents[i].regstr_len[2] = agent->regstr_len[2];
+
+			platform.agents[i].code_len = agent->code_len;
+			platform.agents[i].code = (uint16_t*) malloc( agent->code_len * sizeof(uint16_t));
+			memcpy(platform.agents[i].code, agent->code, agent->code_len * sizeof(uint16_t));
+
+			platform.agents[i].pc = agent->pc + 1;
+			platform.agents[i].status_flag = agent->status_flag;
+
+			memcpy(platform.agents[i].regs, agent->regs, REG_MAX * sizeof(int16_t));
+			platform.agents[i].regs[REG_ACC] = 0;
+			result = 0;
+			break;
+		}
+	}
+
+	return result;
+}
+
+void recv_handler(uint8_t msg_length, uint8_t *msg_body){
+
 }
 
 /*

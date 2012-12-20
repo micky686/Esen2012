@@ -22,6 +22,7 @@
 #define AGENT_MAX 4
 #define OPCODE_LEN 16
 #define STR_REG_MAX 3
+#define REG_MAX 7
 
 #define PLATFORM_CONFIGURATION() \
 platform_config_t platform_config =
@@ -35,6 +36,9 @@ platform_config_t platform_config =
 .prio = agentprio, \
 .code = #agentcode }
 
+#define COMMUNICATION_ID(id) \
+.comm_timeout = id
+
 typedef struct {
 
 	uint8_t id;
@@ -46,6 +50,7 @@ typedef struct {
 
 typedef struct {
 	agent_config_t agents_conf[AGENT_MAX];
+	uint8_t comm_timeout;
 } platform_config_t;
 
 extern platform_config_t platform_config;
@@ -93,10 +98,10 @@ typedef struct {
 	uint32_t status_flag;
 	uint16_t pc;
 
-	int16_t regs[7];
+	int16_t regs[REG_MAX];
 
 	uint16_t code_len;
-	uint16_t regstr_len [3];
+	uint16_t regstr_len [STR_REG_MAX];
 
 	uint16_t* code;
 
@@ -110,7 +115,6 @@ typedef struct {
 typedef struct {
 	agent_t agents[4];
 	drivers_t drivers;
-
 } platform_t;
 
 extern volatile platform_t platform;
@@ -118,8 +122,10 @@ extern volatile platform_t platform;
 void init_drivers(void);
 void init_agents(void);
 void reset_agent(uint8_t id);
+uint8_t clone_agent(agent_t *agent);
 void platform_init(void);
 void run_platform(void);
+void recv_handler(uint8_t msg_length, uint8_t *msg_body); 
 
 
 #endif /* PLATFORM_H_ */
