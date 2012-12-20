@@ -21,7 +21,7 @@ void init_drivers(void){
 #endif
 
 #ifdef PROTOCOL0
-	protocol_init(platform_config.comm_timeout, recv_handler);
+	protocol_init(platform_config.platform_id+1, recv_handler);
 #endif
 
 #ifdef TIMER2

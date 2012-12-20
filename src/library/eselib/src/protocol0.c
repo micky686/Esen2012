@@ -8,7 +8,7 @@
 /*              e0006828@stud3.tuwien.ac.at                             */
 /*======================================================================*/
 
-#include "protocoll.h"
+#include "protocol0.h"
 #include "global.h"
 
 volatile uint8_t send_timeout = 0;
@@ -214,9 +214,9 @@ int8_t send_msg(uint8_t message_header, uint8_t *msg_body) {
 			}
 		
 		case 2:
-			SET_BUS_LOW;
+			SET_BUS0_LOW;
 			wait_ms(send_timeout);
-			SET_BUS_HIGH;
+			SET_BUS0_HIGH;
 			init_timer3(1);
 			while (timer3_done != 1)
 				;

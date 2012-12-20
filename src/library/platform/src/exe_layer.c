@@ -51,6 +51,13 @@ opcode_t decode_opcode(uint16_t opcode) {
 	case 0:
 		switch (nibble2) {
 
+		//clr reg_str
+		//0000 0010 0000 rrrr
+		case 2:
+			result.id = CLEAR;
+			result.reg1 = NIBBLE4(opcode);
+			break;
+
 		//add reg_d, reg_r
 		//0000 0011 dddd rrrr
 		case 3:
@@ -427,7 +434,28 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case SEND:
 		PRINTF("sendmsg reg:%d, agent:%d, platform:%d\n", opcode.reg1, opcode.agent_id, opcode.node_id);
-		//TODO
+
+		packet_t packet;
+		packet.agent_id = opcode.agent_id;
+		packet.dst_node = opcode.node_id;
+		packet.src_board = platform_config.board_id;
+		packet.src_node = platform_config.platform_id;
+		packet.type = 0;
+		packet.frame_id = 0;
+		packet.packet_id = 0;
+
+		if (opcode.reg1 > REG_MAX) {
+			opcode.reg1 = opcode.reg1 & REG_STR_MASK;
+			packet.payload_length = agent->regstr_len[opcode.reg1];
+			packet.payload = (char*) malloc (packet.payload_length);
+			memcpy(packet.payload, agent->reg_str[opcode.reg1], packet.payload_length);
+		} else {
+			packet.payload_length = sizeof(int16_t);
+			packet.payload = (char*) malloc (packet.payload_length);
+			memcpy(packet.payload, agent->regs[opcode.reg1], packet.payload_length);
+		}
+		agent->regs[REG_ACC] = send_message(packet);
+
 		break;
 
 	case RECV:
@@ -465,6 +493,14 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 		agent->priority = opcode.value;
 		break;
 
+	case CLEAR:
+		PRINTF("clr reg_str:%d\n", opcode.reg1);
+		opcode.reg1 = (opcode.reg1 & REG_STR_MASK);
+		agent->reg_str[opcode.reg1] = (char*)realloc(agent->reg_str[opcode.reg1], 1);
+		agent->reg_str[opcode.reg1] = '\0';
+		agent->regstr_len[opcode.reg1] = 0;
+		break;
+
 
 	default:
 		break;
@@ -481,5 +517,42 @@ int16_t get_signed_value(uint8_t value) {
 	} else {
 		result = value & POS_SIGN;
 	}
+	return result;
+}
+
+uint8_t send_message(packet_t packet){
+	uint8_t result = 0;
+	uint8_t tmp;
+
+	char* send_buffer = (char*) malloc (MIN_PACKET_SIZE + packet.payload_length);
+
+	tmp = 0;
+	SET_HIGH(tmp, packet.dst_node);
+	SET_LOW(tmp, packet.payload_length);
+	send_buffer[0] = tmp;
+
+	tmp = 0;
+	SET_HIGH(tmp, packet.src_node);
+	SET_LOW(tmp, packet.dst_board);
+	send_buffer[1] = tmp;
+
+	tmp = 0;
+	SET_HIGH(tmp, packet.src_board);
+	SET_LOW(tmp, packet.type);
+	send_buffer[2] = tmp;
+
+	tmp = packet.frame_id;
+	send_buffer[3] = tmp;
+
+	tmp = (packet.packet_id & 0xFF00) >> 8;
+	send_buffer[4] = tmp;
+
+	tmp = (packet.packet_id & 0x00FF);
+	send_buffer[5] = tmp;
+
+	tmp = 0;
+	send_buffer[6] = tmp;
+
+
 	return result;
 }

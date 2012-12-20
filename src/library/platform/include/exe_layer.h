@@ -37,6 +37,7 @@
 #define MV      23
 #define WAIT    24
 #define PRIO    25
+#define CLEAR	26
 
 //services
 #define SERVICE_BARGRAPH 0
@@ -72,6 +73,15 @@
 #define POS_SIGN 0x00ff
 
 #define TEMP_MASK 0xfff8
+#define REG_STR_MASK 0x07
+
+#define HIGH_MASK 0xf0
+#define LOW_MASK  0x0f
+
+#define SET_HIGH(value, high) (value |= ((high & HIGH_MASK) << 4))
+#define SET_LOW(value, low) (value |= (low & HIGH_MASK))
+
+#define MIN_PACKET_SIZE 8
 
 typedef struct {
 uint8_t id;
@@ -82,10 +92,24 @@ uint8_t node_id;
 uint8_t agent_id;
 } opcode_t;
 
+typedef struct {
+	uint8_t dst_node;
+	uint8_t payload_length;
+	uint8_t src_node;
+	uint8_t dst_board;
+	uint8_t src_board;
+	uint8_t type;
+	uint8_t frame_id;
+	uint16_t packet_id;
+	uint8_t agent_id;
+	char* payload;
+} packet_t;
+
 int16_t get_signed_value(uint8_t value);
 uint8_t execute_agent(agent_t *agent, uint8_t opcode_size);
 opcode_t decode_opcode(uint16_t opcode);
 void execute_opcode(agent_t *agent, opcode_t opcode);
+uint8_t send_message(packet_t packet);
 
 #ifdef X86
 #define PRINTF printf

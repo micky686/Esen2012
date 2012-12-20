@@ -18,6 +18,7 @@
 #include "cooler.h"
 #include "heater.h"
 #include "DISPLAY.h"
+#include "protocol0.h"
 
 #define AGENT_MAX 4
 #define OPCODE_LEN 16
@@ -36,8 +37,11 @@ platform_config_t platform_config =
 .prio = agentprio, \
 .code = #agentcode }
 
-#define COMMUNICATION_ID(id) \
-.comm_timeout = id
+#define PLATFORM_ID(id) \
+.platform_id = id
+
+#define BOARD_ID(id) \
+.board_id = id
 
 typedef struct {
 
@@ -50,7 +54,8 @@ typedef struct {
 
 typedef struct {
 	agent_config_t agents_conf[AGENT_MAX];
-	uint8_t comm_timeout;
+	uint8_t platform_id;
+	uint8_t board_id;
 } platform_config_t;
 
 extern platform_config_t platform_config;
