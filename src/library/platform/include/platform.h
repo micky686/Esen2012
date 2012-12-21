@@ -56,6 +56,7 @@ typedef struct {
 	agent_config_t agents_conf[AGENT_MAX];
 	uint8_t platform_id;
 	uint8_t board_id;
+	uint8_t frame_id;
 } platform_config_t;
 
 extern platform_config_t platform_config;
@@ -130,7 +131,6 @@ void reset_agent(uint8_t id);
 uint8_t clone_agent(agent_t *agent);
 void platform_init(void);
 void run_platform(void);
-void recv_handler(uint8_t msg_length, uint8_t *msg_body); 
 
 
 #endif /* PLATFORM_H_ */

@@ -8,6 +8,7 @@
 #include "platform.h"
 #include "hw_layer.h"
 #include "scheduler.h"
+#include "comm_layer.h"
 
 #include "util/delay.h"
 
@@ -197,10 +198,6 @@ uint8_t clone_agent(agent_t *agent){
 	}
 
 	return result;
-}
-
-void recv_handler(uint8_t msg_length, uint8_t *msg_body){
-
 }
 
 /*
