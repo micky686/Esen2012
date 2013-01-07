@@ -1,86 +1,22 @@
-/** 
- * blinking_leds (N1-3)
- *
- **/
+/*
+* main.c
+*
+* Created on: Dec 9, 2012
+* Author: igor
+*/
+#include "platform.h"
 
 
-#include "global.h"
-#include "main.h"
-#include "node0.h"
-#include "protocoll.h"
-#include "util/delay.h"
-
-void rcv_handler(uint8_t msg_length, uint8_t *msg_body);
-void wr_to_bargraph(uint8_t val);
-
-
-int main(void) {
-  uint8_t i;
-  uint8_t m[1];
-
-  DDRF |= (1 << PF3);
-  PORTF &= ~(1 << PF3);
-  DDRF |= (1 << PF2);
-  PORTF &= ~(1 << PF2);  
-  
-  wr_to_bargraph(1);
-
-  protocol_init(2,rcv_handler);
-  sei();
-
-  i = 1;
-  while(TRUE) {
-    m[0] = i;    
-    send_msg(0x42,m);
-    wr_to_bargraph(i);
-    i++;
-    _delay_ms(1000);    
-  }
-
-  while(TRUE);
-  return 1; 
-}
-
-int main2(void)
+PLATFORM_CONFIGURATION()
 {
-	/* setting up hw-uart0 */
-	HWUART0_OPORT |= ( _BV(HWUART0_RXD) | _BV(HWUART0_TXD) );
-	HWUART0_DDR |= _BV(HWUART0_TXD);
-	SWUART_OPORT |= ( _BV(SWUART_RXD) | _BV(SWUART_TXD) );
-	
-	LED_DDR |= (1<<LED_GREEN) | (1<<LED_RED);
-	LED_PORT_REG |= (1<<LED_RED);
-	
-	while(TRUE)
-	{
-		if(HWUART0_IPORT & (1<<HWUART0_RXD))
-		{
-			LED_PORT_REG |= (1<<LED_RED);
-			LED_PORT_REG &= ~(1<<LED_GREEN);
-		}
-		else
-		{
-			LED_PORT_REG |= (1<<LED_GREEN);
-			LED_PORT_REG &= ~(1<<LED_RED);
-		}		
-	}
-
-
-	while(TRUE); /* the day will never come when we remove this redundancy */
-	return 1;
-}
-
-void rcv_handler(uint8_t msg_length, uint8_t *msg_body) {
-  /*
-  if (msg_length > 0) {
-    wr_to_bargraph(msg_body[0]);
-  } else {
-    //debug
-  }
-  */
-} 
-
-void wr_to_bargraph(uint8_t val) {
-  LEDS_DDR_ND0 = val; 
-  LEDS_PORT_ND0 = ~(val);
-}
+	AGENTS_CONFIGURATION(){
+		//AGENT_INIT(0x00, 0x03, 1101000000000000011100000000000000110000000000011111001111111101),
+		//AGENT_INIT(0x03, 0x03, 0100001000000001010000010000000001110001000000000011000100000001000011010001000010100010000000001111001111111011)
+		//AGENT_INIT(0x01, 0x03, 11010000111100000111000000000000),
+		//AGENT_INIT(0x02, 0x03, 110100001111000001110000000000001101000011110001011100000000000011010000111100100111000000000000),
+		//AGENT_INIT(0x03, 0x03, 11010000111100000111000000000000)
+		AGENT_INIT(0x03, 0x03, 01000010000000010100000100000000111100100000000001110001000000000011000100000001000011010001000010100010000000001111001111111011)
+	},
+	PLATFORM_ID(0x03),
+	BOARD_ID(0x00)
+};

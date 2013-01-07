@@ -11,6 +11,10 @@ endif
 OBJ-$(MNAME)	+= $(foreach m, $(OBJ-ESEL-$(MNAME)-y), $(ESELIB_DIR)/src/$(m).o)
 OBJ-$(MNAME)	+= $(foreach m, $(OBJ-ESEL-MDEP-$(MNAME)-y), $(d)/$(m).mdep.o)
 SRC-MDEP-$(MNAME) += $(foreach m, $(OBJ-ESEL-MDEP-$(MNAME)-y), $(filter %.c %.S,$(wildcard $(ESELIB_DIR)/src/$(m).*)))
+OBJ-$(MNAME)	+= $(foreach m, $(OBJ-PLATFORM-$(MNAME)-y), $(PLATFORM_DIR)/src/$(m).o)
+OBJ-$(MNAME)	+= $(foreach m, $(OBJ-PLATFORM-MDEP-$(MNAME)-y), $(d)/$(m).mdep.o)
+DEFINES-$(MNAME)+=  $(foreach m, $(OBJ-ESEL-MDEP-$(MNAME)-y), -D$(shell echo  $(m) | tr 'a-z' 'A-Z'))
+SRC-MDEP-$(MNAME) += $(foreach m, $(OBJ-PLATFORM-MDEP-$(MNAME)-y), $(filter %.c %.S,$(wildcard $(PLATFORM_DIR)/src/$(m).*)))
 OBJ-$(MNAME)	+= $(foreach m, $(OBJ-SCDL-$(MNAME)-y), $(SCADE_DIR)/src/$(m).o)
 
 # TTPA extension
@@ -73,6 +77,7 @@ OBJ		+= $(OBJ-$(MNAME))
 # necessary to evaluate the whole expression. TODO: find a better way
 OBJ-$(MNAME)	:= $(OBJ-$(MNAME))
 SRC-MDEP-$(MNAME) := $(SRC-MDEP-$(MNAME))
+DEFINES-$(MNAME) := $(DEFINES-$(MNAME))
 
 #complete library includes
 LIB-LD-$(MNAME)	:= $(addprefix -l,$(LIB-LD-$(MNAME)))

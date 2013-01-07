@@ -35,7 +35,7 @@
 /*void get_temp(): liefert die aktuelle temperatur zurueck*/
 /*****************************************************************************/
 void therm_init(void);
-int16_t therm_get_temp(uint8_t name);
+uint16_t therm_get_temp(uint8_t name);
 /* WARN: those functions below don't actually measure, but return only the
    last result */
 uint8_t therm_get_temp_high(void);
