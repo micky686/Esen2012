@@ -1,0 +1,2 @@
+ jtagprog  --port=/dev/ttyACM0  -m4 --infile=zigbit-blinktoradio.elf erase prog-flash-pageload prog-eeprom-bytewise
+
