@@ -75,20 +75,48 @@ typedef struct {
 	uint8_t payload[PACKET_LEN];
 } packet_t;
 
-typedef struct{
+struct frame{
 	unsigned dst_node:4;
 	unsigned dst_board:4;
 	unsigned dst_agent:4;
 	frame_id_t frame_id;
 	unsigned frame_length:16;
 	unsigned index:16;
+	struct frame *next_frame;
 	char *data;
-}frame_t;
+};
 
-extern volatile frame_t* recv_frames;
+typedef struct frame frame_t;
+
+typedef struct {
+	uint16_t size;
+	frame_t *first;
+	frame_t *last;
+}frame_list_t;
+
+extern frame_list_t frm_list;
 
 uint8_t send_message(frame_t frame);
 uint8_t send_msg(uint8_t message_header, uint8_t *msg_body);
+
+#define HI_MASK 0xf0
+#define LO_MASK 0x0f
+
+#define GET_DST_NODE(header) (header & HI_MASK) >> 4)
+#define GET_MSG_LEN(header) ((header & LO_MASK))
+
+#define GET_PAYLOAD_TYPE(payload) ((payload[0]& HI_MASK) >> 4)
+#define GET_PAYLOAD_SRC_BOARD(payload) (payload[0] & LO_MASK)
+
+#define GET_PAYLOAD_SRC_NODE(payload) ((payload[1] & HI_MASK) >> 4)
+#define GET_PAYLOAD_FRAME_ID(payload) (payload[1] & LO_MASK)
+
+#define GET_PAYLOAD_PACK_ID(payload) ((payload[2] << 8) | payload[3])
+
+#define GET_PAYLOAD_DST_BOARD(payload) ((payload[4] & HI_MASK) >> 4)
+#define GET_PAYLOAD_DST_AGENT(payload) (payload[4] & LO_MASK)
+
+#define GET_PAYLOAD_FRAME_LEN(payload) ((payload[5] << 8) | payload[6])
 
 void recv_handler(uint8_t msg_length, uint8_t *msg_body);
 
