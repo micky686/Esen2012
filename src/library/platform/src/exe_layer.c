@@ -460,16 +460,22 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case RECV:
 		PRINTF("pullmsg reg:%d\n", opcode.reg1);
-		if (opcode.reg1 > REG_MAX) {
-			opcode.reg1 = opcode.reg1 & REG_STR_MASK;
-			memcpy(agent->reg_str[opcode.reg1], agent->rec_msg_content, sizeof(agent->rec_msg_content));
-			agent->regstr_len[opcode.reg1] = sizeof(agent->rec_msg_content);
+		if (agent->rec_msg_content != 0){
+			if (opcode.reg1 > REG_MAX) {
+				opcode.reg1 = opcode.reg1 & REG_STR_MASK;
+				memcpy(agent->reg_str[opcode.reg1], agent->rec_msg_content, strlen(agent->rec_msg_content));
+				agent->regstr_len[opcode.reg1] = strlen(agent->rec_msg_content);
+			} else {
+				agent->regs[opcode.reg1] = 0;
+				agent->regs[opcode.reg1] = agent->rec_msg_content[0] << 8;
+				agent->regs[opcode.reg1] |= agent->rec_msg_content[1];
+			}
+			free(agent->rec_msg_content);
+			agent->rec_msg_content = 0;
+			agent->regs[REG_ACC] = 0;
 		} else {
-			agent->regs[opcode.reg1] = 0;
-			agent->regs[opcode.reg1] = agent->rec_msg_content[0] << 8;
-			agent->regs[opcode.reg1] |= agent->rec_msg_content[1];
+			agent->regs[REG_ACC] = -1;
 		}
-		free(agent->rec_msg_content);
 
 		break;
 
