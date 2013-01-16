@@ -69,7 +69,7 @@ uint8_t send_message(frame_t frame){
 
 
 
-uint8_t send_msg(uint8_t message_header, uint8_t *msg_body){
+/*uint8_t send_msg(uint8_t message_header, uint8_t *msg_body){
 
 	printf("header %x\n", message_header);
 	uint8_t i = 0;
@@ -78,7 +78,7 @@ uint8_t send_msg(uint8_t message_header, uint8_t *msg_body){
 	}
 	fflush(stdout);
 	recv_handler(message_header&0x0f, msg_body);
-}
+}*/
 
 /* |	dst_node	|	packet len	|
  * |	start_type	|  	src board	|
@@ -162,6 +162,7 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 					memcpy(platform.agents[current->dst_agent].rec_msg_content, current->data, current->frame_length);
 
 					prev->next_frame = current->next_frame;
+
 					//only one element
 					if (frm_list.last == frm_list.first){
 						frm_list.last = NULL;

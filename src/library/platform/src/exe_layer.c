@@ -290,6 +290,13 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 			}
 			break;
 
+		case SERVICE_LED:
+			if (opcode.reg1 > REG_MAX) {
+				opcode.reg1 = opcode.reg1 & REG_STR_MASK;
+				platform.drivers.dotmatrix_send(agent->reg_str[opcode.reg1]);
+			}
+			break;
+
 		default:
 			break;
 

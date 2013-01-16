@@ -19,6 +19,7 @@
 #include "heater.h"
 #include "DISPLAY.h"
 #include "protocol0.h"
+#include "ledmatrix.h"
 
 #define AGENT_MAX 4
 #define OPCODE_LEN 16
@@ -81,6 +82,8 @@ typedef struct {
 	void (*init_pushbutton1)(void(*callback)(void));
 
 	uint16_t (*therm_get_temp)(uint8_t name);
+
+	void (*dotmatrix_send)(char *data)
 
 } drivers_t;
 

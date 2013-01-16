@@ -22,7 +22,7 @@ void init_drivers(void){
 #endif
 
 #ifdef PROTOCOL0
-	protocol_init(platform_config.platform_id+1, recv_handler);
+	protocol_init(platform_config.platform_id, recv_handler);
 #endif
 
 #ifdef TIMER2
@@ -62,8 +62,7 @@ void init_drivers(void){
 
 #ifdef LEDMATRIX
 	init_dotmatrix();
-	char buf[] = "ABCD";
-	dotmatrix_send(buf);
+	platform.drivers.dotmatrix_send = dotmatrix_send;
 #endif
 
 }

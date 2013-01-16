@@ -6,6 +6,7 @@
  */
 
 #include "platform.h"
+#include "protocol0.h"
 
 #ifndef COMM_LAYER_H_
 #define COMM_LAYER_H_
@@ -97,7 +98,7 @@ typedef struct {
 extern frame_list_t frm_list;
 
 uint8_t send_message(frame_t frame);
-uint8_t send_msg(uint8_t message_header, uint8_t *msg_body);
+//uint8_t send_msg(uint8_t message_header, uint8_t *msg_body);
 
 #define HI_MASK 0xf0
 #define LO_MASK 0x0f
