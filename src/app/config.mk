@@ -64,22 +64,23 @@ COMMLIB_DIR	= $(LIB_DIR)/commlib
 TTPALD_DIR	= $(TTPA_DIR)/ldscripts
 SCADE_DIR	= $(LIB_DIR)/scade
 LDD_DIR		= $(TTPA_DIR)/ldscripts/
+PLATFORM_DIR= $(LIB_DIR)/platform
 IFSCONV_SCR	= $(TTPA_DIR)/scripts/conv_byteorder.pl
 
 # add include directories of the various libraries
-CFLAGS		+= -I$(ESELIB_DIR)/include -I$(TTPA_DIR)/include -I$(COMMLIB_DIR)/include -I$(SCADE_DIR)/include -I./include
+CFLAGS		+= -I$(ESELIB_DIR)/include -I$(TTPA_DIR)/include -I$(COMMLIB_DIR)/include -I$(SCADE_DIR)/include -I./include -I$(PLATFORM_DIR)/include
 #use special linker script if this is a ttpa application
 ifeq "$(MODE)" "ttpa"
   LDFLAGS	+= -Xlinker -T -Xlinker ${TTPALD_DIR}/${MCU}.x
 endif
 
 # add SCADE_DIR and ESELIB_DIR to cleanpath
-CLEANPATH	+= $(ESELIB_DIR) $(COMMLIB_DIR) $(SCADE_DIR)
+CLEANPATH	+= $(ESELIB_DIR) $(COMMLIB_DIR) $(SCADE_DIR) $(PLATFORM_DIR)
 
 # VPATH settings
-VPATH_HEADER	:= ./include:$(ESELIB_DIR)/include/:$(COMMLIB_DIR)/include/:$(TTPA_DIR)/include/:$(SCADE_DIR)/include/
-VPATH_CFILES	:= $(ESELIB_DIR)/src/:$(COMMLIB_DIR)/src/:$(TTPA_DIR)/ttpa/:$(SCADE_DIR)/src/
-VPATH_SFILES	:= $(ESELIB_DIR)/src/:$(COMMLIB_DIR)/src/:$(TTPA_DIR)/ttpa/:$(SCADE_DIR)/src/
+VPATH_HEADER	:= ./include:$(ESELIB_DIR)/include/:$(COMMLIB_DIR)/include/:$(TTPA_DIR)/include/:$(SCADE_DIR)/include/:$(PLATFORM_DIR)/include/
+VPATH_CFILES	:= $(ESELIB_DIR)/src/:$(COMMLIB_DIR)/src/:$(TTPA_DIR)/ttpa/:$(SCADE_DIR)/src/:$(PLATFORM_DIR)/src/
+VPATH_SFILES	:= $(ESELIB_DIR)/src/:$(COMMLIB_DIR)/src/:$(TTPA_DIR)/ttpa/:$(SCADE_DIR)/src/:$(PLATFORM_DIR)/src/
 
 # include other configuration
 include $(LIB_DIR)/Makefile.ttpa

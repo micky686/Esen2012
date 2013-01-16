@@ -14,7 +14,10 @@ OBJ-ESEL-$(MNAME)-y	+=
 
 # put the module specific used library modules in here (need 
 # to be defined in library/eselib/Makefile.eselib)
-OBJ-ESEL-MDEP-$(MNAME)-y += protocoll timer2 
+OBJ-ESEL-MDEP-$(MNAME)-y += protocol0 timer2 bargraph clock thermometer cooler heater
+
+# put platform specific used library modules in here
+OBJ-PLATFORM-MDEP-$(MNAME)-y += platform exe_layer scheduler comm_layer
 
 # put the used scade models in here (need to be defined in 
 # library/scade/Makefile.scade)
