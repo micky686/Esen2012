@@ -11,6 +11,7 @@ frame_list_t frm_list;
 
 uint8_t send_message(frame_t frame){
 
+	uint8_t res = 0;
 	packet_t packet;
 	uint16_t packet_id = 0;
 	uint8_t packet_ind =0;
@@ -60,11 +61,11 @@ uint8_t send_message(frame_t frame){
 		memcpy((packet.payload+packet_ind), (frame.data+frame.index), data_len);
 		frame.index+= data_len;
 
-		send_msg(packet.header, packet.payload);
+		res += send_msg(packet.header, packet.payload);
 		packet_id += 1;
 	}
 
-
+	return res;
 }
 
 

@@ -63,6 +63,9 @@ void init_drivers(void){
 #ifdef LEDMATRIX
 	init_dotmatrix();
 	platform.drivers.dotmatrix_send = dotmatrix_send;
+	//char buf[] = "ABCD";
+	//dotmatrix_send(buf);
+	//platform.drivers.dotmatrix_send(buf);
 #endif
 
 }
@@ -207,6 +210,7 @@ void platform_init(void) {
 
 	init_drivers();
 	init_agents();
+	sei();
 }
 
 void run_platform(void) {

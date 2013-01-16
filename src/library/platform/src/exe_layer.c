@@ -6,6 +6,7 @@
  */
 #include "exe_layer.h"
 #include "comm_layer.h"
+char buf = 'A';
 
 uint8_t execute_agent(agent_t *agent, uint8_t opcode_size) {
 
@@ -291,9 +292,11 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 			break;
 
 		case SERVICE_LED:
-			if (opcode.reg1 > REG_MAX) {
-				opcode.reg1 = opcode.reg1 & REG_STR_MASK;
-				platform.drivers.dotmatrix_send(agent->reg_str[opcode.reg1]);
+			if (platform.drivers.dotmatrix_send != NULL) {
+				if (opcode.reg1 > REG_MAX) {
+					opcode.reg1 = opcode.reg1 & REG_STR_MASK;
+					platform.drivers.dotmatrix_send(agent->reg_str[opcode.reg1]);
+				}
 			}
 			break;
 
@@ -463,7 +466,6 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 		platform_config.frame_id += 1;
 		agent->regs[REG_ACC] = send_message(frame);
 		free(frame.data);
-		break;
 
 	case RECV:
 		PRINTF("pullmsg reg:%d\n", opcode.reg1);
@@ -478,7 +480,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 				agent->regs[opcode.reg1] |= agent->rec_msg_content[1];
 			}
 			free(agent->rec_msg_content);
-			agent->rec_msg_content = 0;
+			//agent->rec_msg_content = 0;
 			agent->regs[REG_ACC] = 0;
 		} else {
 			agent->regs[REG_ACC] = -1;
