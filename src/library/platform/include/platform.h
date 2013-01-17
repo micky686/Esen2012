@@ -71,11 +71,10 @@ typedef struct {
 	void (*set_cooler)(uint8_t duty_cycle);
 
 	void (*DISPLAY_drawBg)(uint16_t rgb);
-	uint8_t (*DISPLAY_drawElement)(uint8_t row, uint8_t col, uint16_t rgb,
-		DisplayObject_t object);
-	void (*DISPLAY_drawBorder)(void);
-	uint8_t (*DISPLAY_drawPoints)(uint8_t player_id, uint8_t points);
 
+	void (*DISPLAY_drawDot)(uint8_t row, uint8_t col, uint16_t rgb, uint8_t grid);
+
+	void (*DISPLAY_draw_char)(uint8_t x, uint8_t y, uint16_t font_color, uint16_t bg_color, uint8_t pixel_size, char c);
 	void (*heater_set)(uint8_t duty_cycle);
 
 	void (*init_pushbutton0)(void(*callback)(void));
@@ -83,7 +82,7 @@ typedef struct {
 
 	uint16_t (*therm_get_temp)(uint8_t name);
 
-	void (*dotmatrix_send)(char *data)
+	void (*dotmatrix_send)(char *data);
 
 } drivers_t;
 

@@ -47,7 +47,11 @@ void init_drivers(void){
 
 
 #ifdef DISPLAY
-
+	DISPLAY_init();
+	DISPLAY_string(20, 150, RGB(30,238,30), RGB(0,0,0), 2, "Agents          :");
+	DISPLAY_string(20, 130, RGB(30,238,30), RGB(0,0,0), 2, "Agent message   :");
+	DISPLAY_string(20, 110, RGB(30,238,30), RGB(0,0,0), 2, "Agent state     :");
+	DISPLAY_string(20, 110, RGB(30,238,30), RGB(0,0,0), 2, "Platform status :");
 #endif
 
 #ifdef THERMOMETER
