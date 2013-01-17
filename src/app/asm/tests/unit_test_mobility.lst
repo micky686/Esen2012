@@ -1,0 +1,9 @@
+		1111000100000001		move		temp						
+		1111000100000000		move		bargraph						
+		1111000100000010		move		fan						
+		1111000100000011		move		heater						
+		1111000100000100		move		led_matrix						
+		1111000100000101		move		lcd						
+		1111000100000110		move		buttons						
+		1111001000000000		clone								
+		1111010000000000		die								
