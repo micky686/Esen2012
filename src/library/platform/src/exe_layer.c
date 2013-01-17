@@ -24,7 +24,7 @@ uint8_t execute_agent(agent_t *agent, uint8_t opcode_size) {
 
 		//4. increase program counter
 		if (agent->status == ready) {
-			if (agent->pc < agent->code_len - 1) {
+			if (agent->pc < agent->code_len - 1 || agent->pc == 0xffff) {
 				agent->pc += 1;
 			} else {
 				agent->status = stopped;
