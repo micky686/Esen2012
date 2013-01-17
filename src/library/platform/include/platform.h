@@ -118,6 +118,7 @@ typedef struct {
 
 	char* rec_msg_id;
 	char* rec_msg_content;
+	uint16_t rec_msg_len;
 
 } agent_t;
 

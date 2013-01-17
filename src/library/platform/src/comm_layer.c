@@ -159,8 +159,10 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 				current->index += msg_length - DATA_PACKET_LEN;
 				if (current->frame_length == current->index){
 					//everything received
-					platform.agents[current->dst_agent].rec_msg_content = (char*)realloc(platform.agents[agent_id].rec_msg_content, current->frame_length);
+					platform.agents[current->dst_agent].rec_msg_content = (char*)realloc(platform.agents[agent_id].rec_msg_content, current->frame_length + 1);
+					memset(platform.agents[current->dst_agent].rec_msg_content, 0, current->frame_length + 1);
 					memcpy(platform.agents[current->dst_agent].rec_msg_content, current->data, current->frame_length);
+					platform.agents[current->dst_agent].rec_msg_len = current->frame_length;
 
 					prev->next_frame = current->next_frame;
 

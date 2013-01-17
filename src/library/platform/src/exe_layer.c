@@ -466,21 +466,25 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 		platform_config.frame_id += 1;
 		agent->regs[REG_ACC] = send_message(frame);
 		free(frame.data);
+		break;
 
 	case RECV:
 		PRINTF("pullmsg reg:%d\n", opcode.reg1);
 		if (agent->rec_msg_content != 0){
 			if (opcode.reg1 > REG_MAX) {
 				opcode.reg1 = opcode.reg1 & REG_STR_MASK;
-				memcpy(agent->reg_str[opcode.reg1], agent->rec_msg_content, strlen(agent->rec_msg_content));
-				agent->regstr_len[opcode.reg1] = strlen(agent->rec_msg_content);
+				realloc(agent->reg_str[opcode.reg1], agent->rec_msg_len+1);
+				memset(agent->reg_str[opcode.reg1], 0, agent->rec_msg_len+1);
+				memcpy(agent->reg_str[opcode.reg1], agent->rec_msg_content, agent->rec_msg_len);
+				agent->regstr_len[opcode.reg1] = agent->rec_msg_len;
 			} else {
 				agent->regs[opcode.reg1] = 0;
 				agent->regs[opcode.reg1] = agent->rec_msg_content[0] << 8;
 				agent->regs[opcode.reg1] |= agent->rec_msg_content[1];
 			}
 			free(agent->rec_msg_content);
-			//agent->rec_msg_content = 0;
+			agent->rec_msg_content = 0;
+			agent->rec_msg_len = 0;
 			agent->regs[REG_ACC] = 0;
 		} else {
 			agent->regs[REG_ACC] = -1;
@@ -499,7 +503,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 	case STORE_C:
 		PRINTF("storecr reg_str:%d, char:%d\n", opcode.reg1, opcode.value);
 		opcode.reg1 = (opcode.reg1 & REG_STR_MASK);
-		agent->reg_str[opcode.reg1] = (char*) realloc (agent->reg_str[opcode.reg1], agent->regstr_len[opcode.reg1] + 1);
+		agent->reg_str[opcode.reg1] = (char*) realloc (agent->reg_str[opcode.reg1], agent->regstr_len[opcode.reg1] + 2);
 		agent->reg_str[opcode.reg1][agent->regstr_len[opcode.reg1]] = opcode.value;
 		agent->regstr_len[opcode.reg1]+= 1;
 		break;

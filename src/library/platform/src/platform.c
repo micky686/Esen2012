@@ -195,6 +195,11 @@ uint8_t clone_agent(agent_t *agent){
 			memcpy(platform.agents[i].regs, agent->regs, REG_MAX * sizeof(int16_t));
 			platform.agents[i].regs[REG_ACC] = 0;
 			result = 0;
+
+			if ( agent->rec_msg_content!= NULL){
+				memcpy(platform.agents[i].rec_msg_content, agent->rec_msg_content, agent->rec_msg_len);
+				platform.agents[i].rec_msg_len = agent->rec_msg_len;
+			}
 			break;
 		}
 	}
