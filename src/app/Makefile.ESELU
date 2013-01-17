@@ -25,7 +25,8 @@ install:
 #	$(MUXR) --global-disable=1
 #new ese board:
 # # jtagprog -p /dev/ttyACM0 -m0 --infile=node0.elf erase prog-flash-pageload prog-eeprom-bytewise
-flash_node: node${N}/node${N}.elf
+#  node${N}/node${N}.elf
+flash_node:
 	jtagprog -p ${PRGMIF} -m${N} --infile=node${N}/node${N}.elf erase prog-flash-pageload prog-eeprom-bytewise
 
 # correct the nodes

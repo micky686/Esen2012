@@ -14,7 +14,7 @@ OBJ-ESEL-$(MNAME)-y	+=
 
 # put the module specific used library modules in here (need 
 # to be defined in library/eselib/Makefile.eselib)
-OBJ-ESEL-MDEP-$(MNAME)-y += protocol0 timer2
+OBJ-ESEL-MDEP-$(MNAME)-y += protocol0 timer2 DISPLAY
 
 # put platform specific used library modules in here
 OBJ-PLATFORM-MDEP-$(MNAME)-y += platform exe_layer scheduler comm_layer
