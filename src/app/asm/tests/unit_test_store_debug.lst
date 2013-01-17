@@ -1,0 +1,4 @@
+		1011101001100010		storecr		reg_str_2		b				
+		0000001000001000		clr		reg_str_0						
+		0000001000001001		clr		reg_str_1						
+		0000001000001010		clr		reg_str_2						
