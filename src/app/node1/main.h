@@ -8,4 +8,8 @@
 
 #define NODE 1
 
+#include "platform.h"
+
+ACTIVATE_AGENT(0);
+
 #endif

@@ -19,7 +19,8 @@
 
 // project include
 #include "DISPLAY.h"
-//#include "PlatformAVR.h"
+#include "FONT.h"
+
 
 // ================================================================================================
 // Module internal Definitions
@@ -83,7 +84,7 @@ void DISPLAY_writeParameter(uint8_t param);
 void DISPLAY_writeByte(uint8_t cmd, uint8_t data);
 uint8_t DISPLAY_readByte(uint8_t cmd);
 void DISPLAY_delayMs(uint32_t count);
-
+extern uint8_t font_0[94][6];
 // ================================================================================================
 // Function-Implementations
 // ================================================================================================
@@ -271,71 +272,45 @@ void DISPLAY_init() {
 // ------------------------------------------------------------------------------------------------
 //
 // ------------------------------------------------------------------------------------------------
-uint8_t DISPLAY_drawElement(uint8_t row, uint8_t col, uint16_t rgb, DisplayObject_t object) {
-
-	uint8_t i = 0;
+void DISPLAY_drawDot(uint8_t row, uint8_t col, uint16_t rgb, uint8_t grid) {
+	uint32_t i = 0;
 	uint8_t j = 0;
 	uint16_t set_row = 0;
 	uint16_t set_col = 0;
 
-	if		(row >= 64) 		return (1);
-	else if	(col >= 36) 		return (2);
+	if		(row*grid >= 640) 		return (1);
+	else if	(col*grid >= 360) 		return (2);
 
-	set_row = row*10;
+	set_row = row*grid;
 
 	DISPLAY_writeCommand(DISPLAY_SET_ROW);		
 	DISPLAY_writeParameter((uint8_t)((set_row>>8)&0x03));
 	DISPLAY_writeParameter((uint8_t)(set_row));	
 
-	set_row = (row*10)+9;
+	set_row = (row*grid)+grid-1;
 
 	DISPLAY_writeParameter((uint8_t)((set_row>>8)&0x03));
 	DISPLAY_writeParameterLast((uint8_t)(set_row));	
 
 
-	set_col = col*10;
+	set_col = col*grid;
 
 	DISPLAY_writeCommand(DISPLAY_SET_COL);		
 	DISPLAY_writeParameter((uint8_t)((set_col>>8)&0x03));
 	DISPLAY_writeParameter((uint8_t)(set_col));	
 
-	set_col = (col*10)+9;
+	set_col = (col*grid)+grid-1;
 
 	DISPLAY_writeParameter((uint8_t)((set_col>>8)&0x03));
 	DISPLAY_writeParameterLast((uint8_t)(set_col));	
 
-	if((object == DispObj_Body) || (object == DispObj_Food) || (object == DispObj_Wall) || (object == DispObj_Blank))
-	{
+
 		DISPLAY_writeCommand(0x2C);
-		for(i=0; i<99; i++) {
+		for(i=0; i<(grid*grid); i++) {
 			DISPLAY_WRITE((uint8_t)(rgb>>8));
 			DISPLAY_WRITE((uint8_t)rgb);
 		}
-		DISPLAY_WRITE((uint8_t)(rgb>>8));
-		DISPLAY_writeParameterLast((uint8_t)rgb);
-	}
-	else
-	{
-		DISPLAY_writeCommand(0x2C);
-		for(i=0; i<10; i++)
-			for(j=0; j<10; j++) {
 
-				if((i<=1)||(i>=8)||(j<=1)||(j>=8))
-				{
-					DISPLAY_WRITE((uint8_t)(rgb>>8));
-					DISPLAY_WRITE((uint8_t)rgb);
-				}
-				else
-				{
-					DISPLAY_WRITE((uint8_t)(COLOR_BLANK>>8));
-					DISPLAY_WRITE((uint8_t)COLOR_BLANK);
-				}
-			}
-		DISPLAY_WRITE((uint8_t)(rgb>>8));
-		DISPLAY_writeParameterLast((uint8_t)rgb);
-	}
-
-	return (0);
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -353,28 +328,6 @@ void DISPLAY_drawBg(uint16_t rgb) {
 
 	DISPLAY_WRITE((uint8_t)(rgb>>8));
 	DISPLAY_writeParameterLast((uint8_t)rgb);
-}
-
-// ------------------------------------------------------------------------------------------------
-//
-// ------------------------------------------------------------------------------------------------
-void DISPLAY_drawBorder(void)
-{
-	uint8_t i=0;
-
-	for(i=0; i<(DISPLAY_HEIGHT/10); i++)
-	{
-		DISPLAY_drawElement(i,0 ,COLOR_WALL,DispObj_Wall);
-		DISPLAY_drawElement(i,35,COLOR_WALL,DispObj_Wall);
-	}
-	for(i=0; i<(DISPLAY_WIDTH/10); i++)
-	{
-		DISPLAY_drawElement(0 ,i,COLOR_WALL,DispObj_Wall);
-		DISPLAY_drawElement(47,i,COLOR_WALL,DispObj_Wall);
-		DISPLAY_drawElement(48,i,COLOR_WALL,DispObj_Wall);
-		DISPLAY_drawElement(62,i,COLOR_WALL,DispObj_Wall);
-		DISPLAY_drawElement(63,i,COLOR_WALL,DispObj_Wall);
-	}
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -480,117 +433,39 @@ void DISPLAY_writeParameter(uint8_t param) {
 // ------------------------------------------------------------------------------------------------
 //
 // ------------------------------------------------------------------------------------------------
-uint8_t DISPLAY_drawPoints(uint8_t player_id, uint8_t points)
-{
-	uint8_t points_1, points_10, points_100;
-	uint8_t row=0;
-	uint8_t column=0;
-
-	uint8_t nbr_offset=0;
-	uint16_t rgb = 0;
-
-	uint16_t num[10] = {0b0111111000111111,		//0
-						0b0000001111100000,		//1
-						0b0111011010110111,		//2
-						0b0111111010110101,		//3
-						0b0011110010011100,		//4
-						0b0101111010111101,		//5
-						0b0101111010111111,		//6
-						0b0111111000010000,		//7
-						0b0111111010111111,		//8
-						0b0111111010111101};	//9
-	uint16_t draw;
-
-	if(player_id == 1)
-	{
-		nbr_offset = 26;
-		rgb = COLOR_P0;
+void DISPLAY_string(uint8_t x, uint8_t y, uint16_t font_color, uint16_t bg_color, uint8_t pixel_size, char *ptr){
+	uint8_t cx, cy;
+	cx = x; cy = y;
+	while (*ptr != '\0'){
+		DISPLAY_draw_char(cx, cy, font_color, bg_color, pixel_size, *ptr++);
+		cx = cx + pixel_size*(FONT_WIDTH - 3);
 	}
-	else if(player_id == 2)
-	{
-		nbr_offset = 19;
-		rgb = COLOR_P1;
-	}
-	else if(player_id == 3)
-	{
-		nbr_offset = 12;
-		rgb = COLOR_P2;
-	}
-	else if(player_id == 4)
-	{
-		nbr_offset = 5;
-		rgb = COLOR_P3;
-	}
-	else
-	{
-		return (1);
-	}
+}
 
-
-	points_100 = points/100;
-	points_10 = (points - (points_100*100))/10;
-	points_1 = points%10;
-
-	draw = num[points_100];
-
-	for(row=50; row <=52; row++)
-	{
-		for(column=nbr_offset; column<=nbr_offset+4; column++)
-		{
-			if(draw&0x00001)
-			{
-				DISPLAY_drawElement(row,column,rgb,DispObj_Food);
+void DISPLAY_draw_char(uint8_t x, uint8_t y, uint16_t font_color, uint16_t bg_color, uint8_t pixel_size, char c){
+	uint8_t bit_index = 0;
+	uint8_t byte_index = 0;
+	uint8_t cy, cx;
+	int index = c - 30;
+		for(cy = y + FONT_HEIGHT; cy > y; cy--){
+			for(cx = x; cx < x + FONT_WIDTH; cx++){
+				if (FONT8x16[index][byte_index]>>(7-bit_index) & 01)
+					DISPLAY_drawDot(cx,cy,font_color,  pixel_size);
+				else
+					DISPLAY_drawDot(cx,cy, bg_color, pixel_size);
+				bit_index++;
+				if(bit_index >= 8){
+					bit_index = 0;
+					byte_index++;
+				}
 			}
-			else
-			{
-				DISPLAY_drawElement(row,column,COLOR_BLANK,DispObj_Food);
-			}
-			draw = draw>>1;
 		}
-	}
-
-	draw = num[points_10];
-
-	for(row=54; row <=56; row++)
-	{
-		for(column=nbr_offset; column<=nbr_offset+4; column++)
-		{
-			if(draw&0x00001)
-			{
-				DISPLAY_drawElement(row,column,rgb,DispObj_Food);
-			}
-			else
-			{
-				DISPLAY_drawElement(row,column,COLOR_BLANK,DispObj_Food);
-			}
-			draw = draw>>1;
-		}
-	}
-
-	draw = num[points_1];
-
-	for(row=58; row <=60; row++)
-	{
-		for(column=nbr_offset; column<=nbr_offset+4; column++)
-		{
-			if(draw&0x00001)
-			{
-				DISPLAY_drawElement(row,column,rgb,DispObj_Food);
-			}
-			else
-			{
-				DISPLAY_drawElement(row,column,COLOR_BLANK,DispObj_Food);
-			}
-			draw = draw>>1;
-		}
-	}
-	return (0);
 }
 
 // ------------------------------------------------------------------------------------------------
 //
 // ------------------------------------------------------------------------------------------------
-void DISPLAY_delayMs(uint32_t count) {
+void DISPLAY_delayMs(uint32_t count){
 	uint16_t i=0;
 
 	while(count) {

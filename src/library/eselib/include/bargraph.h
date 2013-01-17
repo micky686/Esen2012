@@ -34,7 +34,7 @@
 /*Dezimalzahl in Binaer aus.                              */
 /**********************************************************/
 
-void init_bargraph(void);
+void bargraph_init(void);
 void set_bargraph(uint8_t value);
 
 #endif
