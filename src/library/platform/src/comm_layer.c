@@ -137,8 +137,10 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 
 		} else {
 			//write directly to agent
-			platform.agents[agent_id].rec_msg_content = (char*)realloc(platform.agents[agent_id].rec_msg_content, frame_size);
+			platform.agents[agent_id].rec_msg_content = (char*)realloc(platform.agents[agent_id].rec_msg_content, frame_size +1);
+			memset(platform.agents[agent_id].rec_msg_content, 0, frame_size + 1);
 			memcpy(platform.agents[agent_id].rec_msg_content, msg_body+START_PACKET_LEN, frame_size);
+			platform.agents[agent_id].rec_msg_len = frame_size;
 		}
 
 
