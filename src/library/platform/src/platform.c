@@ -225,12 +225,19 @@ void platform_init(void) {
 void run_platform(void) {
 
 	schedule_next();
-	_delay_ms(1000);
+	//_delay_ms(1000);
 }
 
 int main(void) {
 
+
 	platform_init();
+
+	/*if (platform.drivers.dotmatrix_send != NULL){
+		char a1[] = "3";
+		platform.drivers.dotmatrix_send(a1);
+		_delay_ms(2000);
+	}*/
 
 	while (1){
 		run_platform();
