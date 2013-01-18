@@ -482,9 +482,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 				memcpy(agent->reg_str[opcode.reg1], agent->rec_msg_content, agent->rec_msg_len);
 				agent->regstr_len[opcode.reg1] = agent->rec_msg_len;
 			} else {
-				agent->regs[opcode.reg1] = 0;
-				agent->regs[opcode.reg1] = agent->rec_msg_content[0] << 8;
-				agent->regs[opcode.reg1] |= agent->rec_msg_content[1];
+				agent->regs[opcode.reg1] = agent->rec_msg_content[0];
 			}
 			free(agent->rec_msg_content);
 			agent->rec_msg_content = 0;
