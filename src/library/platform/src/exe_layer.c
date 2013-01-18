@@ -503,14 +503,36 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 	case STORE_C:
 		PRINTF("storecr reg_str:%d, char:%d\n", opcode.reg1, opcode.value);
 		opcode.reg1 = (opcode.reg1 & REG_STR_MASK);
-		agent->reg_str[opcode.reg1] = (char*) realloc (agent->reg_str[opcode.reg1], agent->regstr_len[opcode.reg1] + 2);
+		agent->reg_str[opcode.reg1] = (char*) realloc (agent->reg_str[opcode.reg1], agent->regstr_len[opcode.reg1] + 1);
 		agent->reg_str[opcode.reg1][agent->regstr_len[opcode.reg1]] = opcode.value;
 		agent->regstr_len[opcode.reg1]+= 1;
 		break;
 
 	case MV:
 		PRINTF("mv reg_d:%d, reg_r:%d\n", opcode.reg1, opcode.reg2);
-		agent->regs[opcode.reg1] = agent->regs[opcode.reg2];
+
+		if (opcode.reg1 > REG_MAX && opcode.reg2 > REG_MAX){
+			//both str
+			opcode.reg1 = opcode.reg1 & REG_STR_MASK;
+			opcode.reg2 = opcode.reg2 & REG_STR_MASK;
+			realloc(agent->reg_str[opcode.reg1], agent->regstr_len[opcode.reg2]);
+			memcpy(agent->reg_str[opcode.reg1], agent->reg_str[opcode.reg2], agent->regstr_len[opcode.reg2]);
+			agent->regstr_len[opcode.reg1] = agent->regstr_len[opcode.reg2];
+
+		} else if (opcode.reg1 > REG_MAX) {
+			//dst str
+			opcode.reg1 = (opcode.reg1 & REG_STR_MASK);
+			agent->reg_str[opcode.reg1] = (char*) realloc (agent->reg_str[opcode.reg1], agent->regstr_len[opcode.reg1] + 1);
+			agent->reg_str[opcode.reg1][agent->regstr_len[opcode.reg1]] = agent->regs[opcode.reg2] & 0x00ff;
+			agent->regstr_len[opcode.reg1]+= 1;
+
+		} else if (opcode.reg2 > REG_MAX) {
+			//src str
+			opcode.reg2 = (opcode.reg2 & REG_STR_MASK);
+			agent->regs[opcode.reg1] = agent->reg_str[opcode.reg2][0];
+		} else {
+			agent->regs[opcode.reg1] = agent->regs[opcode.reg2];
+		}
 		break;
 
 	case WAIT:
