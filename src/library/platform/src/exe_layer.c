@@ -542,7 +542,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case WAIT:
 		PRINTF("wait delay_ms:%d\n", opcode.value);
-		//TODO
+		_delay_ms(opcode.value*10);
 		break;
 
 	case PRIO:

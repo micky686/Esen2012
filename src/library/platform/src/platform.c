@@ -221,7 +221,7 @@ void platform_init(void) {
 void run_platform(void) {
 
 	schedule_next();
-	_delay_ms(1000);
+	//_delay_ms(1000);
 }
 
 int main(void) {
