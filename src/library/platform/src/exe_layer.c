@@ -277,6 +277,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 	uint16_t tmp = 0;
 	int16_t sgn_tmp = 0;
 
+
 	switch (opcode.id) {
 	case SETSERVICE:
 		PRINTF("setservice service_id: %d, reg: %d\n", opcode.value, opcode.reg1);
@@ -293,9 +294,12 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 		case SERVICE_LED:
 			if (platform.drivers.dotmatrix_send != NULL) {
+				_delay_ms(50);
 				if (opcode.reg1 > REG_MAX) {
 					opcode.reg1 = opcode.reg1 & REG_STR_MASK;
-					platform.drivers.dotmatrix_send(agent->reg_str[opcode.reg1]);
+					if (agent->reg_str[opcode.reg1] != NULL) {
+						platform.drivers.dotmatrix_send(agent->reg_str[opcode.reg1]);
+					}
 				}
 			}
 			break;
@@ -486,6 +490,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 			agent->rec_msg_content = 0;
 			agent->rec_msg_len = 0;
 			agent->regs[REG_ACC] = 0;
+
 		} else {
 			agent->regs[REG_ACC] = -1;
 		}
