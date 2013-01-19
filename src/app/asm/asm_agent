@@ -191,32 +191,44 @@ def second_pass():
             else:
                 print "Error in line %s, operands do not match mnemonic " %line
         if mnem == "setservice":
-            if label2 != None:
-                print "Error in line %s, illegal label " %line
-            elif operand1 in service and operand2 in reg:
-                opcode = command_opcode[mnem] + reg[operand2] + convert_to_binary(service[operand1])
-            else:
-                print  "Error in line %s, illegal operand" %line
+		if label2 != None:
+			print "Error in line %s, illegal label " %line
+		elif operand1 in service:
+			if operand2 in reg:
+				opcode = command_opcode[mnem] + reg[operand2] + convert_to_binary(service[operand1])
+			elif operand2 in reg_str:
+				opcode = command_opcode[mnem] + reg_str[operand2] + convert_to_binary(service[operand1])
+		else:
+			print  "Error in line %s, illegal operand" %line
         if mnem == "sendmsg":
             if label2 != None:
                  print "Error in line %s, illegal label " %line
-            elif operand1 in reg and re.compile("[0-3]").match(operand2) != None and \
+            elif re.compile("[0-3]").match(operand2) != None and \
                     re.compile("[0-3]").match(operand3) != None:
                 agent =  bin(int(operand2))[2:]
                 dest_agent = agent if len(agent) == 2 else "0" + agent
                 platform = bin(int(operand3))[2:]
                 dest_platform = platform if len(platform) == 2 else "0" + platform
-                opcode = command_opcode[mnem] + reg[operand1] + dest_agent + dest_platform
+		if operand1 in reg:
+			opcode = command_opcode[mnem] + reg[operand1] + dest_agent + dest_platform
+		elif operand1 in reg_str:
+			opcode = command_opcode[mnem] + reg_str[operand1] + dest_agent + dest_platform
             else:
                 print  "Error in line %s, illegal operand" %line
         
         if mnem == "mv":
-            if label2 != None:
-               print "Error in line %s, illegal label " %line
-            elif  operand1 not in reg or operand2 not in reg or operand3 != None:
-               print "Error in line %s, illegal operand" %line
-            else:
-                opcode = command_opcode[mnem] + reg[operand1] + reg[operand2]
+		if label2 != None:
+			print "Error in line %s, illegal label " %line
+		elif (operand1 in reg) and (operand2 in reg):
+			opcode = command_opcode[mnem] + reg[operand1] + reg[operand2]
+		elif (operand1 in reg) and (operand2 in reg_str):
+			opcode = command_opcode[mnem] + reg[operand1] + reg_str[operand2]
+		elif (operand1 in reg_str) and (operand2 in reg):
+			opcode = command_opcode[mnem] + reg_str[operand1] + reg[operand2]
+		elif (operand1 in reg_str) and (operand2 in reg_str):
+			opcode = command_opcode[mnem] + reg_str[operand1] + reg_str[operand2]
+		else:
+			print "Error in line %s, illegal operand" %line
         
         binary.write(opcode)
         listing.write(xstr(FIRST_PARS[i]["LABEL1"]) + "\t\t" + opcode + "\t\t" + xstr(FIRST_PARS[i]["MNEMONIC"]) + "\t\t" + \
