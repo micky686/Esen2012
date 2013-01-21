@@ -277,6 +277,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 	uint16_t tmp = 0;
 	int16_t sgn_tmp = 0;
 
+
 	switch (opcode.id) {
 	case SETSERVICE:
 		PRINTF("setservice service_id: %d, reg: %d\n", opcode.value, opcode.reg1);
@@ -293,9 +294,12 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 		case SERVICE_LED:
 			if (platform.drivers.dotmatrix_send != NULL) {
+				_delay_ms(50);
 				if (opcode.reg1 > REG_MAX) {
 					opcode.reg1 = opcode.reg1 & REG_STR_MASK;
-					platform.drivers.dotmatrix_send(agent->reg_str[opcode.reg1]);
+					if (agent->reg_str[opcode.reg1] != NULL) {
+						platform.drivers.dotmatrix_send(agent->reg_str[opcode.reg1]);
+					}
 				}
 			}
 			break;
@@ -478,14 +482,13 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 				memcpy(agent->reg_str[opcode.reg1], agent->rec_msg_content, agent->rec_msg_len);
 				agent->regstr_len[opcode.reg1] = agent->rec_msg_len;
 			} else {
-				agent->regs[opcode.reg1] = 0;
-				agent->regs[opcode.reg1] = agent->rec_msg_content[0] << 8;
-				agent->regs[opcode.reg1] |= agent->rec_msg_content[1];
+				agent->regs[opcode.reg1] = agent->rec_msg_content[0];
 			}
 			free(agent->rec_msg_content);
 			agent->rec_msg_content = 0;
 			agent->rec_msg_len = 0;
 			agent->regs[REG_ACC] = 0;
+
 		} else {
 			agent->regs[REG_ACC] = -1;
 		}
@@ -537,7 +540,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case WAIT:
 		PRINTF("wait delay_ms:%d\n", opcode.value);
-		//TODO
+		_delay_ms(opcode.value*10);
 		break;
 
 	case PRIO:

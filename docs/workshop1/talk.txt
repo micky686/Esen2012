@@ -1,0 +1,174 @@
+============Slide 1 ==================
+Title page
+
+Greeting
+Introduce project 
+(20-30 s)
+
+===========Slide 2 ===================
+Outline
+
+Give short outline of the presentation
+
+(1 min)
+
+===========Slide 3 ===================
+Motivation
+
+(20-30 s)
+
+===========Slide 4 ===================
+Code mobility overview
+
+What is code mobility?
+dynamically change bindings between code fragments and
+location where it is executed.
+
+Crucial concept: mobile agent (that piece of software that is able to move)
+
+How the mobile agent can move is moved is also important concept in code mobility
+And here weak and strong code mobility arises
+
+(1.5 min)
+
+=============Slide 5 =================
+Level of abstraction
+
+Reading about code mobility in literature:
+object
+
+Our goal: to lower the level of abstraction downto hardware
+
+work with all the cocncerns
+
+(1 min)
+
+=============Slide 6 ================
+Design challenges for the project
+
+(20 sec)
+
+=============Slide 7 =================
+Requirements
+
+(1 min)
+
+=============Slides 8,9 ==============
+General overview
+
+
+(1.5 min)
+
+=============Slide 10 ================
+Agent language
+
+Overview of operations
+According to goal: move to lower level
+
+(1 min)
+
+=============Slides 11,12,13,14 =======
+Agents
+
+Example of agent language
+
+(2 min)
+
+=============Slide 15 =================
+Platform
+
+(1 min)
+
+=============Slide 16 =================
+Scheduler
+
+(1 min)
+
+=============Slide 17 =================
+Execution layer
+
+(1.5 min)
+
+=============Slide 18 -  =================
+Communication
+
+* Network Participants
+  zigbee gateway - dedicated node (30sec)
+  hardware communication infrastructure
+
+* Protocol Design
+ + Requirements     (1.30 min)
+  - Local internode communication
+    (local network is on bus0)
+  - Remote interboard communication
+    (over a gateway node)
+    (possible utilisation of dedicated bus1)
+  - Sending agent code
+    (large data volume) (could monopolize network bandwidth)
+  - Sending application data
+    (small amount of data such as sensor value) 
+    (possibly at regular time intervalls)
+    (possibly with implicit time value)
+ 
++ Principles : (from requirements and keeping development time low) (1.30min)
+  - Layered design
+    (low level CSMA/CA - same as in wireless ieee 802.15.4)    
+    (high level: message routing and frame composition)
+    (who does what)
+  - Fairness in network access 
+    (for timely message delivery)
+    (solved on low level - packets - egalitarian network access)
+    (and distinction of message types: agent code, data, control messages)
+  - Composability with Zigbee
+    (bridging between local protocol and zigbee network)
+    (adressing scheme) 
+    (zigbee accessed at application layer using library no no problem)
+    (using subset of zigbee services)   
+  [- Acknowledgement and retry
+    (implemented in zigbee on network layer)
+    (our local bus is short)
+    (on high layer datagramm level)
+    (we do not try to reimplement TCP)
+    (light weight)
+
+* Transmission layers  (1min)
+  - high level 
+    (embedded in low level)
+    (offers more functionality)
+    (packet types)
+
+* Configuration of Zigbee Network (30sec)
+   - Node types
+     (coordinator initiates, router, end device)
+   - Mesh topology 
+     (each node is capable of routing)
+     (many connections)
+   - Flexible rerouting
+     (example)
+=============Slide 22 =================
+Milestones
+
+Phases
+
+(30 sec)
+
+=============Slide 23 =================
+Workpackages
+
+TODO
+
+(30 sec)
+
+=============Slide 24 =================
+Gantt diagram
+
+
+
+(30 sec)
+
+=============Slide 25 =================
+Tools
+
+Redmine, github, eclipse.
+
+(1 min)
