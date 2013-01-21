@@ -161,7 +161,7 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 				current->index += msg_length - DATA_PACKET_LEN;
 				if (current->frame_length == current->index){
 					//everything received
-					platform.agents[current->dst_agent].rec_msg_content = (char*)realloc(platform.agents[agent_id].rec_msg_content, current->frame_length + 1);
+					platform.agents[current->dst_agent].rec_msg_content = (char*)realloc(platform.agents[current->dst_agent].rec_msg_content, current->frame_length + 1);
 					memset(platform.agents[current->dst_agent].rec_msg_content, 0, current->frame_length + 1);
 					memcpy(platform.agents[current->dst_agent].rec_msg_content, current->data, current->frame_length);
 					platform.agents[current->dst_agent].rec_msg_len = current->frame_length;
@@ -182,6 +182,8 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 					free(current);
 					current = NULL;
 					frm_list.size -= 1;
+				} else {
+					current = NULL;
 				}
 			} else {
 				prev = current;
@@ -191,3 +193,131 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 	}
 
 }
+
+
+
+/*typedef struct {
+
+	uint8_t id;				0
+	uint8_t priority;		1
+	agent_status_t status;	2
+
+	uint32_t status_flag;	3456
+	uint16_t pc;			78
+
+	int16_t regs[REG_MAX];	910 1112 1314 1516 1718 1920 2122
+
+	uint16_t code_len;		2324
+	uint16_t* code;
+
+	uint16_t regstr_len [STR_REG_MAX]; 2526 2728 2930
+	char** reg_str;
+
+	uint16_t rec_msg_len; 3132
+	char* rec_msg_content;
+
+
+} agent_t;*/
+uint8_t* serialize_agent(agent_t agent, uint16_t* agent_len){
+
+	*agent_len = FIXED_LEN + (agent.code_len * sizeof(uint16_t)) + agent.regstr_len[0] + agent.regstr_len[1] + agent.regstr_len[2] + agent.rec_msg_len;
+	uint8_t* agent_str = (uint8_t*) malloc(agent_len);
+
+	SET_MOBILITY_HEADER(agent_str);
+
+	SET_AGENT_ID(agent_str, agent.id);
+	SET_AGENT_PRIO(agent_str, agent.priority);
+	SET_AGENT_STATUS(agent_str, agent.status);
+
+	SET_AGENT_FLAG_REG(agent_str, agent.status_flag);
+	SET_AGENT_PC(agent_str, agent.pc);
+
+	SET_AGENT_REG(agent_str, agent, 0);
+	SET_AGENT_REG(agent_str, agent, 1);
+	SET_AGENT_REG(agent_str, agent, 2);
+	SET_AGENT_REG(agent_str, agent, 3);
+	SET_AGENT_REG(agent_str, agent, 4);
+	SET_AGENT_REG(agent_str, agent, 5);
+	SET_AGENT_REG(agent_str, agent, 6);
+
+	SET_AGENT_CODE_LEN(agent_str, agent.code_len);
+
+	SET_AGENT_REG_STR_LEN(agent_str, agent, 0);
+	SET_AGENT_REG_STR_LEN(agent_str, agent, 1);
+	SET_AGENT_REG_STR_LEN(agent_str, agent, 2);
+
+	SET_AGENT_REC_MSG_LEN(agent_str, agent.rec_msg_len);
+
+	//copy code
+	memcpy(agent_str + DYNAMIC_START, agent.code, agent.code_len * sizeof(uint16_t));
+
+	//copy reg_str
+	uint32_t pos = DYNAMIC_START + (agent.code_len * sizeof (uint16_t));
+	memcpy(agent_str + pos, agent.reg_str[0], agent.regstr_len[0]);
+
+	pos += agent.regstr_len[0];
+	memcpy(agent_str + pos, agent.reg_str[1], agent.regstr_len[1]);
+
+	pos += agent.regstr_len[1];
+	memcpy(agent_str + pos, agent.reg_str[2], agent.regstr_len[2]);
+
+	pos += agent.regstr_len[2];
+	memcpy(agent_str + pos, agent.rec_msg_content, agent.rec_msg_len);
+
+	pos += agent.rec_msg_len;
+
+	SET_MOBILITY_END(agent_str, pos);
+
+	return agent_str;
+}
+
+agent_t deserialize_agent(uint8_t* packet){
+	agent_t agent;
+
+
+	agent.id = GET_AGENT_ID(packet);
+	agent.priority = GET_AGENT_PRIO(packet);
+	agent.status = GET_AGENT_STATUS(packet);
+	agent.status_flag = GET_AGENT_FLAG_REG(packet);
+	agent.pc = GET_AGENT_PC(packet);
+
+	agent.regs[0] = GET_AGENT_REG(packet, 0);
+	agent.regs[1] = GET_AGENT_REG(packet, 1);
+	agent.regs[2] = GET_AGENT_REG(packet, 2);
+	agent.regs[3] = GET_AGENT_REG(packet, 3);
+	agent.regs[4] = GET_AGENT_REG(packet, 4);
+	agent.regs[5] = GET_AGENT_REG(packet, 5);
+	agent.regs[6] = GET_AGENT_REG(packet, 6);
+
+	agent.code_len = GET_AGENT_CODE_LEN(packet);
+
+	agent.regstr_len[0] = GET_AGENT_REG_STR_LEN(packet, 0);
+	agent.regstr_len[1] = GET_AGENT_REG_STR_LEN(packet, 1);
+	agent.regstr_len[2] = GET_AGENT_REG_STR_LEN(packet, 2);
+
+	agent.rec_msg_len = GET_AGENT_REC_MSG_LEN(packet);
+
+	agent.code = malloc(agent.code_len * sizeof(uint16_t));
+	memcpy(agent.code, packet+DYNAMIC_START, agent.code_len * sizeof(uint16_t));
+
+	agent.reg_str = (char**) malloc(STR_REG_MAX * sizeof(char*));
+
+	uint32_t pos = DYNAMIC_START + (agent.code_len * sizeof(uint16_t));
+	agent.reg_str[0] = malloc (agent.regstr_len[0]);
+	memcpy(agent.reg_str[0], packet+pos, agent.regstr_len[0]);
+
+	pos += agent.regstr_len[0];
+	agent.reg_str[1] = malloc( agent.regstr_len[1]);
+	memcpy(agent.reg_str[1], packet+pos, agent.regstr_len[1]);
+
+	pos += agent.regstr_len[1];
+	agent.reg_str[2] = malloc(agent.regstr_len[2]);
+	memcpy(agent.reg_str[2], packet+pos, agent.regstr_len[2]);
+
+	pos += agent.regstr_len[2];
+	agent.rec_msg_content = malloc(agent.rec_msg_len);
+	memcpy(agent.rec_msg_content, packet+pos, agent.rec_msg_len);
+
+	return agent;
+}
+

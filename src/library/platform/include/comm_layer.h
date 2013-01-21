@@ -121,6 +121,117 @@ uint8_t send_message(frame_t frame);
 
 void recv_handler(uint8_t msg_length, uint8_t *msg_body);
 
+uint8_t* serialize_agent(agent_t agent, uint16_t* agent_len);
+agent_t deserialize_agent(uint8_t* packet);
+
+#define MOBILITY_BYTE 0x55
+
+#define HEADER_POS 	0
+#define ID_POS 		1
+#define PRIO_POS	2
+#define STATUS_POS	3
+
+#define FLAG_POS1 	4
+#define FLAG_POS2 	5
+#define FLAG_POS3 	6
+#define FLAG_POS4 	7
+
+#define PC_POS1 	8
+#define PC_POS2 	9
+
+#define REG0_POS1 10
+#define REG0_POS2 11
+#define REG1_POS1 12
+#define REG1_POS2 13
+#define REG2_POS1 14
+#define REG2_POS2 15
+#define REG3_POS1 16
+#define REG3_POS2 17
+#define REG4_POS1 18
+#define REG4_POS2 19
+#define REG5_POS1 20
+#define REG5_POS2 21
+#define REG6_POS1 22
+#define REG6_POS2 23
+
+#define CODE_LEN_POS1 24
+#define CODE_LEN_POS2 25
+
+#define REG0_STR_LEN_POS1 26
+#define REG0_STR_LEN_POS2 27
+#define REG1_STR_LEN_POS1 28
+#define REG1_STR_LEN_POS2 29
+#define REG2_STR_LEN_POS1 30
+#define REG2_STR_LEN_POS2 31
+
+#define REC_LEN_POS1 32
+#define REC_LEN_POS2 33
+
+#define FIXED_LEN 35
+#define DYNAMIC_START 34
+
+#define SET_MOBILITY_HEADER(packet) (packet[HEADER_POS] = MOBILITY_BYTE)
+#define GET_MOBILITY_HEADER(packet) (packet[HEADER_POS])
+
+#define SET_MOBILITY_END(packet, pos) (packet[pos] = MOBILITY_BYTE)
+#define GET_MOBILITY_END(packet, pos) (packet[pos])
+
+#define SET_AGENT_ID(packet, id) (packet[ID_POS] = id)
+#define GET_AGENT_ID(packet) (packet[ID_POS])
+
+#define SET_AGENT_PRIO(packet, prio) (packet[PRIO_POS] = prio)
+#define GET_AGENT_PRIO(packet) (packet[PRIO_POS])
+
+#define SET_AGENT_STATUS(packet, status) (packet[STATUS_POS] = status)
+#define GET_AGENT_STATUS(packet) (packet[STATUS_POS])
+
+#define SET_AGENT_FLAG_REG(packet, flag) \
+	packet[FLAG_POS1] = ((flag & 0xff000000) >> 24); \
+	packet[FLAG_POS2] = ((flag & 0x00ff0000) >> 16);  \
+	packet[FLAG_POS3] = ((flag & 0x0000ff00) >> 8);  \
+	packet[FLAG_POS4] = (flag & 0x00000000) ;
+
+#define GET_AGENT_FLAG_REG(packet) \
+	(packet[FLAG_POS1] << 24) | (packet[FLAG_POS2] << 16) | (packet[FLAG_POS3] << 8) | packet[FLAG_POS4];
+
+
+#define SET_AGENT_PC(packet, pc) \
+		packet[PC_POS1] = ((pc & 0xff00)>>8); \
+		packet[PC_POS2] = (pc & 0x00ff);
+
+#define GET_AGENT_PC(packet) \
+		(packet[PC_POS1] << 8) | packet[PC_POS2];
+
+
+#define SET_AGENT_REG(packet, agent, reg) \
+		packet[REG##reg##_POS1] = ((agent.regs[reg] & 0xff00) >> 8); \
+		packet[REG##reg##_POS2] = (agent.regs[reg] & 0x00ff);
+
+#define GET_AGENT_REG(packet, reg) \
+		(packet[REG##reg##_POS1] << 8) | packet[REG##reg##_POS2];
+
+#define SET_AGENT_CODE_LEN(packet, len) \
+		packet[CODE_LEN_POS1] = ((len & 0xff00)>>8); \
+		packet[CODE_LEN_POS2] = (len & 0x00ff);
+
+#define GET_AGENT_CODE_LEN(packet) \
+		(packet[CODE_LEN_POS1] << 8) | packet[CODE_LEN_POS2];
+
+
+#define SET_AGENT_REG_STR_LEN(packet, agent, reg) \
+		packet[REG##reg##_STR_LEN_POS1] = ((agent.regstr_len[reg] & 0xff00) >> 8); \
+		packet[REG##reg##_STR_LEN_POS2] = (agent.regstr_len[reg] & 0x00ff);
+
+#define GET_AGENT_REG_STR_LEN(packet, reg) \
+		(packet[REG##reg##_STR_LEN_POS1] << 8)| packet[REG##reg##_STR_LEN_POS2];
+
+
+#define SET_AGENT_REC_MSG_LEN(packet, len) \
+		packet[REC_LEN_POS1] = ((len & 0xff00)>>8); \
+		packet[REC_LEN_POS2] = (len & 0x00ff);
+
+#define GET_AGENT_REC_MSG_LEN(packet) \
+		(packet[REC_LEN_POS1] << 8) | packet[REC_LEN_POS2];
 
 
 #endif /* COMM_LAYER_H_ */
