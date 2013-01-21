@@ -106,10 +106,11 @@ uint8_t send_message(frame_t frame){
  */
 void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 
-	uint8_t agent_id = GET_PAYLOAD_DST_AGENT(msg_body);
+	
 	if (GET_PAYLOAD_TYPE(msg_body) == START_PACKET){
 
 		//new frame received
+		uint8_t agent_id = GET_PAYLOAD_DST_AGENT(msg_body);
 		uint16_t frame_size = GET_PAYLOAD_FRAME_LEN(msg_body);
 
 		if (frame_size > (msg_length - START_PACKET_LEN)){
@@ -187,7 +188,7 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 				}
 			} else {
 				prev = current;
-				current = prev->next_frame->next_frame;
+				current = current->next_frame;
 			}
 		}
 	}
