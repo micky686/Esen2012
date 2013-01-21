@@ -63,6 +63,7 @@ uint8_t send_message(frame_t frame){
 		frame.index+= data_len;
 
 		res += send_msg(packet.header, packet.payload);
+		//_delay_ms(1000);
 		packet_id += 1;
 	}
 
@@ -162,10 +163,14 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 				current->index += msg_length - DATA_PACKET_LEN;
 				if (current->frame_length == current->index){
 					//everything received
-					platform.agents[current->dst_agent].rec_msg_content = (char*)realloc(platform.agents[current->dst_agent].rec_msg_content, current->frame_length + 1);
-					memset(platform.agents[current->dst_agent].rec_msg_content, 0, current->frame_length + 1);
-					memcpy(platform.agents[current->dst_agent].rec_msg_content, current->data, current->frame_length);
-					platform.agents[current->dst_agent].rec_msg_len = current->frame_length;
+
+					uint8_t agent_id = current->dst_agent;
+					uint16_t frame_size = current->frame_length;
+
+					platform.agents[agent_id].rec_msg_content = (char*)realloc(platform.agents[agent_id].rec_msg_content, frame_size +1);
+					memset(platform.agents[agent_id].rec_msg_content, 0, frame_size + 1);
+					memcpy(platform.agents[agent_id].rec_msg_content, current->data, frame_size);
+					platform.agents[agent_id].rec_msg_len = frame_size;
 
 					prev->next_frame = current->next_frame;
 

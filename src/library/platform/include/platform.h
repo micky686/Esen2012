@@ -115,14 +115,14 @@ typedef struct {
 
 	char** reg_str;
 
-	char* rec_msg_id;
-	char* rec_msg_content;
-	uint16_t rec_msg_len;
+	volatile char* rec_msg_content;
+	volatile uint16_t rec_msg_len;
 
+	volatile uint8_t sem;
 } agent_t;
 
 typedef struct {
-	agent_t agents[4];
+	volatile agent_t agents[4];
 	drivers_t drivers;
 } platform_t;
 

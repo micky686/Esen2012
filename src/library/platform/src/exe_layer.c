@@ -297,7 +297,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 				_delay_ms(50);
 				if (opcode.reg1 > REG_MAX) {
 					opcode.reg1 = opcode.reg1 & REG_STR_MASK;
-					if (agent->reg_str[opcode.reg1] != NULL) {
+					if (agent->regstr_len[opcode.reg1] != 0) {
 						platform.drivers.dotmatrix_send(agent->reg_str[opcode.reg1]);
 					}
 				}
@@ -474,17 +474,22 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case RECV:
 		PRINTF("pullmsg reg:%d\n", opcode.reg1);
-		if (agent->rec_msg_content != 0){
+		if (agent->rec_msg_len != 0){
+
 			if (opcode.reg1 > REG_MAX) {
 				opcode.reg1 = opcode.reg1 & REG_STR_MASK;
-				realloc(agent->reg_str[opcode.reg1], agent->rec_msg_len+1);
-				memset(agent->reg_str[opcode.reg1], 0, agent->rec_msg_len+1);
-				memcpy(agent->reg_str[opcode.reg1], agent->rec_msg_content, agent->rec_msg_len);
+
+				if (agent->regstr_len[opcode.reg1] != 0){
+					free(agent->reg_str[opcode.reg1]);
+				}
+
+				agent->reg_str[opcode.reg1] = agent->rec_msg_content;
 				agent->regstr_len[opcode.reg1] = agent->rec_msg_len;
+
 			} else {
 				agent->regs[opcode.reg1] = agent->rec_msg_content[0];
 			}
-			free(agent->rec_msg_content);
+
 			agent->rec_msg_content = 0;
 			agent->rec_msg_len = 0;
 			agent->regs[REG_ACC] = 0;

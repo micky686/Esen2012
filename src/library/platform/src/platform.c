@@ -66,7 +66,10 @@ void init_drivers(void){
 
 #ifdef LEDMATRIX
 	init_dotmatrix();
-	platform.drivers.dotmatrix_send = dotmatrix_send;
+	//platform.drivers.dotmatrix_send = dotmatrix_send;
+	platform.drivers.dotmatrix_send=dotmatrix_send_scrolling_text;
+	dotmatrix_enable_scrolling();
+
 	//char buf[] = "ABCD";
 	//dotmatrix_send(buf);
 	//platform.drivers.dotmatrix_send(buf);
@@ -148,12 +151,12 @@ void reset_agent(uint8_t id){
 	agent->pc = 0;
 	agent->status_flag = 0;
 
-	if (agent->rec_msg_id != 0){
+/*	if (agent->rec_msg_id != 0){
 		free(agent->rec_msg_id);
 		agent->rec_msg_id = 0;
 
 	}
-
+*/
 	if (agent->rec_msg_content != 0) {
 		free(agent->rec_msg_content);
 		agent->rec_msg_content = 0;
