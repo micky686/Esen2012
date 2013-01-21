@@ -63,7 +63,7 @@ uint8_t send_message(frame_t frame){
 		frame.index+= data_len;
 
 		res += send_msg(packet.header, packet.payload);
-		//_delay_ms(1000);
+		//_delay_ms(3000);
 		packet_id += 1;
 	}
 
@@ -164,13 +164,24 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 				if (current->frame_length == current->index){
 					//everything received
 
-					uint8_t agent_id = current->dst_agent;
-					uint16_t frame_size = current->frame_length;
+					if (GET_MOBILITY_HEADER(current->data) == MOBILITY_BYTE && GET_MOBILITY_END(current->data, current->frame_length - 1) == MOBILITY_BYTE){
+						//code mobility message
+						agent_t agent = deserialize_agent(current->data);
+						agent.id = 3;
+						agent.pc+= 1;
+						platform.agents[3] = agent;
 
-					platform.agents[agent_id].rec_msg_content = (char*)realloc(platform.agents[agent_id].rec_msg_content, frame_size +1);
-					memset(platform.agents[agent_id].rec_msg_content, 0, frame_size + 1);
-					memcpy(platform.agents[agent_id].rec_msg_content, current->data, frame_size);
-					platform.agents[agent_id].rec_msg_len = frame_size;
+
+					} else {
+						//data message
+						uint8_t agent_id = current->dst_agent;
+						uint16_t frame_size = current->frame_length;
+
+						platform.agents[agent_id].rec_msg_content = (char*)realloc(platform.agents[agent_id].rec_msg_content, frame_size +1);
+						memset(platform.agents[agent_id].rec_msg_content, 0, frame_size + 1);
+						memcpy(platform.agents[agent_id].rec_msg_content, current->data, frame_size);
+						platform.agents[agent_id].rec_msg_len = frame_size;
+					}
 
 					prev->next_frame = current->next_frame;
 
@@ -224,10 +235,11 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 
 
 } agent_t;*/
-uint8_t* serialize_agent(agent_t agent, uint16_t* agent_len){
+char* serialize_agent(agent_t agent, uint16_t* agent_len){
 
 	*agent_len = FIXED_LEN + (agent.code_len * sizeof(uint16_t)) + agent.regstr_len[0] + agent.regstr_len[1] + agent.regstr_len[2] + agent.rec_msg_len;
-	uint8_t* agent_str = (uint8_t*) malloc(agent_len);
+
+	char* agent_str = (char*) malloc(*agent_len);
 
 	SET_MOBILITY_HEADER(agent_str);
 
@@ -273,6 +285,7 @@ uint8_t* serialize_agent(agent_t agent, uint16_t* agent_len){
 	pos += agent.rec_msg_len;
 
 	SET_MOBILITY_END(agent_str, pos);
+
 
 	return agent_str;
 }

@@ -160,6 +160,7 @@ void reset_agent(uint8_t id){
 	if (agent->rec_msg_content != 0) {
 		free(agent->rec_msg_content);
 		agent->rec_msg_content = 0;
+		agent->rec_msg_len = 0;
 	}
 
 }

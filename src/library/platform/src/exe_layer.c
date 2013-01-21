@@ -276,6 +276,7 @@ opcode_t decode_opcode(uint16_t opcode) {
 void execute_opcode(agent_t *agent, opcode_t opcode) {
 	uint16_t tmp = 0;
 	int16_t sgn_tmp = 0;
+	frame_t frame;
 
 
 	switch (opcode.id) {
@@ -434,7 +435,35 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case MOVE:
 		PRINTF("move service:%d\n", opcode.value);
-		//TODO
+
+		// find service
+		/*uint8_t i;
+
+		for (i = 0; i <)*/
+
+
+		// prepare frame
+
+		//frame_t frame;
+		frame.dst_node = 4;
+		frame.dst_agent = 0;
+		frame.frame_id.id = platform_config.frame_id;
+		frame.frame_id.src_board = platform_config.board_id;
+		frame.dst_board = platform_config.board_id;
+		frame.frame_id.src_node = platform_config.platform_id;
+		frame.index = 0;
+
+		uint16_t len;
+
+		frame.data = serialize_agent(*agent, &len);
+		frame.frame_length = len;
+
+		platform_config.frame_id += 1;
+		agent->regs[REG_ACC] = send_message(frame);
+
+		free(frame.data);
+
+
 		break;
 
 	case CLONE:
@@ -449,7 +478,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case SEND:
 		PRINTF("sendmsg reg:%d, agent:%d, platform:%d\n", opcode.reg1, opcode.agent_id, opcode.node_id);
-		frame_t frame;
+
 		frame.dst_node = opcode.node_id;
 		frame.dst_agent = opcode.agent_id;
 		frame.frame_id.id = platform_config.frame_id;

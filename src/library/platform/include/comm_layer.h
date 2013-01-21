@@ -121,7 +121,7 @@ uint8_t send_message(frame_t frame);
 
 void recv_handler(uint8_t msg_length, uint8_t *msg_body);
 
-uint8_t* serialize_agent(agent_t agent, uint16_t* agent_len);
+char* serialize_agent(agent_t agent, uint16_t* agent_len);
 agent_t deserialize_agent(uint8_t* packet);
 
 #define MOBILITY_BYTE 0x55
