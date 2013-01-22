@@ -137,6 +137,7 @@ typedef struct {
 } platform_t;
 
 extern volatile platform_t platform;
+extern uint8_t service_locations[MAX_SERVICE][MAX_NODES];
 
 void init_drivers(void);
 void init_agents(void);
