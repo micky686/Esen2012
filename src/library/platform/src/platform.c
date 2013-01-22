@@ -46,12 +46,14 @@ void init_drivers(void){
 
 #ifdef COOLER
 	init_cooler();
-
+	platform.drivers.set_cooler = set_cooler;
+	//set_cooler(50);
 #endif
 
 
 #ifdef HEATER
 	heater_init();
+	platform.drivers.heater_set = heater_set;
 	//heater_set(50);
 #endif
 
@@ -76,13 +78,18 @@ void init_drivers(void){
 
 #ifdef LEDMATRIX
 	init_dotmatrix();
-	//platform.drivers.dotmatrix_send = dotmatrix_send;
-	platform.drivers.dotmatrix_send=dotmatrix_send_scrolling_text;
-	dotmatrix_enable_scrolling();
+	platform.drivers.dotmatrix_send = dotmatrix_send;
+	//platform.drivers.dotmatrix_send=dotmatrix_send_scrolling_text;
+	//dotmatrix_enable_scrolling();
 
 	//char buf[] = "ABCD";
 	//dotmatrix_send(buf);
 	//platform.drivers.dotmatrix_send(buf);
+	/*uint16_t val = 0xff;
+	dotmatrix_send_int(val, 0);
+	dotmatrix_send_comma(1);
+	dotmatrix_send_int(val, 3);*/
+
 #endif
 
 }

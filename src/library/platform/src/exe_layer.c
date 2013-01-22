@@ -304,6 +304,18 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 			}
 			break;
 
+		case SERVICE_COOLER:
+			if (platform.drivers.set_cooler != NULL){
+				platform.drivers.set_cooler((agent->regs[opcode.reg1] & 0x00ff));
+			}
+			break;
+
+		case SERVICE_HEATER:
+			if (platform.drivers.heater_set != NULL){
+				platform.drivers.heater_set((agent->regs[opcode.reg1] & 0x00ff));
+			}
+			break;
+
 		default:
 			break;
 
@@ -313,14 +325,28 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 			printf("getservice service_id: %d\n", opcode.value);
 			switch (opcode.value){
 			case SERVICE_THERMOMETER:
+				//_delay_ms(5000);
 				if (platform.drivers.therm_get_temp != NULL){
 
-					tmp = (platform.drivers.therm_get_temp(THERMOMETER1) >>3);
-					tmp += (platform.drivers.therm_get_temp(THERMOMETER2) >>3);
-					tmp += (platform.drivers.therm_get_temp(THERMOMETER3) >>3);
+					tmp = (platform.drivers.therm_get_temp(THERMOMETER1) >>5);
+					tmp += (platform.drivers.therm_get_temp(THERMOMETER2) >>5);
+					tmp += (platform.drivers.therm_get_temp(THERMOMETER3) >>5);
 					tmp /= 3;
 					agent->regs[REG_ACC] = tmp;
 
+					agent->regstr_len[0] = 0;
+					free(agent->reg_str[0]);
+
+					agent->reg_str[0] = malloc (6);
+					agent->regstr_len[0] = 6;
+
+					uint16_t after = (tmp & 0x0007);
+					after *= 125;
+
+					uint16_t before = ((tmp & 0xfff8) >> 3);
+					//realloc(agent->reg_str[REG_ACC], 7);
+					//agent->regstr_len[REG_ACC] = 7;
+					sprintf(agent->reg_str[REG_ACC], "%d.%d", before, after);
 
 				} else {
 					SET_ERROR(agent->status_flag, ERROR_NO_SERVICE_PRESENT);
@@ -441,8 +467,10 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 			for (i=0; i < MAX_NODES; i++){
 				if (service_locations[opcode.value][i] != INVALID){
-					dst_node = service_locations[opcode.value][i];
-					break;
+					if (dst_node != platform.id){
+						dst_node = service_locations[opcode.value][i];
+						break;
+					}
 				}
 			}
 
