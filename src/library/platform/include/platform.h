@@ -26,6 +26,15 @@
 #define STR_REG_MAX 3
 #define REG_MAX 7
 
+#define MAX_SERVICE 7
+#define MAX_NODES 4
+#define INVALID 0xff
+
+#define NODE0_ID 0x04
+#define NODE1_ID 0x03
+#define NODE2_ID 0x02
+#define NODE3_ID 0x01
+
 #define PLATFORM_CONFIGURATION() \
 platform_config_t platform_config =
 
@@ -55,7 +64,7 @@ typedef struct {
 
 typedef struct {
 	agent_config_t agents_conf[AGENT_MAX];
-	uint8_t platform_id;
+	//uint8_t platform_id;
 	uint8_t board_id;
 	uint8_t frame_id;
 } platform_config_t;
@@ -124,6 +133,7 @@ typedef struct {
 typedef struct {
 	volatile agent_t agents[4];
 	drivers_t drivers;
+	uint8_t id;
 } platform_t;
 
 extern volatile platform_t platform;

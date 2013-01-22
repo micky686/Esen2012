@@ -6,7 +6,6 @@
  */
 #include "exe_layer.h"
 #include "comm_layer.h"
-char buf = 'A';
 
 uint8_t execute_agent(agent_t *agent, uint8_t opcode_size) {
 
@@ -276,7 +275,7 @@ opcode_t decode_opcode(uint16_t opcode) {
 void execute_opcode(agent_t *agent, opcode_t opcode) {
 	uint16_t tmp = 0;
 	int16_t sgn_tmp = 0;
-	frame_t frame;
+	//frame_t frame;
 
 
 	switch (opcode.id) {
@@ -435,35 +434,36 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case MOVE:
 		PRINTF("move service:%d\n", opcode.value);
+		{
+			// find dst
+			uint8_t i;
+			uint8_t dst_node;
 
-		// find service
-		/*uint8_t i;
+			for (i=0; i < MAX_NODES; i++){
+				if (service_locations[opcode.value][i] != INVALID){
+					dst_node = service_locations[opcode.value][i];
+					break;
+				}
+			}
 
-		for (i = 0; i <)*/
+			//prepare frame
+			frame_t frame;
+			frame.dst_node = dst_node;
+			frame.dst_agent = 0;
+			frame.frame_id.id = platform_config.frame_id;
+			frame.frame_id.src_board = platform_config.board_id;
+			frame.dst_board = platform_config.board_id;
+			frame.frame_id.src_node = platform.id;
+			frame.index = 0;
 
+			uint16_t len;
+			frame.data = serialize_agent(*agent, &len);
+			frame.frame_length = len;
 
-		// prepare frame
-
-		//frame_t frame;
-		frame.dst_node = 4;
-		frame.dst_agent = 0;
-		frame.frame_id.id = platform_config.frame_id;
-		frame.frame_id.src_board = platform_config.board_id;
-		frame.dst_board = platform_config.board_id;
-		frame.frame_id.src_node = platform_config.platform_id;
-		frame.index = 0;
-
-		uint16_t len;
-
-		frame.data = serialize_agent(*agent, &len);
-		frame.frame_length = len;
-
-		platform_config.frame_id += 1;
-		agent->regs[REG_ACC] = send_message(frame);
-
-		free(frame.data);
-
-
+			platform_config.frame_id += 1;
+			agent->regs[REG_ACC] = send_message(frame);
+			free(frame.data);
+		}
 		break;
 
 	case CLONE:
@@ -478,27 +478,29 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case SEND:
 		PRINTF("sendmsg reg:%d, agent:%d, platform:%d\n", opcode.reg1, opcode.agent_id, opcode.node_id);
-
-		frame.dst_node = opcode.node_id;
-		frame.dst_agent = opcode.agent_id;
-		frame.frame_id.id = platform_config.frame_id;
-		frame.frame_id.src_board = platform_config.board_id;
-		frame.dst_board = platform_config.board_id;
-		frame.frame_id.src_node = platform_config.platform_id;
-		frame.index = 0;
-		if (opcode.reg1 > REG_MAX) {
-			opcode.reg1 = opcode.reg1 & REG_STR_MASK;
-			frame.frame_length = agent->regstr_len[opcode.reg1];
-			frame.data = (char*) malloc (frame.frame_length);
-			memcpy(frame.data, agent->reg_str[opcode.reg1], frame.frame_length);
-		} else {
-			frame.frame_length = sizeof(int16_t);
-			frame.data = (char*) malloc (frame.frame_length);
-			memcpy(frame.data, &(agent->regs[opcode.reg1]), frame.frame_length);
+		{
+			frame_t frame;
+			frame.dst_node = opcode.node_id;
+			frame.dst_agent = opcode.agent_id;
+			frame.frame_id.id = platform_config.frame_id;
+			frame.frame_id.src_board = platform_config.board_id;
+			frame.dst_board = platform_config.board_id;
+			frame.frame_id.src_node = platform.id;
+			frame.index = 0;
+			if (opcode.reg1 > REG_MAX) {
+				opcode.reg1 = opcode.reg1 & REG_STR_MASK;
+				frame.frame_length = agent->regstr_len[opcode.reg1];
+				frame.data = (char*) malloc (frame.frame_length);
+				memcpy(frame.data, agent->reg_str[opcode.reg1], frame.frame_length);
+			} else {
+				frame.frame_length = sizeof(int16_t);
+				frame.data = (char*) malloc (frame.frame_length);
+				memcpy(frame.data, &(agent->regs[opcode.reg1]), frame.frame_length);
+			}
+			platform_config.frame_id += 1;
+			agent->regs[REG_ACC] = send_message(frame);
+			free(frame.data);
 		}
-		platform_config.frame_id += 1;
-		agent->regs[REG_ACC] = send_message(frame);
-		free(frame.data);
 		break;
 
 	case RECV:
@@ -517,6 +519,8 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 			} else {
 				agent->regs[opcode.reg1] = agent->rec_msg_content[0];
+				free(agent->rec_msg_content);
+				agent->rec_msg_len = 0;
 			}
 
 			agent->rec_msg_content = 0;

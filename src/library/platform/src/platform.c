@@ -14,6 +14,16 @@
 
 volatile platform_t platform;
 
+uint8_t service_locations[MAX_SERVICE][MAX_NODES] = {
+			{NODE0_ID, NODE1_ID, INVALID, INVALID},		 //BARGRAPH
+			{NODE1_ID, INVALID, INVALID, INVALID}, 	 //THERMOMETER
+			{NODE1_ID, INVALID, INVALID, INVALID},	 //COOLER
+			{NODE1_ID, INVALID, INVALID, INVALID},   //HEATER
+			{NODE3_ID, INVALID, INVALID, INVALID},   //LED
+			{NODE2_ID, INVALID, INVALID, INVALID},   //LCD
+			{NODE0_ID, NODE1_ID, NODE2_ID, NODE3_ID}			 //BUTTONS
+};
+
 void init_drivers(void){
 
 #ifdef BARGRAPH
@@ -22,7 +32,7 @@ void init_drivers(void){
 #endif
 
 #ifdef PROTOCOL0
-	protocol_init(platform_config.platform_id, recv_handler);
+	 protocol_init(platform.id, recv_handler);
 #endif
 
 #ifdef TIMER2
@@ -220,6 +230,16 @@ uint8_t clone_agent(agent_t *agent){
 * setup all requested drivers.
  */
 void platform_init(void) {
+
+#ifdef NODE0
+	platform.id = NODE0_ID;
+#elif NODE1
+	platform.id = NODE1_ID;
+#elif NODE2
+	platform.id = NODE2_ID;
+#elif NODE3
+	platform.id = NODE3_ID;
+#endif
 
 	init_drivers();
 	init_agents();

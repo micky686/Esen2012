@@ -166,11 +166,16 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 
 					if (GET_MOBILITY_HEADER(current->data) == MOBILITY_BYTE && GET_MOBILITY_END(current->data, current->frame_length - 1) == MOBILITY_BYTE){
 						//code mobility message
-						agent_t agent = deserialize_agent(current->data);
-						agent.id = 3;
-						agent.pc+= 1;
-						platform.agents[3] = agent;
 
+						for (i = 0; i < AGENT_MAX; i++){
+							if (platform.agents[i].status == stopped){
+								agent_t agent = deserialize_agent(current->data);
+								agent.id = id;
+								agent.pc+= 1;
+								platform.agents[i] = agent;
+								break;
+							}
+						}
 
 					} else {
 						//data message

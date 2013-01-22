@@ -14,6 +14,7 @@ SRC-MDEP-$(MNAME) += $(foreach m, $(OBJ-ESEL-MDEP-$(MNAME)-y), $(filter %.c %.S,
 OBJ-$(MNAME)	+= $(foreach m, $(OBJ-PLATFORM-$(MNAME)-y), $(PLATFORM_DIR)/src/$(m).o)
 OBJ-$(MNAME)	+= $(foreach m, $(OBJ-PLATFORM-MDEP-$(MNAME)-y), $(d)/$(m).mdep.o)
 DEFINES-$(MNAME)+=  $(foreach m, $(OBJ-ESEL-MDEP-$(MNAME)-y), -D$(shell echo  $(m) | tr 'a-z' 'A-Z'))
+DEFINES-$(MNAME)+=  -D$(shell echo  $(MNAME) | tr 'a-z' 'A-Z')
 SRC-MDEP-$(MNAME) += $(foreach m, $(OBJ-PLATFORM-MDEP-$(MNAME)-y), $(filter %.c %.S,$(wildcard $(PLATFORM_DIR)/src/$(m).*)))
 OBJ-$(MNAME)	+= $(foreach m, $(OBJ-SCDL-$(MNAME)-y), $(SCADE_DIR)/src/$(m).o)
 
