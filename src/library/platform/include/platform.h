@@ -24,7 +24,7 @@
 #define AGENT_MAX 4
 #define OPCODE_LEN 16
 #define STR_REG_MAX 3
-#define REG_MAX 7
+#define REG_MAX 13
 
 #define MAX_SERVICE 7
 #define MAX_NODES 4

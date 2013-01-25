@@ -153,22 +153,37 @@ agent_t deserialize_agent(uint8_t* packet);
 #define REG5_POS2 21
 #define REG6_POS1 22
 #define REG6_POS2 23
+#define REG7_POS1 24
+#define REG7_POS2 25
+#define REG8_POS1 26
+#define REG8_POS2 27
+#define REG9_POS1 28
+#define REG9_POS2 29
+#define REG10_POS1 30
+#define REG10_POS2 31
+#define REG11_POS1 32
+#define REG11_POS2 33
+#define REG12_POS1 34
+#define REG12_POS2 35
+#define REG13_POS1 36
+#define REG13_POS2 37
 
-#define CODE_LEN_POS1 24
-#define CODE_LEN_POS2 25
 
-#define REG0_STR_LEN_POS1 26
-#define REG0_STR_LEN_POS2 27
-#define REG1_STR_LEN_POS1 28
-#define REG1_STR_LEN_POS2 29
-#define REG2_STR_LEN_POS1 30
-#define REG2_STR_LEN_POS2 31
+#define CODE_LEN_POS1 38
+#define CODE_LEN_POS2 39
 
-#define REC_LEN_POS1 32
-#define REC_LEN_POS2 33
+#define REG0_STR_LEN_POS1 40
+#define REG0_STR_LEN_POS2 41
+#define REG1_STR_LEN_POS1 42
+#define REG1_STR_LEN_POS2 43
+#define REG2_STR_LEN_POS1 44
+#define REG2_STR_LEN_POS2 45
 
-#define FIXED_LEN 35
-#define DYNAMIC_START 34
+#define REC_LEN_POS1 46
+#define REC_LEN_POS2 47
+
+#define FIXED_LEN 49
+#define DYNAMIC_START 48
 
 #define SET_MOBILITY_HEADER(packet) (packet[HEADER_POS] = MOBILITY_BYTE)
 #define GET_MOBILITY_HEADER(packet) (packet[HEADER_POS])

@@ -171,6 +171,7 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 							if (platform.agents[i].status == stopped){
 								agent_t agent = deserialize_agent(current->data);
 								agent.id = id;
+								agent.regs[REG_ACC] = 0;
 								agent.pc+= 1;
 								platform.agents[i] = agent;
 								break;
@@ -255,6 +256,7 @@ char* serialize_agent(agent_t agent, uint16_t* agent_len){
 	SET_AGENT_FLAG_REG(agent_str, agent.status_flag);
 	SET_AGENT_PC(agent_str, agent.pc);
 
+
 	SET_AGENT_REG(agent_str, agent, 0);
 	SET_AGENT_REG(agent_str, agent, 1);
 	SET_AGENT_REG(agent_str, agent, 2);
@@ -262,6 +264,13 @@ char* serialize_agent(agent_t agent, uint16_t* agent_len){
 	SET_AGENT_REG(agent_str, agent, 4);
 	SET_AGENT_REG(agent_str, agent, 5);
 	SET_AGENT_REG(agent_str, agent, 6);
+	SET_AGENT_REG(agent_str, agent, 7);
+	SET_AGENT_REG(agent_str, agent, 8);
+	SET_AGENT_REG(agent_str, agent, 9);
+	SET_AGENT_REG(agent_str, agent, 10);
+	SET_AGENT_REG(agent_str, agent, 11);
+	SET_AGENT_REG(agent_str, agent, 12);
+	SET_AGENT_REG(agent_str, agent, 13);
 
 	SET_AGENT_CODE_LEN(agent_str, agent.code_len);
 
@@ -305,6 +314,7 @@ agent_t deserialize_agent(uint8_t* packet){
 	agent.status_flag = GET_AGENT_FLAG_REG(packet);
 	agent.pc = GET_AGENT_PC(packet);
 
+
 	agent.regs[0] = GET_AGENT_REG(packet, 0);
 	agent.regs[1] = GET_AGENT_REG(packet, 1);
 	agent.regs[2] = GET_AGENT_REG(packet, 2);
@@ -312,6 +322,14 @@ agent_t deserialize_agent(uint8_t* packet){
 	agent.regs[4] = GET_AGENT_REG(packet, 4);
 	agent.regs[5] = GET_AGENT_REG(packet, 5);
 	agent.regs[6] = GET_AGENT_REG(packet, 6);
+	agent.regs[7] = GET_AGENT_REG(packet, 7);
+	agent.regs[8] = GET_AGENT_REG(packet, 8);
+	agent.regs[9] = GET_AGENT_REG(packet, 9);
+	agent.regs[10] = GET_AGENT_REG(packet, 10);
+	agent.regs[11] = GET_AGENT_REG(packet, 11);
+	agent.regs[12] = GET_AGENT_REG(packet, 12);
+	agent.regs[13] = GET_AGENT_REG(packet, 13);
+
 
 	agent.code_len = GET_AGENT_CODE_LEN(packet);
 

@@ -134,7 +134,7 @@ void reset_agent(uint8_t id){
 	agent->id = 0;
 	agent->status = stopped;
 	agent->priority = 0;
-	memset(agent->regs, 0, sizeof(agent->regs));
+	memset(agent->regs, 0, REG_MAX * sizeof(int16_t));
 
 	if (agent->reg_str != 0){
 
