@@ -40,7 +40,8 @@ service = {"temp":"1",\
                "heater":"3",\
                "led_matrix":"4",\
                "lcd":"5",\
-               "buttons":"6",\
+	       "button0":"6",\
+	       "button1":"7",\
                }
 
 command_opcode = {"add":"00000011",\
