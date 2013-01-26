@@ -68,9 +68,9 @@ void init_drivers(void){
 
 #ifdef PUSHBUTTON
 	//platform.drivers.button0_callback = buttoncallback0;
-	platform.drivers.button1_callback = buttoncallback1;
+	//platform.drivers.button1_callback = buttoncallback1;
 	//init_pushbutton0(platform.drivers.button0_callback);
-	init_pushbutton1(platform.drivers.button1_callback);
+	//init_pushbutton1(platform.drivers.button1_callback);
 	button0_pressed = 0;
 	button1_pressed = 0;
 #endif

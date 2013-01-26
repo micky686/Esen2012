@@ -322,7 +322,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 		}
 		break;
 		case GETSERVICE:
-			printf("getservice service_id: %d\n", opcode.value);
+			PRINTF("getservice service_id: %d\n", opcode.value);
 			switch (opcode.value){
 			case SERVICE_THERMOMETER:
 				//_delay_ms(5000);
