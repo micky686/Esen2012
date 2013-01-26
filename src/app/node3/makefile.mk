@@ -14,7 +14,7 @@ OBJ-ESEL-$(MNAME)-y	+=
 
 # put the module specific used library modules in here (need 
 # to be defined in library/eselib/Makefile.eselib)
-OBJ-ESEL-MDEP-$(MNAME)-y += protocol0 timer2 ledmatrix spi
+OBJ-ESEL-MDEP-$(MNAME)-y += protocol0 timer2 ledmatrix spi pushbutton
 
 # put the used scade models in here (need to be defined in 
 # library/scade/Makefile.scade)
