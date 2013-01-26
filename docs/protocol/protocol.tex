@@ -22,7 +22,7 @@
 \usepackage{hyperref}
 \hypersetup{
     bookmarks=true,    % show bookmarks bar?
-    pdftitle={Specification},    % title
+    pdftitle={Lab protocol},    % title
     pdfauthor={Selyunin, Pelesic, Jakovljevic},                     % author
     pdfsubject={TeX and LaTeX},                        % subject of the document
     pdfkeywords={TeX, LaTeX, graphics, images}, % list of keywords
@@ -33,6 +33,7 @@
     urlcolor=purple,        % color of external links
 %    linktoc=page            % only page is linked
 }
+\setcounter{secnumdepth}{3}
 \def\myversion{1.0 }
 \title{%
 \flushright
@@ -56,8 +57,6 @@ Miljenko Jakovljevi\'c, Matrikelnumber 0426673 }
 \textbf{abstract:}
 The lab protocof contains the final project documentation. We present the introductory part of the project and all necessary organization details in the chapter 1.
 The requirements are stated in chapter 2. Chapter 3 provides the reader with unambiguous specification, Implementation details are represented in chapter 4.
-
-
 }
 \vfill
 \rule{16cm}{2pt}\vskip1cm
@@ -99,13 +98,157 @@ The requirements are stated in chapter 2. Chapter 3 provides the reader with una
 
 \chapter{Project Outline}
 
-\section{Organization}
+	\section{Organization}
 
-\section{Project Description}
+The roles and responsibilities for the project are represented as follows:
+\begin{itemize}
 
-\section{Workpackages}
+\item{
+\textbf{Project manager:} Konstantin Selyunin [S]
 
-\section{Milestones and timeplan}
+\begin{itemize}
+
+\item[--] Defining tasks
+\item[--] Internal organization
+\item[--] Control meeting deadlines
+\item[--] Agent assember language: Development and Implementation
+\item[--] Adaptation of drivers
+\end{itemize}
+
+}
+\item{
+\textbf{System architect:} Igor Pelesi\'c [P]
+
+\begin{itemize}
+
+\item[--] Defining and reviewing technical aspects
+\item[--] Designing communication protocol
+\item[--] Adaptation of drivers
+\item[--] Platform: Design and Implementation
+
+\end{itemize}
+
+}
+\item{
+\textbf{Zigbee communication:} Miljenko Jakovljevi\'c 
+
+\begin{itemize}
+
+\item[--] Designing board-to-board communication using zigbee
+\item[--] Presentation for workshop 1: communication part
+
+\end{itemize}
+
+}
+\end{itemize}
+
+	\section{Project Description}
+
+The purpose of the project is to design, implement and evaluate code mobility platform on Embedded system engineering board \cite{galler}.
+Our goal is to develop the system that allows users to build and execute simple agent program on top of  hardware ESE platform.
+To achieve the goal we have developed three layered software: agent layer, platform layer, communication layer.
+Our goal is to show that code mobility concepts that are successfully used on much higher abstraction level are applicable for the embedded applications.
+During the project we have developed and implemented infrastructure that allows developer of agent program do not be aware of the hardware services presented on the given platform.
+
+
+	\section{Workpackages}
+
+In the following section we describe workpackage deliverables for our project:
+
+	\subsection{WP1 Documentation}
+
+	\subsubsection{Requirements and Specification}
+
+Before the development and implementation, clear requirements should be defined.
+In this deliverable we define user roles, global requirements for the project, functional and non-functional requirements.
+
+	\subsubsection{Presentation for Workshop 1}
+
+In the first workshop we introduce to the audience the general overview of our project and specification. 
+For this deliverable we have done self-contained presentation, which inroduce all necessary concepts, our goals and approach.
+The goal for preparing the presentation is to convey a message of our project
+to audience, assuming no prior knowledge of code mobility concepts.
+We introduce milestones and time plan, as well as project management concepts to achieve the goal.
+
+	\subsubsection{Presentation for Workshop 2}
+
+In the second workshop we present the results of our work.
+We do the test application for using the code mobility on the board.
+We discuss our major design decisions that have beed made during the design and implementation phases.
+
+	\subsubsection{Lab protocol}
+
+The lab protocol will consist of outline of our project, the requirements and specification for the project.
+In addition it contains precision description of Agent language, low-level assember-like language that support code mobility syntax.
+Desciption of the API and structure of our software.
+
+\vspace{0.2in}
+\begin{tabular}{|ll|ll|}
+\hline \multicolumn{4}{|c|}{\textbf{Workpackage 1. Documentation}}\\
+\hline
+Responsible:	&  Konstantin Selyunin			& Start date:		& 07.11.2012 \\
+Deliverables:	&  D1.1 Requirements and Specification  & Finish date:	 	& 28.01.2013\\
+		&  D1.2 Presentation for Workshop 1	& Estimated Effort: 	& 180 hours \\
+		&  D1.3 Presentation for Workshop 2	& Interdependencies:	& all	\\
+		&  D1.4 Lab protocol			& 			& 	\\
+\hline
+\end{tabular}
+
+	\subsection{WP2 Adaptation of drivers}
+
+The platform will provide access to hardware for mobile agents.
+During this deliverable drivers for the following peripherials should be adapted or otherwise implemented:
+\begin{enumerate}
+
+\item{\textbf{Bargraph:} Port A of nodes 0 and 1 is connected to the led bargraph.
+The driver should display encoded in binary number a value from the range \texttt{0 ... 255} on the bargraph.
+}
+
+
+\item{\textbf{Heater:} Two heating resistors on the node 2 could be controlled by PWM signal.
+Driver that provide setting a duty cycle should be implemented.
+To control PWM PIN of the microcontroller timers should be configured and appropriate mode of the PWM should be selected.
+}
+
+\item{\textbf{Cooler:} The cooling fan is also controlled by PWM signal.
+The same aproach as for the heating should be used here.
+Controlling the speed of the fan should be done by setting up the duty cycle of the PWM signal.
+}
+
+\item{\textbf{Temperature sensor:} 
+Three temperature sensors are connected to the bottom of the sink with I2C interface.
+The driver should read data from all sensors and return the average.
+}
+
+\item{\textbf{Led matrix display:} 
+Led matrix display with 6 segments of 5 by 7 each is connected to the node 3.
+The driver should provide API for writing single character and arrays of characters to the led matrix.
+}
+
+\item{\textbf{TFT display:} 
+Node 2 is connected to 640 by 360 TFT display.
+The driver should provide the following capabilities: 
+set the cursor to the position on the display,
+set font and background colors and print arrays of characters on the display.
+}
+\end{enumerate}
+
+\vspace{0.2in}
+\begin{tabular}{|ll|ll|}
+\hline \multicolumn{4}{|c|}{\textbf{Workpackage 2. Adaptation of drivers}}\\
+\hline
+Responsible:	&  Igor Pelesi\'c , Konstantin Selyunin	& Start date:		& 15.11.2012 \\
+Deliverables:	&  D1.1 Requirements and Specification  & Finish date:	 	& 12.12.2012\\
+		&  D1.2 Presentation for Workshop 1	& Estimated Effort: 	& 180 hours \\
+		&  D1.3 Presentation for Workshop 2	& Interdependencies:	& all	\\
+		&  D1.4 Lab protocol			& 			& 	\\
+\hline
+\end{tabular}
+	\subsubsection{Requirements and Specification}
+
+Before the development and implementation, clear requirements should be defined.
+In this deliverable we define user roles, global requirements for the project, functional and non-functional requirements.
+	\section{Milestones and timeplan}
 
 
 
@@ -129,7 +272,6 @@ The requirements are stated in chapter 2. Chapter 3 provides the reader with una
 The specification defines the goals that should meet the project "Code mobility in Networked Embedded system". It is written by project members listed on the title page to precisely identify the goals to meet at the end of the project.
 \vspace{0.1in}
 \noindent
-The purpose of the project is to build code mobility platform on Embedded system engineering board \cite{galler}. Our goal is to develop the system that allows users to build and execute simple agent program on top of  hardware ESE platform. To achieve the goal we propose to develop three layered structure: agent layer, platform layer, communication layer. Developer of the agent program should not aware of location of the services available on the platform and details about method to access the particular service. Given list of services agent is executed on a platform that is
 
 	%\section{Scope}
 
