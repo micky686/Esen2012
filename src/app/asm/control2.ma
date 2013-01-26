@@ -2,11 +2,12 @@ move temp
 compare reg_0, 0
 jmpeq START1
 die
-START1: ldl reg_1, 26
+START1: ldl reg_1, 30
+
 mul reg_1, 8
 mv reg_1, reg_0			//desired
-ldl reg_2, 10			//kp
-ldl reg_3, 0			//kd
+ldl reg_2, 20			//kp
+ldl reg_3, 5			//kd
 START:getservice temp
 sub reg_1, reg_0		//desired - current = e
 mv reg_5, reg_0			//temporary e
