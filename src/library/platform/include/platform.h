@@ -20,6 +20,7 @@
 #include "DISPLAY.h"
 #include "protocol0.h"
 #include "ledmatrix.h"
+#include "pushbutton.h"
 
 #define AGENT_MAX 4
 #define OPCODE_LEN 16
@@ -86,8 +87,8 @@ typedef struct {
 	void (*DISPLAY_draw_char)(uint8_t x, uint8_t y, uint16_t font_color, uint16_t bg_color, uint8_t pixel_size, char c);
 	void (*heater_set)(uint8_t duty_cycle);
 
-	void (*init_pushbutton0)(void(*callback)(void));
-	void (*init_pushbutton1)(void(*callback)(void));
+	void(*button0_callback)(void);
+	void(*button1_callback)(void);
 
 	uint16_t (*therm_get_temp)(uint8_t name);
 
@@ -138,6 +139,8 @@ typedef struct {
 
 extern volatile platform_t platform;
 extern uint8_t service_locations[MAX_SERVICE][MAX_NODES];
+extern volatile uint8_t button0_pressed;
+extern volatile uint8_t button1_pressed;
 
 void init_drivers(void);
 void init_agents(void);
@@ -145,6 +148,9 @@ void reset_agent(uint8_t id);
 uint8_t clone_agent(agent_t *agent);
 void platform_init(void);
 void run_platform(void);
+
+void buttoncallback0(void);
+void buttoncallback1(void);
 
 
 #endif /* PLATFORM_H_ */

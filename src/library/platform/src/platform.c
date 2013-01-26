@@ -13,6 +13,8 @@
 #include "util/delay.h"
 
 volatile platform_t platform;
+volatile uint8_t button0_pressed;
+volatile uint8_t button1_pressed;
 
 uint8_t service_locations[MAX_SERVICE][MAX_NODES] = {
 			{NODE0_ID, NODE1_ID, INVALID, INVALID},		 //BARGRAPH
@@ -43,14 +45,6 @@ void init_drivers(void){
 
 #endif
 
-
-#ifdef COOLER
-	init_cooler();
-	platform.drivers.set_cooler = set_cooler;
-	//set_cooler(50);
-#endif
-
-
 #ifdef HEATER
 	heater_init();
 	platform.drivers.heater_set = heater_set;
@@ -73,7 +67,18 @@ void init_drivers(void){
 
 
 #ifdef PUSHBUTTON
+	//platform.drivers.button0_callback = buttoncallback0;
+	platform.drivers.button1_callback = buttoncallback1;
+	//init_pushbutton0(platform.drivers.button0_callback);
+	init_pushbutton1(platform.drivers.button1_callback);
+	button0_pressed = 0;
+	button1_pressed = 0;
+#endif
 
+#ifdef COOLER
+	init_cooler();
+	platform.drivers.set_cooler = set_cooler;
+	//set_cooler(50);
 #endif
 
 #ifdef LEDMATRIX
@@ -92,6 +97,15 @@ void init_drivers(void){
 
 #endif
 
+}
+
+
+void buttoncallback0(void){
+	button0_pressed = 1;
+}
+
+void buttoncallback1(void){
+	button1_pressed = 1;
 }
 
 void init_agents(){

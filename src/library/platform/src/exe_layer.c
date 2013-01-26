@@ -350,6 +350,17 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 					SET_ERROR(agent->status_flag, ERROR_NO_SERVICE_PRESENT);
 				}
 				break;
+			case SERVICE_BUTTON0:
+				{
+					agent->regs[REG_ACC] = button0_pressed;
+					button0_pressed = 0;
+				}
+				break;
+			case SERVICE_BUTTON1:
+				{
+					agent->regs[REG_ACC] = button1_pressed;
+					button1_pressed = 0;
+				}
 			default:
 				break;
 			}
