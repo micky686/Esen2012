@@ -14,14 +14,14 @@ OBJ-ESEL-$(MNAME)-y	+=
 
 # put the module specific used library modules in here (need 
 # to be defined in library/eselib/Makefile.eselib)
-OBJ-ESEL-MDEP-$(MNAME)-y += ledmatrix spi
+OBJ-ESEL-MDEP-$(MNAME)-y += protocol0 timer2 ledmatrix spi pushbutton
 
 # put the used scade models in here (need to be defined in 
 # library/scade/Makefile.scade)
 OBJ-SCDL-$(MNAME)-y	+=
 
 # put platform specific used library modules in here
-OBJ-PLATFORM-MDEP-$(MNAME)-y += platform exe_layer scheduler
+OBJ-PLATFORM-MDEP-$(MNAME)-y += platform exe_layer scheduler comm_layer
 
 # and finally the required system libraries (e.g. you would 
 # put 'm' in there if you want to use the math library)

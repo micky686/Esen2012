@@ -17,7 +17,6 @@
 
 // standard includes
 #include <stdint.h>
-
 // project includes
 
 // ================================================================================================
@@ -45,25 +44,16 @@
 // Type-Definitions
 // ================================================================================================
 
-typedef enum
-{
-        DispObj_Head,
-        DispObj_Body,
-        DispObj_Food,
-        DispObj_Wall,
-        DispObj_Blank,
-}
-DisplayObject_t;
-
 // ================================================================================================
 // Function-Definitions
 // ================================================================================================
 
 void DISPLAY_init(void);
 void DISPLAY_drawBg(uint16_t rgb);
-uint8_t DISPLAY_drawElement(uint8_t row, uint8_t col, uint16_t rgb, DisplayObject_t object);
-void DISPLAY_drawBorder(void);
-uint8_t DISPLAY_drawPoints(uint8_t player_id, uint8_t points);
+void DISPLAY_drawDot(uint8_t row, uint8_t col, uint16_t rgb, uint8_t grid);
+void DIPSLAY_text(uint8_t x, uint8_t y, uint16_t font_color, uint16_t bg_color, uint8_t pixel);
+void DISPLAY_string(uint8_t x, uint8_t y, uint16_t font_color, uint16_t bg_color, uint8_t pixel_size, char *string);
+void DISPLAY_draw_char(uint8_t x, uint8_t y, uint16_t font_color, uint16_t bg_color, uint8_t pixel_size, char c);
 
 
 #endif // _DISPLAY_H_

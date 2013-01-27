@@ -32,18 +32,21 @@ volatile uint8_t init_state=0;
 
 SIGNAL(SIG_UART0_RECV) {
 
+	PORTF &= ~(1 << PF3);
 	/*if (PORTF &(1<<PF3)){
 		PORTF&=~(1<<PF3);
 	} else {
 		PORTF|=(1<<PF3);
 	}*/
 
-	if ((UCSR0A & (1 << FE0) ) || (UCSR0A & (1 << DOR0)) || (UCSR0A & (1 << PE0))  ) {
-		PORTF |= (1 << PF3);
+	//
+
+	if ((UCSR0A & (1 << FE0) ) || (UCSR0A & (1 << DOR0)) || (UCSR0A & (1 << FE0))  ) {
+		//PORTF |= (1 << PF3);
 		help=UDR0;
 		return;
 	} else {
-		PORTF &= ~(1 << PF3);
+		//PORTF &= ~(1 << PF3);
 	}
 
 
@@ -67,10 +70,12 @@ SIGNAL(SIG_UART0_RECV) {
 	/* correct destination, read next byte*/
 	else if ((timestamp>1)&&(node_id==msg_id))
 	{
+
 		message[msg_index]=UDR0;
 		checksum^=message[msg_index];
 		msg_index++;
 		timestamp--;
+
 	}
 
 	/* der falsche targetnode?? wir tun nur warten; timestamp verringern*/
@@ -92,6 +97,7 @@ SIGNAL(SIG_UART0_RECV) {
 		{
 			if (checksum==help)
 			{ /* checksummen check*/
+				PORTF|=(1<<PF3);
 				msg_pointer = message;
 				receive_handler(length, (uint8_t *) msg_pointer);
 			}
@@ -189,6 +195,7 @@ int8_t send_msg(uint8_t message_header, uint8_t *msg_body) {
 	init_state = 0;
 	PORTF &= ~(1 << PF2);
 	
+
 	while (ready == OFF) {
 		anzahl_versuche++;
 
