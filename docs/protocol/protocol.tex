@@ -53,13 +53,13 @@ Group 4\\
 \author{Igor Pelesi\'c, Matrikelnumber 0006828\\
 Konstantin Selyunin, Matrikelnumber 1228206\\
 Miljenko Jakovljevi\'c, Matrikelnumber 0426673 }
-\small{
-\textbf{abstract:}
-The lab protocof contains the final project documentation. We present the introductory part of the project and all necessary organization details in the chapter 1.
-The requirements are stated in chapter 2. Chapter 3 provides the reader with unambiguous specification, Implementation details are represented in chapter 4.
-}
 \vfill
 \rule{16cm}{2pt}\vskip1cm
+\flushleft
+\small{abstract:
+The lab protocof contains the final project documentation. We present the introductory part of the project and all necessary organization details in the chapter 1.
+The requirements are stated in chapter 2. Chapter 3 provides the reader with unambiguous specification, Implementation details are represented in chapter 4.}
+\flushright
 \date{}
 \today
 }
@@ -275,12 +275,35 @@ CSMA/CA protocol will suit for our purpose, so we propose to implement communica
 One of the main goals for possible future work is to make agents and message transfer real-time.
 
 
+\vspace{0.2in}
 \begin{tabular}{|ll|ll|}
 \hline \multicolumn{4}{|c|}{\textbf{Workpackage 4. Communication }}\\
 \hline
 Responsible:	&  Igor Pelesi\'c			& Start date:		& 10.12.2012 \\
 Deliverables:	&  D4.1 CSMA/CA communication protocol	& Finish date:	 	& 21.12.2012\\
 		&  					& Estimated Effort: 	& 60 hours \\
+		&  					& Interdependencies:	& 	\\
+		&  					& 			& 	\\
+\hline
+\end{tabular}
+
+
+	\subsection{WP5 Platform }
+
+Platform supports concurrent execution of mobile agents as well as provides means for transfering
+agent code and messages.
+The main challenges in this deliverable are to implement priority based scheduler, 
+execution layer and communication layer.
+It is of paramount importance that each platform support only hardware that is physically connected 
+to dedicated $\mu$C, to save memory. It should be done during compile time.
+
+\vspace{0.2in}
+\begin{tabular}{|ll|ll|}
+\hline \multicolumn{4}{|c|}{\textbf{Workpackage 5. Platform }}\\
+\hline
+Responsible:	&  Igor Pelesi\'c			& Start date:		& 21.12.2012 \\
+Deliverables:	&  D5.1 Platform			& Finish date:	 	& 15.01.2013\\
+		&  					& Estimated Effort: 	& 120 hours \\
 		&  					& Interdependencies:	& 	\\
 		&  					& 			& 	\\
 \hline
