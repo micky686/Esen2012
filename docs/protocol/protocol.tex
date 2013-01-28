@@ -152,6 +152,20 @@ Our goal is to show that code mobility concepts that are successfully used on mu
 During the project we have developed and implemented infrastructure that allows developer of agent program do not be aware of the hardware services presented on the given platform.
 
 
+	\section{Definitions, Acronyms, and Abbreviations}
+
+By \emph{code mobility} we mean the capability of code to change the location where it is executed.
+
+\vspace{0.1in}
+\emph{Strong} code mobility is the ability to allow migration of both code and execution state to the destination, \emph{weak} code mobility allows code transfer but it does not involve the transfer of the execution state.
+
+\vspace{0.1in}
+\emph{Platform} is a component that provides corresponding hardware services to 
+
+	\section{Background}
+
+The research has been done to use code mobility in distributed environment \cite{Bart1} and various application has been developed including \cite{Bart2} web application platform that allows people without major programming experience to develop the application as work-flow specification in graphical form. The use of code mobility is to "move the knowledge close to the resources" \cite{Picco} and enable higher flexibility of accessing remote resources.
+
 	\section{Workpackages}
 
 In the following section we describe workpackage deliverables for our project:
@@ -345,9 +359,9 @@ Defining requirements in a rigorous way will help us to exercise realistic valid
 \renewcommand{\labelenumi}{R_\arabic{enumi}}
 \renewcommand{\labelenumii}{R_\arabic{enumi}_\arabic{enumii}}
 
-\begin{enumerate}
 
-\item\textbf{User roles}
+\section{User roles}
+\renewcommand{\labelenumi}{R_UR_\arabic{enumi}}
 \begin{enumerate}
 
 \item Application Developers (Tasks: Create control application in agent language, debug, test, prepare deployment packages)
@@ -360,12 +374,11 @@ Defining requirements in a rigorous way will help us to exercise realistic valid
 \end{enumerate}
 
 
-\textbf{
-Global Requirements:
-}
+\section{Global Requirements: }
 
 
-\item	\textbf{Application development requirements:}
+\subsection{Application Development requirements:}
+\renewcommand{\labelenumi}{R_AD_\arabic{enumi}}
 \begin{enumerate}
 \item The App Developer should be enabled to instantiate up to 4 agents on a single node, which are running concurrently.
 \item The App Developer should be allowed to configure the execution scheduling of the agents via a prioriatization of the agents.
@@ -382,26 +395,15 @@ Global Requirements:
 \end{enumerate}
 
 
-\item\textbf{Application Consumers requirements:}
+\subsection{Application Consumers requirements:}
+\renewcommand{\labelenumi}{R_AC_\arabic{enumi}}
 \begin{enumerate}
 \item The platform should provide means to deploy the agent software on the target boards easily.
 \item A tracing mechanism should be provided in order to ease the process of fault detection and to allow valuable bug descriptions.
 \end{enumerate}
 
-%What do the Platform Developers need:
-
-\item\textbf{Non-functional requirements}
-
-\begin{enumerate}
-\item The platform should be open to extensions i.e adding new hardware.
-\item The agent language should be extendable.
-\item Scalability
-\item Documentation 
-\item A platform tracing mechanism should be provided which allows for more efficient bugfixing.
-\end{enumerate}
-
-
-\item\textbf{Application Designers requirements:}
+\subsection{Application Designers requirements:}
+\renewcommand{\labelenumi}{R_A_DES_\arabic{enumi}}
 \begin{enumerate}
 \item A description of the platform possibilities and limitations should be provided.
 \item The platform should provide means for reducing the overall complexity of a system, by allowing encapsulation of different tasks.
@@ -412,18 +414,30 @@ Global Requirements:
 \item A description of a platform should provide a list of all available services
 \end{enumerate}
 
-\textbf{Low-Level Requirements}
+\section{Non-functional requirements}
+\renewcommand{\labelenumi}{R_NF_\arabic{enumi}}
+\begin{enumerate}
+\item The platform should be open to extensions i.e adding new hardware.
+\item The agent language should be extendable.
+\item Scalability
+\item Documentation 
+\item A platform tracing mechanism should be provided which allows for more efficient bugfixing.
+\end{enumerate}
 
 
-\item\textbf{Communication protocol}
+\section{Low-Level Requirements}
 
+
+\subsection{Communication protocol}
+\renewcommand{\labelenumi}{R_LL_CP_\arabic{enumi}}
 \begin{enumerate}
 \item Protocol must provide means to avoid collisions on the bus
 \item Protocol must provide means to check correctness of the data sent
 \end{enumerate}
 
 
-\item\textbf{Drivers}
+\subsection{Drivers}
+\renewcommand{\labelenumi}{R_LL_DRV_\arabic{enumi}}
 \begin{enumerate}
 \item Drivers shall deliver access for the platform to hardware by means of API
 \item The cooler driver must provide means to set up the duty cycle of the fan in range 0 (turn off) to 100 (full speed).
@@ -433,182 +447,11 @@ Global Requirements:
 \item Let matrix driver must provide means to display char arrays on the led indicators.
 \item TFT display driver must provide means to set background color of a display, position cursor to the desired location,
 	set the font and background color and print array of characters on the display
-
-
 \end{enumerate}
-
-\end{enumerate}
-
 
 
 
 \chapter{Specification and design}
-
-\chapter{Implementation}
-
-\chapter{Validation}
-
-\chapter{Results and future plans}
-
-
-
-
-	\section{Purpose}
-
-The specification defines the goals that should meet the project "Code mobility in Networked Embedded system". It is written by project members listed on the title page to precisely identify the goals to meet at the end of the project.
-\vspace{0.1in}
-\noindent
-
-	%\section{Scope}
-
-	\section{Definitions, Acronyms, and Abbreviations}
-
-By \emph{code mobility} we mean the capability of code to change the location where it is executed.
-
-\vspace{0.1in}
-\noindent
-\emph{Strong} code mobility is the ability to allow migration of both code and execution state to the destination, \emph{weak} code mobility allows code transfer but it does not involve the transfer of the execution state.
-
-\vspace{0.1in}
-\noindent
-\emph{Platform} is a component that provides corresponding hardware services to 
-
-	\section{Background}
-
-\noindent
-The research has been done to use code mobility in distributed environment \cite{Bart1} and various application has been developed including \cite{Bart2} web application platform that allows people without major programming experience to develop the application as work-flow specification in graphical form. The use of code mobility is to "move the knowledge close to the resources" \cite{Picco} and enable higher flexibility of accessing remote resources.
-	%\section{References}
-
-	%\section{Overview}
-
-
-\begin{comment}
-%What do the Application Testers need:
-%1) ?? To test control applications you need access to sensor data ?? Hence a test mode should be supported where sensor data are presented to the tester.
-
-%Functional requirements
-
-%Non-functional requirements
-
-
-%Specification (based on this functional and non-functional requirements)
-
-
-
-%User defines agents in a simple programming language (called "Agent").
-%"Agents" program is interpreted on PC to bytecode.
-
-%NES board support four platforms (nodes) for agents interactions and execution and 1 platform (node) for board-to-board communication.
-
-
-
-%Project outline
-
-%This will be the largest and most important section of the SRS.  The customer requirements will be embodied within Section 2, but this section will give the D-requirements that are used to guide the project’s software design, implementation, and testing.
-
-%Each requirement in this section should be:
-%•	Correct
-%•	Traceable (both forward and backward to prior/future artifacts)
-%•	Unambiguous
-%•	Verifiable (i.e., testable)
-%•	Prioritized (with respect to importance and/or stability)
-%•	Complete
-%•	Consistent
-%•	Uniquely identifiable (usually via numbering like 3.4.5.6)
-
-%Attention should be paid to the carefuly organize the requirements presented in this section so that they may easily accessed and understood.  Furthermore, this SRS is not the software design document, therefore one should avoid the tendency to over-constrain (and therefore design) the software project within this SRS.
-
-	\section{External Interface Requirements}
-
-		\subsection{User Interfaces}
-
-		\subsection{Hardware Interfaces}
-
-		\subsection{Software Interfaces}
-
-		\subsection{Communications Interfaces}
-
-	\section{Functional Requirements}
-This section describes specific features of the software project.  If desired, some requirements may be specified in the use-case format and listed in the Use Cases Section.
-		\subsection{Functional Requirement or Feature 1}
-
-			\subsubsection{Introduction}
-
-			\subsubsection{Inputs}
-
-			\subsubsection{ Processing}
-
-			\subsubsection{Outputs}
-
-			\subsubsection{Error Handling}
-
-		\subsection{ Functional Requirement or Feature 2}
-…
-	\section{Use Cases}
-
-		\subsection{Use Case \#1}
-
-		\subsection{Use Case \#2}
-…
-	\section{ Classes / Objects}
-
-		\subsection{Class / Object \#1}
-
-			\subsubsection{Attributes}
-
-			\subsubsection{Functions}
-
-<Reference to functional requirements and/or use cases>
-
-		\subsection{Class / Object \#2}
-…
-	\section{ Non-Functional Requirements}
-Non-functional requirements may exist for the following attributes.  Often these requirements must be achieved at a system-wide level rather than at a unit level.  State the requirements in the following sections in measurable terms (e.g., 95% of transaction shall be processed in less than a second, system downtime may not exceed 1 minute per day, > 30 day MTBF value, etc). 
-		\subsection{Performance}
-
-		\subsection{Reliability}
-
-		\subsection{Availability}
-
-		\subsection{Security}
-
-		\subsection{Maintainability}
-
-		\subsection{Portability}
-
-		\section{Inverse Requirements}
-
-State any *useful* inverse requirements.
-
-	\section{Design Constraints}
-
-Specify design constrains imposed by other standards, company policies, hardware limitation, etc. that will impact this software project.
-
-	\section{Logical Database Requirements}
-
-Will a database be used?  If so, what logical requirements exist for data formats, storage capabilities, data retention, data integrity, etc.
-
-	\section{Other Requirements}
-
-Catchall section for any additional requirements.
-
-\chapter{Analysis Models}
-
-List all analysis models used in developing specific requirements previously given in this SRS.  Each model should include an introduction and a narrative description.  Furthermore, each model should be traceable the SRS’s requirements.
-
-	\section{Sequence Diagrams}
-
-	\section{Data Flow Diagrams (DFD)}
-
-	\section{State-Transition Diagrams (STD)}
-
-\chapter{Change Management Process}
-
-Identify and describe the process that will be used to update the SRS, as needed, when project scope or requirements change.  Who can submit changes and by what means, and how will these changes be approved.
-
-\end{comment}
-
-\chapter {Specification}
 
 \section{General}
 
@@ -2122,6 +1965,25 @@ int comm_send_msg(comm_msg_T *msg, void (*sent_cb)(int));
 \caption{Message Sending}
 \label{fig:comm-send-msg}
 \end{figure}
+
+
+
+\chapter{Implementation}
+
+\chapter{Validation}
+
+\chapter{Results and future plans}
+
+
+
+
+	%\section{References}
+
+	%\section{Overview}
+
+
+
+\chapter {Specification}
 
 
 \chapter{Implementation timetable}
