@@ -4,11 +4,11 @@ import sys
 
 
 LABEL = r"[A-Za-z][A-Za-z0-9]{0,5}"
-MNEMONIC = r"add|sub|div|mul|jmpgr|jmpeq|jmpls|compare|move|clr|clone|die|sendmsg|pullmsg|storecr|ldh|ldl|mv|wait|priority|setservice|getservice"
+MNEMONIC = r"add|sub|div|mul|jmpgr|jmpeq|jmpls|compare|convert|move|clr|clone|die|sendmsg|pullmsg|storecr|ldh|ldl|mv|wait|priority|setservice|getservice"
 REG = r"reg_10|reg_11|reg_12|reg_0|reg_1|reg_2|reg_3|reg_4|reg_5|reg_6|reg_7|reg_8|reg_9|reg_str_0|reg_str_1|reg_str_2"
 VALUE = r"0x[0-9A-F]{1,2}|0b[01]{1,8}|[+-]?[01]?[0-9]?[0-9]"
 SERVICE = r"temp|bargraph|fan|heater|led_matrix|lcd|button0|button1"
-CHAR = r"[A-Za-z0-9_]"
+CHAR = r"[-_:;!,.A-Za-z0-9]"
 OPERAND = REG + "|" + VALUE + "|" + SERVICE 
 OPERAND_OR_CHAR = OPERAND + "|" + CHAR
 LEGAL_LABEL = "((?!" + MNEMONIC + "|" + OPERAND + ")" + LABEL +")"
@@ -70,7 +70,8 @@ command_opcode = {"add":"00000011",\
                "wait":"00000101",\
                "priority":"00001000",\
                "setservice":"0111",\
-               "getservice":"00000111"}
+               "getservice":"00000111",\
+	       "convert":"11111111"}
                
 #LEGAL LINE:
 #LABEL:? MNEMONIC (?: OPERAND1? (?:, OPERAND2?)) | (LABEL2)
@@ -232,6 +233,13 @@ def second_pass():
 			opcode = command_opcode[mnem] + reg_str[operand1] + reg[operand2]
 		elif (operand1 in reg_str) and (operand2 in reg_str):
 			opcode = command_opcode[mnem] + reg_str[operand1] + reg_str[operand2]
+		else:
+			print "Error in line %s, illegal operand" %line
+	if mnem == "convert":
+		if label2 != None:
+			print "Error in line %s, illegal label " %line
+		elif (operand1 in reg_str) and (operand2 in reg):
+			opcode = command_opcode[mnem] + reg_str[operand1] + reg[operand2]
 		else:
 			print "Error in line %s, illegal operand" %line
         
