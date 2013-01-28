@@ -541,8 +541,6 @@ counter value is changed and the control is returned back to the scheduler.
 \label{exelayer}
 \end{figure}
 
-
-
 The execution layer is 
 called by the method execute which takes the following input parameters:
 \begin{itemize}
@@ -634,6 +632,106 @@ to device drivers without necessity to change the platform code.
 \noindent
 If an interaction with a device driver is blocking, then the calling agent will be put to status blocking unless there is an answer from
 the device driver.
+
+\subsection{Device drivers}
+
+\subsubsection{Cooler}
+The device driver for the cooler should be initialized with a function:
+
+\begin{itemize}
+		
+\item\texttt{void init_cooler(void)}
+This function should configure the timer and set PWM mode.
+After executing init function cooler should stay off.
+
+\item\texttt{void set_cooler(uint8_t duty_cycle)}
+This function sets the duty cycle of the PWM-signal, which controls the speed of the fan and the cooling effect.
+
+\item\texttt{required components}
+	1 timer for PWM signal
+\end{itemize}
+
+\subsubsection{Heater}
+The device driver for the heating registers should be initialized with a function:
+
+\begin{itemize}
+		
+\item\texttt{void heater_init(void)}
+
+This function should configure the timer and set PWM mode.
+After executing init function heater should stay off.
+
+\item\texttt{void heater_set(uint8_t duty_cycle)}
+
+This function sets the duty cycle of the PWM-signal, which controls the dissipated power (0 - no heating, 100 - max power dissipation)
+
+\item\texttt{required components}
+	1 timer for PWM signal
+\end{itemize}
+
+\subsubsection{Temperature sensor}
+The temperature sensor driver should be initialized with the following function:
+
+\begin{itemize}
+
+\item\texttt{void therm_init(void)}
+
+This function should initialize temperature sensors connected to I2C bus.
+
+\item\texttt{ uint16_t therm_get_temp(uint8_t name)}
+
+This function returns the value of the temperature in degrees Celcius.
+
+\end{itemize}
+
+
+\subsubsection{Led matrix}
+The led matrix driver should be initialized with the following function:
+
+\begin{itemize}
+
+\item\texttt{void init_dotmatrix(void)}
+
+
+\item\texttt{void dotmatrix_send(char *data)}
+
+Using this function we send the first six characters to the led matrix.
+
+\end{itemize}
+
+\subsubsection{Bargraph}
+With the following function we initialize LED bargraph, connected to the port A of nodes 0 or 1 
+\begin{itemize}
+
+\item\texttt{ void bargraph_init(void)}
+
+\item\texttt{void set_bargraph(uint8_t value)}
+
+This function is used to display the corresponding \texttt{value} on the bargraph.
+
+\end{itemize}
+
+
+\subsubsection{TFT display}
+The following function is used to initialize TFT display that is connected to the node 2 of the ESE board:
+\begin{itemize}
+
+\item\texttt{ void DISPLAY_init(void)}
+
+\item\texttt{ void DISPLAY_drawBg(uint16_t rgb)}
+
+This function is used to draw the background of the display. RGB color could be defined using the following macro:
+\texttt{RGB(R[0..255], G[0..255], B[0..255])}.
+
+\item\texttt{ void DISPLAY_string(uint8_t x, uint8_t y, uint16_t font_color, uint16_t bg_color, uint8_t pixel_size, char *string)}
+
+The following function is used to display char array on the display, starting from the position \texttt{x, y}
+with corresponding RGB values of font and background.
+The size of the font could be changed by setting the size of the basic drawing pixel.
+
+\end{itemize}
+
+
 
 \section{Communication Layer}
 
@@ -747,15 +845,6 @@ Register & \texttt{rrrr} & Char Register & \texttt{rrrr}\\
 \hline
 \texttt{reg_12} & \texttt{1100} &   &  \\
 \hline
-%\texttt{acc} & \texttt{1111} & &\\
-%\hline
-%\texttt{reg_7L} & \texttt{0111} &   &  \\
-%\hline
-%\texttt{reg_7H} & \texttt{1011} &  &  \\
-%\hline
-%\texttt{reg_7} & \texttt{1100} & & \\
-
-%\hline
 \end{tabular}
 
 \subsubsection{Arithmetic operations of agent assembly language}
@@ -1607,9 +1696,6 @@ Syntax  		  & Operands   								     & Program counter       \\
 
 \end{tabular}
 \vspace{0.1in}
-%\noindent
-%\framebox{\texttt{setservice value}}
-%\vspace{0.1in}
 
 \noindent
 \textbf{Get}
