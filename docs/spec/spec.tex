@@ -326,7 +326,18 @@ Identify and describe the process that will be used to update the SRS, as needed
 
 \end{comment}
 
-\chapter {Specification}
+\section{Project Outline}
+
+
+
+\subsection{Organization}
+
+\subsection{Project Description}
+
+\subsection{Workpackages}
+
+
+
 
 \section{General}
 
@@ -596,11 +607,11 @@ The language supports the following groups of operations: arithmetic, control fl
 \hline
 Register & \texttt{rrrr} & Char Register & \texttt{rrrr}\\
 \hline
-\texttt{reg_0} & \texttt{0000} & \texttt{reg_str_0} & \texttt{1000}\\
+\texttt{reg_0} & \texttt{0000} & \texttt{reg_str_0} & \texttt{1101}\\
 \hline
-\texttt{reg_1} & \texttt{0001} & \texttt{reg_str_1} & \texttt{1001}\\
+\texttt{reg_1} & \texttt{0001} & \texttt{reg_str_1} & \texttt{1110}\\
 \hline
-\texttt{reg_2} & \texttt{0010} & \texttt{reg_str_2} & \texttt{1010}\\
+\texttt{reg_2} & \texttt{0010} & \texttt{reg_str_2} & \texttt{1111}\\
 \hline
 \texttt{reg_3} & \texttt{0011} &   &  \\
 \hline
@@ -609,6 +620,18 @@ Register & \texttt{rrrr} & Char Register & \texttt{rrrr}\\
 \texttt{reg_5} & \texttt{0101} &   &  \\
 \hline
 \texttt{reg_6} & \texttt{0110} &   &  \\
+\hline
+\texttt{reg_7} & \texttt{0111} &   &  \\
+\hline
+\texttt{reg_8} & \texttt{1000} &   &  \\
+\hline
+\texttt{reg_9} & \texttt{1001} &   &  \\
+\hline
+\texttt{reg_10} & \texttt{1010} &   &  \\
+\hline
+\texttt{reg_11} & \texttt{1011} &   &  \\
+\hline
+\texttt{reg_12} & \texttt{1100} &   &  \\
 \hline
 %\texttt{acc} & \texttt{1111} & &\\
 %\hline
@@ -635,7 +658,7 @@ Add the content of \texttt{reg_d} and \texttt{reg_r} (or \texttt{value}) and put
 
 Syntax  & Operands   & Program counter & Flags\\
 
-\texttt{add reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6,  reg_0 $\leq$ reg_r $\leq$ reg_6} & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{add reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_12,  reg_0 $\leq$ reg_r $\leq$ reg_12 } & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} & & \\
 
@@ -664,7 +687,7 @@ Syntax  & Operands   & Program counter & Flags\\
 
 Syntax  & Operands   & Program counter & Flags\\
 
-\texttt{add reg_r, value} & \texttt{reg_0 $\leq$ reg_r $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{add reg_r, value} & \texttt{reg_0 $\leq$ reg_r $\leq$ reg_12, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} & & \\
 
@@ -698,7 +721,7 @@ Subtract \texttt{reg_s} (or \texttt{value}) from \texttt{reg_m} and put the resu
 
 Syntax  & Operands   & Program counter & Flags\\
 
-\texttt{sub reg_m, reg_s} & \texttt{reg_0 $\leq$ reg_m $\leq$ reg_6, reg_0 $\leq$ reg_s $\leq$ reg_6,} & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{sub reg_m, reg_s} & \texttt{reg_0 $\leq$ reg_m $\leq$ reg_12, reg_0 $\leq$ reg_s $\leq$ reg_12,} & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} & & \\
 
@@ -727,7 +750,7 @@ Syntax  & Operands   & Program counter & Flags\\
 
 Syntax  & Operands   & Program counter & Flags\\
 
-\texttt{sub reg_m, value} & \texttt{reg_0 $\leq$ reg_m $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{sub reg_m, value} & \texttt{reg_0 $\leq$ reg_m $\leq$ reg_12, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} & & \\
 
@@ -763,7 +786,7 @@ Divide \texttt{reg1} by \texttt{reg2} (or value) and put the result into \texttt
 
 Syntax  & Operands   & Program counter & Flags\\
 
-\texttt{div reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, reg_0 $\leq$ reg_r $\leq$ reg_6,} & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{div reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_12, reg_0 $\leq$ reg_r $\leq$ reg_12,} & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} & & \\
 
@@ -792,7 +815,7 @@ Syntax  & Operands   & Program counter & Flags\\
 
 Syntax  		  & Operands   								     & Program counter       & Flags\\
 
-\texttt{div reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6,  0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{div reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_12,  0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} 									      & 		     & \\
 
@@ -827,7 +850,7 @@ Multiply \texttt{reg1} and \texttt{reg2} (or \texttt{value}) and put the result 
 
 Syntax  & Operands   & Program counter & Flags\\
 
-\texttt{mul reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, reg_0 $\leq$ reg_r $\leq$ reg_6 } & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{mul reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_12, reg_0 $\leq$ reg_r $\leq$ reg_12 } & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} & & \\
 
@@ -856,7 +879,7 @@ Syntax  & Operands   & Program counter & Flags\\
 
 Syntax  		  & Operands   								     & Program counter       & Flags\\
 
-\texttt{mul reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
+\texttt{mul reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_12, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} & \texttt{C} \\
 
 \multicolumn{2}{l}{Operation} 									      & 		     & \\
 
@@ -992,7 +1015,7 @@ Compare \texttt{reg1} and \texttt{reg2} (or \texttt{value}).
 
 Syntax  & Operands   & Program counter \\
 
-\texttt{compare reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, reg_0 $\leq$ reg_r $\leq$ reg_6 } & \texttt{PC = PC + 1} \\
+\texttt{compare reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_12, reg_0 $\leq$ reg_r $\leq$ reg_12 } & \texttt{PC = PC + 1} \\
 
 \multicolumn{3}{l}{Operation} \\
 
@@ -1021,7 +1044,7 @@ Syntax  & Operands   & Program counter \\
 
 Syntax  & Operands   & Program counter \\
 
-\texttt{compare reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} \\
+\texttt{compare reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_12, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1} \\
 
 \multicolumn{3}{l}{Operation} \\
 
@@ -1149,7 +1172,7 @@ Syntax  & Operands   & Program counter \\
 
 \texttt{sendmsg reg, agent, platform} & \texttt{platform_0 $\leq$ platform $\leq$ platform_3} & \texttt{PC = PC + 1}\\
  & \texttt{agent_0 $\leq$ agent $\leq$ agent_3} & \\
- & \texttt{reg_0 $\leq$ reg $\leq$ reg_6} & \\
+ & \texttt{reg_0 $\leq$ reg $\leq$ reg_12} & \\
  & \texttt{reg_str_0 $\leq$ reg $\leq$ reg_str_2} & \\
 \multicolumn{3}{l}{Operation} \\
 \multicolumn{3}{l}{Send value of the register \texttt{reg} to the agent \texttt{aa} on the platform \texttt{pp}} \\
@@ -1183,7 +1206,7 @@ Pull message from \texttt{platform} to \texttt{register}.
 
 Syntax & Operation  & Program counter \\
 
-\texttt{pullmsg} & \texttt{reg_0 $\leq$ reg $\leq$ reg_6} & \texttt{PC = PC + 1} \\
+\texttt{pullmsg} & \texttt{reg_0 $\leq$ reg $\leq$ reg_12} & \texttt{PC = PC + 1} \\
  & \texttt{reg_str_0 $\leq$ reg $\leq$ reg_str_2} & \\
 
 \multicolumn{3}{l}{Operation} \\
@@ -1219,7 +1242,7 @@ Store \texttt{value} in \texttt{h}-part of \texttt{reg_d}
 
 Syntax  		  & Operands   								     & Program counter       \\
 
-\texttt{ldh reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1}  \\
+\texttt{ldh reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_12, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1}  \\
 
 \multicolumn{2}{l}{Operation} 									      & 		     \\
 
@@ -1250,7 +1273,7 @@ Store \texttt{value} in \texttt{l}-part of \texttt{reg_d}
 
 Syntax  		  & Operands   								     & Program counter       \\
 
-\texttt{ldl reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1}  \\
+\texttt{ldl reg_d, value} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_12, 0x00 $\leq$ value $\leq$ 0xFF} & \texttt{PC = PC + 1}  \\
 
 \multicolumn{2}{l}{Operation} 									      & 		     \\
 
@@ -1351,7 +1374,7 @@ Move value from reg_r to reg_d
 
 Syntax  		  & Operands   								     & Program counter       \\
 
-\texttt{mv reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_6,  reg_0 $\leq$ reg_r $\leq$ reg_6} & \texttt{PC = PC + 1}  \\
+\texttt{mv reg_d, reg_r} & \texttt{reg_0 $\leq$ reg_d $\leq$ reg_12,  reg_0 $\leq$ reg_r $\leq$ reg_12} & \texttt{PC = PC + 1}  \\
 
 \multicolumn{2}{l}{Operation} 									      & 		     \\
 
@@ -1455,7 +1478,7 @@ Set service to reg or value
 
 Syntax  		  & Operands   								     & Program counter       \\
 
-\texttt{setservice service_id, reg} & \texttt{service_0 $\leq$ service_id $\leq$ service_255, reg_0 $\leq$ reg $\leq$ reg_6} & \texttt{PC = PC + 1}  \\
+\texttt{setservice service_id, reg} & \texttt{service_0 $\leq$ service_id $\leq$ service_255, reg_0 $\leq$ reg $\leq$ reg_12} & \texttt{PC = PC + 1}  \\
 
 \end{tabular}
 
