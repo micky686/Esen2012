@@ -60,6 +60,7 @@ Miljenko Jakovljevi\'c, Matrikelnumber 0426673 }
 The lab protocof contains the final project documentation. We present the introductory part of the project and all necessary organization details in the chapter 1.
 The requirements are stated in chapter 2. Chapter 3 provides the reader with unambiguous specification, Implementation details are represented in chapter 4.}
 \flushright
+\LARGE
 \date{}
 \today
 }
@@ -130,7 +131,7 @@ The roles and responsibilities for the project are represented as follows:
 
 }
 \item{
-\textbf{Zigbee communication:} Miljenko Jakovljevi\'c 
+\textbf{Zigbee communication:} Miljenko Jakovljevi\'c [J]
 
 \begin{itemize}
 
@@ -308,17 +309,138 @@ Deliverables:	&  D5.1 Platform			& Finish date:	 	& 15.01.2013\\
 		&  					& 			& 	\\
 \hline
 \end{tabular}
-	\subsubsection{Requirements and Specification}
 
-Before the development and implementation, clear requirements should be defined.
-In this deliverable we define user roles, global requirements for the project, functional and non-functional requirements.
+
 	\section{Milestones and timeplan}
 
+For successful completion of our project, the following deadlines should be met:
+\begin{itemize}
+
+\item[--] 22.11.2012 Clear defined requirements and specification
+\item[--]{ 06.12.2012 Workshop 1: presentation of project outline, specification and requirements.
+	Discussion of challenges, possible fallacies and pitfalls.}
+\item[--] 15.12.2012 Avaliability of Agent language tool
+\item[--] 21.12.2012 Completion of communication protocol (D4.1)
+\item[--] 23.01.2013 Avaliability of platform (D5.1), completion of implementation work.
+\item[--] 29.01.2013 Documentation of the work in the lab protocol
+\item[--] 29.01.2013 Demo application for workshop 2.
+\item[--] 31.01.2013 Workshop2: Presentation of results. (D1.3)
+\end{itemize}
+
+	\section{Gantt diagramm}
+
+To represent interdependencies between tasks and sequence of execution of all tasks in our project we use Gantt diagram.
 
 
+Paste Gantt diagram here.
 
 
 \chapter{Requirements}
+
+This section lists all requirements that should meet the project with respect to 
+user roles of code mobility application.
+Defining requirements in a rigorous way will help us to exercise realistic validation scenarios.
+
+
+\renewcommand{\labelenumi}{R_\arabic{enumi}}
+\renewcommand{\labelenumii}{R_\arabic{enumi}_\arabic{enumii}}
+
+\begin{enumerate}
+
+\item\textbf{User roles}
+\begin{enumerate}
+
+\item Application Developers (Tasks: Create control application in agent language, debug, test, prepare deployment packages)
+
+\item Application Consumers  (Tasks: Deploy control application on target system, fill valuable bug reports)
+
+\item Plattform Developers (Tasks: Maintenance, Extensions, Porting to another target board)
+
+\item Application Designers (Tasks: Design control application)
+\end{enumerate}
+
+
+\textbf{
+Global Requirements:
+}
+
+
+\item	\textbf{Application development requirements:}
+\begin{enumerate}
+\item The App Developer should be enabled to instantiate up to 4 agents on a single node, which are running concurrently.
+\item The App Developer should be allowed to configure the execution scheduling of the agents via a prioriatization of the agents.
+\item The platform should provide a simple agent programming language to the App Developer in which the agents of an application can be developed.
+\item The agent language should provide the App Developer with the possibility to reproduce its code on another node or on another board.
+\item The agent language should provide the App Developer with the possibility to communicate with another agent on the same board.
+\item The agent language should provide the App Developer with the possibility to access the node hardware.
+\item The agent language should provide the App Developer with the possibility to implement loops. 
+\item The agent language should provide the App Developer with the possibility to compare variables.
+\item The agent language should provide the App Developer with the possibility to perform addition, subtraction, multiplication and division on variables.
+\item The agent language should provide the App Developer with the possibility to perform delays in the execution of code.
+\item The platform should allow debugging of agents executions.
+\item The platform should provide means for the creation of easily installable deployment packages.
+\end{enumerate}
+
+
+\item\textbf{Application Consumers requirements:}
+\begin{enumerate}
+\item The platform should provide means to deploy the agent software on the target boards easily.
+\item A tracing mechanism should be provided in order to ease the process of fault detection and to allow valuable bug descriptions.
+\end{enumerate}
+
+%What do the Platform Developers need:
+
+\item\textbf{Non-functional requirements}
+
+\begin{enumerate}
+\item The platform should be open to extensions i.e adding new hardware.
+\item The agent language should be extendable.
+\item Scalability
+\item Documentation 
+\item A platform tracing mechanism should be provided which allows for more efficient bugfixing.
+\end{enumerate}
+
+
+\item\textbf{Application Designers requirements:}
+\begin{enumerate}
+\item A description of the platform possibilities and limitations should be provided.
+\item The platform should provide means for reducing the overall complexity of a system, by allowing encapsulation of different tasks.
+\item The platform should provide configurable inter agent communication facilities.
+\item The platform should provide means to enable standby scenarios by allowing dynamical code reproduction.
+\item The platform should provide means for strong mobility, where an agent and its execution state are transferred to a new node or board and
+   the execution on the new destination is started from the memorized state.
+\item A description of a platform should provide a list of all available services
+\end{enumerate}
+
+\textbf{Low-Level Requirements}
+
+
+\item\textbf{Communication protocol}
+
+\begin{enumerate}
+\item Protocol must provide means to avoid collisions on the bus
+\item Protocol must provide means to check correctness of the data sent
+\end{enumerate}
+
+
+\item\textbf{Drivers}
+\begin{enumerate}
+\item Drivers shall deliver access for the platform to hardware by means of API
+\item The cooler driver must provide means to set up the duty cycle of the fan in range 0 (turn off) to 100 (full speed).
+\item The heater driver must provide functions to set the dissipated power of the heating resistors in range:
+	0 (turn off) to 100 (max power dissipation).
+\item Temperature driver must provide means to read temperature from all three sensors with precision of 1/8 of degree Celcius.
+\item Let matrix driver must provide means to display char arrays on the led indicators.
+\item TFT display driver must provide means to set background color of a display, position cursor to the desired location,
+	set the font and background color and print array of characters on the display
+
+
+\end{enumerate}
+
+\end{enumerate}
+
+
+
 
 \chapter{Specification and design}
 
@@ -358,84 +480,6 @@ The research has been done to use code mobility in distributed environment \cite
 	%\section{References}
 
 	%\section{Overview}
-
-\chapter{Requirements}	
-
-Define requirements for the project "Code mobility in Networked Embedded system"
-
-\renewcommand{\labelenumi}{\arabic{enumi}}
-\renewcommand{\labelenumii}{\arabic{enumi}.\arabic{enumii}}
-
-\begin{enumerate}
-
-\item\textbf{User roles}
-\begin{enumerate}
-
-\item Application Developers (Tasks: Create control application in agent language, debug, test, prepare deployment packages)
-\item Application Consumers  (Tasks: Deploy control application on target system, fill valuable bug reports)
-\item Plattform Developers (Tasks: Maintenance, Extensions, Porting to another target board)
-\item Maybe: Application Designers (Tasks: Design control application)
-% Maybe: Application Testers (Tasks: Test control application)
-\end{enumerate}
-
-
-\textbf{
-Global Requirements:
-}
-
-
-\item	\textbf{Application development requirements:}
-\begin{enumerate}
-\item The App Developer should be enabled to instantiate up to 4 agents on a single node, which are running concurrently.
-\item The App Developer should be allowed to configure the execution scheduling of the agents via a prioriatization of the agents.
-\item The platform should provide a simple agent programming language to the App Developer in which the agents of an application can be developed.
-\item The agent language should provide the App Developer with the possibility to reproduce its code on another node or on another board.
-\item The agent language should provide the App Developer with the possibility to communicate with another agent on the same board.
-\item The agent language should provide the App Developer with the possibility to access the node hardware.
-\item The agent language should provide the App Developer with the possibility to implement loops. 
-\item The agent language should provide the App Developer with the possibility to compare variables.
-\item The agent language should provide the App Developer with the possibility to perform addition, subtraction, multiplication and division on variables.
-\item The agent language should provide the App Developer with the possibility to perform delays in the execution of code.
-\item The platform should allow debugging of agents executions.
-\item The platform should provide means for the creation of easily installable deployment packages.
-\end{enumerate}
-
-% The platform should provide means to add new hardware device drivers (customization).?????
-%The platform should provide means to extend the agent language for own purposes (customization).????
-% An Agent-Language-Assembler tool should be provided which enables the transfer of the user readable agent language to the platorm execution code,
-%	which should also be easiliy extendable for customization.????
-
-\item\textbf{Application Consumers requirements:}
-\begin{enumerate}
-\item The platform should provide means to deploy the agent software on the target boards easily.
-\item A tracing mechanism should be provided in order to ease the process of fault detection and to allow valuable bug descriptions.
-\end{enumerate}
-
-%What do the Platform Developers need:
-
-\item\textbf{Non-functional requirements}
-
-\begin{enumerate}
-\item The platform should be open to extensions i.e adding new hardware.
-\item The agent language should be extendable.
-\item Scalability
-\item Documentation 
-\item A platform tracing mechanism should be provided which allows for more efficient bugfixing.
-\end{enumerate}
-
-
-\item\textbf{What do the Application Designers need:}
-\begin{enumerate}
-\item A description of the platform possibilities and limitations should be provided.
-\item The platform should provide means for reducing the overall complexity of a system, by allowing encapsulation of different tasks.
-\item The platform should provide configurable inter agent communication facilities.
-\item The platform should provide means to enable standby scenarios by allowing dynamical code reproduction.
-\item The platform should provide means for strong mobility, where an agent and its execution state are transferred to a new node or board and
-   the execution on the new destination is started from the memorized state.
-\item A description of a platform should provide a list of all available services
-\end{enumerate}
-
-\end{enumerate}
 
 
 \begin{comment}
