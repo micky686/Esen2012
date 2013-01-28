@@ -30,8 +30,8 @@
 \contentsline {section}{\numberline {3.2}Virtualization Platform}{11}{section.3.2}
 \contentsline {section}{\numberline {3.3}Execution Layer}{12}{section.3.3}
 \contentsline {section}{\numberline {3.4}Hardware Services}{13}{section.3.4}
-\contentsline {subsection}{\numberline {3.4.1}Device drivers}{14}{subsection.3.4.1}
-\contentsline {subsubsection}{\numberline {3.4.1.1}Cooler}{14}{subsubsection.3.4.1.1}
+\contentsline {subsection}{\numberline {3.4.1}Device drivers}{15}{subsection.3.4.1}
+\contentsline {subsubsection}{\numberline {3.4.1.1}Cooler}{15}{subsubsection.3.4.1.1}
 \contentsline {subsubsection}{\numberline {3.4.1.2}Heater}{15}{subsubsection.3.4.1.2}
 \contentsline {subsubsection}{\numberline {3.4.1.3}Temperature sensor}{15}{subsubsection.3.4.1.3}
 \contentsline {subsubsection}{\numberline {3.4.1.4}Led matrix}{15}{subsubsection.3.4.1.4}
@@ -43,23 +43,22 @@
 \contentsline {subsection}{\numberline {3.7.1}Agent language (Assembler level)}{17}{subsection.3.7.1}
 \contentsline {subsubsection}{\numberline {3.7.1.1}Arithmetic operations of agent assembly language}{18}{subsubsection.3.7.1.1}
 \contentsline {subsubsection}{\numberline {3.7.1.2}Control flow operations and comparison in agent assembly language}{20}{subsubsection.3.7.1.2}
-\contentsline {subsubsection}{\numberline {3.7.1.3}Code mobility operations of agent assembly language}{22}{subsubsection.3.7.1.3}
+\contentsline {subsubsection}{\numberline {3.7.1.3}Code mobility operations of agent assembly language}{21}{subsubsection.3.7.1.3}
 \contentsline {subsubsection}{\numberline {3.7.1.4}Message exchange}{22}{subsubsection.3.7.1.4}
 \contentsline {subsubsection}{\numberline {3.7.1.5}Store, move and wait operations}{23}{subsubsection.3.7.1.5}
 \contentsline {subsubsection}{\numberline {3.7.1.6}Access to hardware services}{24}{subsubsection.3.7.1.6}
 \contentsline {section}{\numberline {3.8}Communication Architecture}{25}{section.3.8}
 \contentsline {subsection}{\numberline {3.8.1}Hardware}{25}{subsection.3.8.1}
-\contentsline {subsection}{\numberline {3.8.2}Distributed Control}{25}{subsection.3.8.2}
-\contentsline {subsection}{\numberline {3.8.3}Code Mobility}{25}{subsection.3.8.3}
-\contentsline {subsection}{\numberline {3.8.4}Addressing Scheme}{26}{subsection.3.8.4}
-\contentsline {subsection}{\numberline {3.8.5}Communication Interface}{26}{subsection.3.8.5}
-\contentsline {chapter}{\numberline {4}Implementation}{28}{chapter.4}
-\contentsline {section}{\numberline {4.1}Platform}{28}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Initialization}{28}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}Execution}{29}{subsection.4.1.2}
-\contentsline {subsection}{\numberline {4.1.3}Communication}{29}{subsection.4.1.3}
-\contentsline {subsection}{\numberline {4.1.4}Code Mobility}{32}{subsection.4.1.4}
-\contentsline {chapter}{\numberline {5}Validation}{34}{chapter.5}
-\contentsline {chapter}{\numberline {6}Results and future plans}{35}{chapter.6}
-\contentsline {chapter}{\numberline {7}Specification}{36}{chapter.7}
-\contentsline {chapter}{\numberline {8}Implementation timetable}{37}{chapter.8}
+\contentsline {subsection}{\numberline {3.8.2}Code Mobility}{25}{subsection.3.8.2}
+\contentsline {subsection}{\numberline {3.8.3}Addressing Scheme}{25}{subsection.3.8.3}
+\contentsline {subsection}{\numberline {3.8.4}Communication Interface}{25}{subsection.3.8.4}
+\contentsline {chapter}{\numberline {4}Implementation}{27}{chapter.4}
+\contentsline {section}{\numberline {4.1}Platform}{27}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Initialization}{27}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Execution}{28}{subsection.4.1.2}
+\contentsline {subsection}{\numberline {4.1.3}Communication}{28}{subsection.4.1.3}
+\contentsline {subsection}{\numberline {4.1.4}Code Mobility}{31}{subsection.4.1.4}
+\contentsline {chapter}{\numberline {5}Validation}{33}{chapter.5}
+\contentsline {chapter}{\numberline {6}Results and future plans}{34}{chapter.6}
+\contentsline {chapter}{\numberline {7}Specification}{35}{chapter.7}
+\contentsline {chapter}{\numberline {8}Implementation timetable}{36}{chapter.8}

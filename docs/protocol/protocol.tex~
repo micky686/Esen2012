@@ -342,8 +342,12 @@ For successful completion of our project, the following deadlines should be met:
 
 To represent interdependencies between tasks and sequence of execution of all tasks in our project we use Gantt diagram.
 
-
-Paste Gantt diagram here.
+\begin{figure}[!htbp]
+\centering
+\includegraphics[scale=0.4]{figures/gantt.png}
+\caption{Gantt Diagram of the Project}
+\label{fig:ganttdiag}
+\end{figure}
 
 
 \chapter{Requirements}
@@ -477,22 +481,44 @@ between the agents is required this must be requested via the communication serv
 as its code and memory segment will be stored in a structure that is shown in the figure below. 
 
 
-\begin{figure}[!htbp]
-\begin{center}
-\includegraphics[scale=0.4]{figures/agent.png}
+\begin{figure}[!htb]
+\lstset{language=C}
+\begin{lstlisting}[frame=single]
+typedef struct {
+
+	uint8_t id;	
+	uint8_t priority;
+	agent_status_t status;
+
+	uint32_t status_flag;
+	uint16_t pc;
+
+	int16_t regs[REG_MAX];
+
+	uint16_t code_len;
+	uint16_t regstr_len [STR_REG_MAX];
+
+	uint16_t* code;
+
+	char** reg_str;
+
+	volatile char* rec_msg_content;
+	volatile uint16_t rec_msg_len;
+	
+} agent_t;
+\end{lstlisting}
 \caption{Agent structure}
-\end{center}
 \label{agent}
 \end{figure}
 
 Every agent has a unique id within the virtualization platform. Additionally a priority and a status for the
 scheduler are stored. Assigning these values for an agent lies within the scope of an agent developer. 
 Reproducing an agent on a virtualization platform where the agent’s id is already used will result in a denial 
-of the reproduction by the platform. Every agent has 6 numerical general purpose registers used for the execution
+of the reproduction by the platform. Every agent has 13 numerical general purpose registers used for the execution
 of the agent language. Additonally there are 3 char general purpose registers. The result of every agent language 
 command will be written to the accumulator. There is also a program counter which is used for the execution of the
 agent and the numerical agent language representation is stored as well. The agent structure also contains a buffer
-for receiving messages from other agents and variable to store the id of the received message.
+for receiving messages from other agents.
 
 
 \noindent
@@ -538,6 +564,8 @@ counter value is changed and the control is returned back to the scheduler.
 \label{exelayer}
 \end{figure}
 
+
+
 The execution layer is 
 called by the method execute which takes the following input parameters:
 \begin{itemize}
@@ -549,7 +577,7 @@ called by the method execute which takes the following input parameters:
 \lstset{language=C}
 \begin{lstlisting}[frame=single]
 /**
-	Function : execute
+	Function : execute_agent
 		excutes the next opcodes of an agent
 	Returns : 
 		the amount of successfully executed opcoded
@@ -557,7 +585,7 @@ called by the method execute which takes the following input parameters:
 		agent : agent status structure
 		opcode: amount of opcodes to be executed
 **/
-uint8_t execute(agent_t* agent, uint8_t opcode)
+uint8_t execute_agent(agent_t *agent, uint8_t opcode_size);
 \end{lstlisting}
 \caption{Executing agent language opcode}
 \label{fig:excopc}
@@ -585,29 +613,29 @@ otherwise the according function pointer will stay null.
 \begin{lstlisting}[frame=single]
 typedef struct {
 
-	void (*init_bargraph)(void);
 	void (*set_bargraph)(uint8_t value);
 
-	void (*clk_init)(void);
 	uint32_t (*clk_get_time)(void);
 
-	void (*init_cooler)(void);
 	void (*set_cooler)(uint8_t duty_cycle);
 
-	void (*DISPLAY_init)(void);
 	void (*DISPLAY_drawBg)(uint16_t rgb);
-	uint8_t (*DISPLAY_drawElement)(uint8_t row, uint8_t col,
-		uint16_t rgb, DisplayObject_t object);
-	
-	void (*DISPLAY_drawBorder)(void);
-	void (*DISPLAY_string)(uint8_t x, uint8_t y, uint16_t font_color,
-		uint16_t bg_color, uint8_t pixel_size, char *string)
 
-	void (*heater_init)(void);
+	void (*DISPLAY_drawDot)(uint8_t row, uint8_t col,
+				uint16_t rgb, uint8_t grid);
+
+	void (*DISPLAY_draw_char)(uint8_t x, uint8_t y, 
+				uint16_t font_color, uint16_t bg_color, 
+				uint8_t pixel_size, char c);
+				
 	void (*heater_set)(uint8_t duty_cycle);
 
-	void (*therm_init)(void);
-	int16_t (*therm_get_temp)(uint8_t name);
+	void(*button0_callback)(void);
+	void(*button1_callback)(void);
+
+	uint16_t (*therm_get_temp)(uint8_t name);
+
+	void (*dotmatrix_send)(char *data);
 
 } drivers_t;
 \end{lstlisting}
@@ -616,11 +644,11 @@ typedef struct {
 \end{figure}
 
 \noindent
-All device drivers should support init methods, which will be called by the platform during its initialization. 
-Even if a hardware device is not supported on a given node, there should be at least a dummy device driver for it present, 
-providing an empty init method. A real device driver should register its methods to the global function pointers during its 
-init_driver method execution. Choosing this approach we would reach some form of modularity which would allow us to exchange 
-to device drivers without necessity to change the platform code.
+The platform detects all the supported drivers on a specific node by inspection of the linked drivers.
+All drivers linked will be initialized during the setup of a platform and the methods provided by the 
+drivers will be stored in the global function pointer table.
+Choosing this approach we would reach some form of modularity which would allow us to exchange 
+the device drivers without necessity to change the platform code.
 
 \noindent
 If an interaction with a device driver is blocking, then the calling agent will be put to status blocking unless there is an answer from
@@ -732,16 +760,15 @@ language provides means to request the sending or receiving of a message.
 
 
 \noindent
-The sending function is blocking the further execution of the agent until the message is sent respectively received. 
+The sending function is blocking the further execution of the agent until the message is sent. 
 When an agent wants to send a message this message is proceeded to the communications service which takes care of the 
-actual transmission. While the sending procedure is ongoing the further execution of the sending agent is blocked. 
-Its status in the agent structure is set to “blocked”. As soon as the communication service signalizes a successful 
-message transmission or a failure the result of the sending function is written to the accumulator and the agent will 
-be made available for further execution.  
+actual transmission. While the sending procedure is ongoing the further execution of the sending agent is blocked.
+As soon as the communication service signalizes a successful message transmission or a failure the result of the 
+sending function is written to the accumulator and the agent will be made available for further execution.  
 
 
 \noindent
-When an agent sends a message to another agent, the receiving platform stores the id of the message and its content 
+When an agent sends a message to another agent, the receiving platform stores the content 
 to the receiver agent structure. The receiving agent is able to retrieve the last message from its buffer. 
 However only one message can be stored within the receiving agent structure and the next message will overwrite the 
 content and possible the id of the last message.  
@@ -756,9 +783,10 @@ the message was successfully sent or not and should initialize a retransmission 
 \noindent
 Every message sent should be identified by an id, in order to allow the transmission of messages with different semantics.
 
+\noindent
 The receiver of a message should be identified via the node number (0..3) where the receiving agent is currently expected
- to be running and the receiver agent id. As the ids of agents are within the scope of the agent developer she has to make 
-sure, that the correct receiving agent is addressed.Additionally a multicast message could be supported by allowing omitting 
+to be running and the receiver agent id. As the ids of agents are within the scope of the agent developer she has to make 
+sure, that the correct receiving agent is addressed. Additionally a multicast message could be supported by allowing omitting 
 the node address which should result in sending the message to all agents identified by the provided id. 
 
 \section{Scheduler}
@@ -768,8 +796,8 @@ should be made on a static priority based scheduling policy.
 
 
 \noindent
-Every agent is assigned a priority (0..3) by the agent developer which is stored within the agent structure. 
-The highest priority is 3 and the lowest priority is 0. Based on the priorities of the currently running agents 
+Every agent is assigned a priority (0..254) by the agent developer which is stored within the agent structure. 
+The highest priority is 254 and the lowest priority is 0. Based on the priorities of the currently running agents 
 the scheduler creates a static list by which the order of the agent execution is defined. The scheduler instructs 
 the execution layer to execute exactly priority + 1 opcodes for a given agent. Eventually the control returns to 
 the scheduler and the next agent from the list is picked. The list is iterated cyclically.
@@ -784,16 +812,13 @@ the scheduler and the next agent from the list is picked. The list is iterated c
 
 
 \noindent
-If an agent which is to be scheduled next is currently blocked by a sending operation, then its execution should be omitted. 
+If an agent which is to be scheduled next is currently blocked, then its execution should be omitted. 
 
 
 \noindent
 As an agent can reproduce it self to another node or board or clone itself within the same platform the scheduling 
 list requires adaptation as soon as new agent is deployed on a platform. Whenever a given platform is the destination 
 end point of a reproduction respectively cloning operation the scheduler needs to update its scheduling list before proceeding with further executions.
-
-
-
 \section{Agent language}
 
 \subsection{Agent language (Assembler level)}
@@ -1967,14 +1992,6 @@ micro-controller. The bit rate is constrained by the maximum value of 2 Mbps acc
 Node 4 functions as a gateway to another board. It is a bridge between the local
 and the wireless zigbee network.
 
-\subsection{Distributed Control} 
-% Igor: There seems to be a collision between ttp interrupts and our virtual machine scheduler??? 
-Time-triggered protocols are customary for distributed control applications.
-This approach is suitable for low data volumes and data subject to real time
-constraints and regular sending intervals. 
-In a time triggered scheme each node has a separate slot for writing to the bus.
-Meanwhile, other nodes can read the bus in the same slot or process a computation task.
-
 
 \subsection{Code Mobility}
 Code mobility between nodes includes local mobility on the same board and
@@ -1990,8 +2007,7 @@ access to the personal area network.
 
 \subsection{Addressing Scheme}
 Simple local addressing requires unique identifiers for
-each node. The requirement is that this be compatible with the time-triggered protocol
-implementation. For remote communication, board addresses have to be compatible
+each node. For remote communication, board addresses have to be compatible
 with the configuration of the zigbee network. Since, each node will have a static 
 number of agent execution environments, the address has to contain its
 identifier as as well.  
@@ -2000,72 +2016,51 @@ identifier as as well.
 The interface for accessing the communication system is given below
 in Figures ~\ref{fig:msg-struct} through ~\ref{fig:comm-send-msg}. %%% Problem , does not compile this correctly
 \begin{figure}[!htb]
-\lstset{language=C}
+\lstset{language=C, breaklines=true}
 \begin{lstlisting}[frame=single]
-typedef struct comm_msg_S {
-  int type;         /* Message type identifier */
-  int node;         /* Destination or origin node  
-                       depending on the context */
-  int board;        /* Destination or origin board 
-                       depending on the context */
-  long int len;     /* Payload length */
-  char *payload;    /* Payload data*/  
-} comm_msg_T;
+struct frame{
+	unsigned dst_node:4;		//destination node
+	unsigned dst_board:4;		//destination board
+	unsigned dst_agent:4;		//destination agent
+	frame_id_t frame_id;		//source of a message
+	unsigned frame_length:16;	//length of frame payload in bytes
+	unsigned index:16;		//index for buffering
+	struct frame *next_frame;	//next frame to be sent
+	char *data;			//payload
+};
 \end{lstlisting}
 \caption{Message Structure}
 \label{fig:msg-struct}
 \end{figure}
 
 \begin{figure}[!htb]
-%\lstset{language=C}
+\lstset{language=C}
 \begin{lstlisting}[frame=single]
 /**
-    Function: comm_register 
-              Registers a communication endpoint
-    Returns: Zero if successful
-    Parameters: board
-                Board id
-                node
-                Node id inside a board
+   Function: recv_handler
+             Reassembles a complete frame from received packets
+   Parameters: msg_length	length of the current packet
+               msg_body 	payload of the current packet
  */
-int comm_register(int board, int node);
-\end{lstlisting}
-\caption{Endpoint Registration}
-\label{fig:comm-reg}
-\end{figure}
-
-\begin{figure}[!htb]
-%\lstset{language=C}
-\begin{lstlisting}[frame=single]
-/**
-   Function: comm_set_recvr
-             Sets a callback to process incoming messages
-   Parameters: recvr_callback 
-               Callback function that processes a received message
-   Returns: Zero if successful		  
- */
-int comm_set_recvr(void (*recvr_callback)(comm_msg_T *msg));
+void recv_handler(uint8_t msg_length, uint8_t *msg_body);
 \end{lstlisting}
 \caption{Message Receiving}
 \label{fig:comm-set-recvr}
 \end{figure}
 
 \begin{figure}[!htb]
-%\lstset{language=C}
+\lstset{language=C}
 \begin{lstlisting}[frame=single]
 /** 
-   Function: comm_send_msg
+   Function: send_message
              Sends message over communication interface
-   Parameters: msg 
-               Pointer to message structure; 
-               structure will be copied by function
-               sent_cb 
-               Callback that is called when the message has been sent
-   Returns: Zero if message is accepted for sending 
-            or nonzero if rejected
+   Parameters: frame
+               frame to be sent              
+   Returns: amount of sent packets
 
 */
-int comm_send_msg(comm_msg_T *msg, void (*sent_cb)(int)); 
+uint8_t send_message(frame_t frame);
+
 \end{lstlisting}
 \caption{Message Sending}
 \label{fig:comm-send-msg}
@@ -2414,71 +2409,19 @@ was moved or is the initiatior of the moving, the receving platform writes a 0 t
 whereas the sending platform writes the amount of sent packets to the accumulator of the sending agent. 
 
 
+
+
 \chapter{Validation}
 
 \chapter{Results and future plans}
 
 
 
-
-	%\section{References}
-
-	%\section{Overview}
+\chapter{Conclusion}
 
 
 
-\chapter {Specification}
 
-
-\chapter{Implementation timetable}
-
-Figure \ref{fig:ganttdiag} shows the implementation timetable.
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[scale=0.4]{figures/gantt.png}
-\caption{Gantt Diagram of the Project}
-\label{fig:ganttdiag}
-\end{figure}
-
-
-\begin{comment}
-Interpreter for agent language:
-\begin{itemize}
-\item Agent language lexical analysis
-\item Interpreter for agent language
-%\item Agent language semantic analysis
-\end{itemize}
-
-
-Compiler for agent language:
-\begin{itemize}
-\item Agent language lexical analysis
-\item Agent language syntax analysis
-\item Agent language semantic analysis
-\end{itemize}
-}
-
-Platform for mobile agents:
-
-\begin{itemize}
-\item Agent structure representation
-\item Implementation of Agent structure
-\item Implementation of Agent functions
-\item Implementation of drivers
-\item Implementation of scheduler
-\item Implementation of communication protocols
-
-\end{itemize}
-
-
-%\chapter{Appendix 1}
-%\chapter{Appendix 2}
-
-%	\section{Standards}
-%	\section{Training}
-\end{comment}
-% add other chapters and sections to suit
 
 	\bibliography{protocol}
 
