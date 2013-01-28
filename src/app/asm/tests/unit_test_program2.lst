@@ -1,0 +1,10 @@
+		0100000000100000		ldl		reg_0		32				
+LABEL0		0100000100110110		ldl		reg_1		54				
+		0000110100100000		mv		reg_2		reg_0				
+		0000001100100001		add		reg_2		reg_1				
+		0000110100110000		mv		reg_3		reg_0				
+		0000101000110001		compare		reg_3		reg_1				
+		1111001111111010		jmpgr		l						LABEL0
+		0111000100000000		setservice		bargraph		reg_1				
+		1111001000000000		clone								
+		1111010000000000		die								

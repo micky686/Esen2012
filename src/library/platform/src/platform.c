@@ -13,6 +13,18 @@
 #include "util/delay.h"
 
 volatile platform_t platform;
+volatile uint8_t button0_pressed;
+volatile uint8_t button1_pressed;
+
+uint8_t service_locations[MAX_SERVICE][MAX_NODES] = {
+			{NODE0_ID, NODE1_ID, INVALID, INVALID},		 //BARGRAPH
+			{NODE1_ID, INVALID, INVALID, INVALID}, 	 //THERMOMETER
+			{NODE1_ID, INVALID, INVALID, INVALID},	 //COOLER
+			{NODE1_ID, INVALID, INVALID, INVALID},   //HEATER
+			{NODE3_ID, INVALID, INVALID, INVALID},   //LED
+			{NODE2_ID, INVALID, INVALID, INVALID},   //LCD
+			{NODE0_ID, NODE1_ID, NODE2_ID, NODE3_ID}			 //BUTTONS
+};
 
 void init_drivers(void){
 
@@ -22,7 +34,7 @@ void init_drivers(void){
 #endif
 
 #ifdef PROTOCOL0
-	protocol_init(platform_config.platform_id, recv_handler);
+	 protocol_init(platform.id, recv_handler);
 #endif
 
 #ifdef TIMER2
@@ -33,15 +45,9 @@ void init_drivers(void){
 
 #endif
 
-
-#ifdef COOLER
-	init_cooler();
-
-#endif
-
-
 #ifdef HEATER
 	heater_init();
+	platform.drivers.heater_set = heater_set;
 	//heater_set(50);
 #endif
 
@@ -61,14 +67,45 @@ void init_drivers(void){
 
 
 #ifdef PUSHBUTTON
+	//platform.drivers.button0_callback = buttoncallback0;
+	//platform.drivers.button1_callback = buttoncallback1;
+	//init_pushbutton0(platform.drivers.button0_callback);
+	//init_pushbutton1(platform.drivers.button1_callback);
+	button0_pressed = 0;
+	button1_pressed = 0;
+#endif
 
+#ifdef COOLER
+	init_cooler();
+	platform.drivers.set_cooler = set_cooler;
+	//set_cooler(50);
 #endif
 
 #ifdef LEDMATRIX
 	init_dotmatrix();
 	platform.drivers.dotmatrix_send = dotmatrix_send;
+	//platform.drivers.dotmatrix_send=dotmatrix_send_scrolling_text;
+	//dotmatrix_enable_scrolling();
+
+	//char buf[] = "ABCD";
+	//dotmatrix_send(buf);
+	//platform.drivers.dotmatrix_send(buf);
+	/*uint16_t val = 0xff;
+	dotmatrix_send_int(val, 0);
+	dotmatrix_send_comma(1);
+	dotmatrix_send_int(val, 3);*/
+
 #endif
 
+}
+
+
+void buttoncallback0(void){
+	button0_pressed = 1;
+}
+
+void buttoncallback1(void){
+	button1_pressed = 1;
 }
 
 void init_agents(){
@@ -111,7 +148,7 @@ void reset_agent(uint8_t id){
 	agent->id = 0;
 	agent->status = stopped;
 	agent->priority = 0;
-	memset(agent->regs, 0, sizeof(agent->regs));
+	memset(agent->regs, 0, REG_MAX * sizeof(int16_t));
 
 	if (agent->reg_str != 0){
 
@@ -145,15 +182,16 @@ void reset_agent(uint8_t id){
 	agent->pc = 0;
 	agent->status_flag = 0;
 
-	if (agent->rec_msg_id != 0){
+/*	if (agent->rec_msg_id != 0){
 		free(agent->rec_msg_id);
 		agent->rec_msg_id = 0;
 
 	}
-
+*/
 	if (agent->rec_msg_content != 0) {
 		free(agent->rec_msg_content);
 		agent->rec_msg_content = 0;
+		agent->rec_msg_len = 0;
 	}
 
 }
@@ -196,6 +234,11 @@ uint8_t clone_agent(agent_t *agent){
 			memcpy(platform.agents[i].regs, agent->regs, REG_MAX * sizeof(int16_t));
 			platform.agents[i].regs[REG_ACC] = 0;
 			result = 0;
+
+			if ( agent->rec_msg_content!= NULL){
+				memcpy(platform.agents[i].rec_msg_content, agent->rec_msg_content, agent->rec_msg_len);
+				platform.agents[i].rec_msg_len = agent->rec_msg_len;
+			}
 			break;
 		}
 	}
@@ -209,19 +252,37 @@ uint8_t clone_agent(agent_t *agent){
  */
 void platform_init(void) {
 
+#ifdef NODE0
+	platform.id = NODE0_ID;
+#elif NODE1
+	platform.id = NODE1_ID;
+#elif NODE2
+	platform.id = NODE2_ID;
+#elif NODE3
+	platform.id = NODE3_ID;
+#endif
+
 	init_drivers();
 	init_agents();
+	sei();
 }
 
 void run_platform(void) {
 
 	schedule_next();
-	_delay_ms(1000);
+	//_delay_ms(1000);
 }
 
 int main(void) {
 
+
 	platform_init();
+
+	/*if (platform.drivers.dotmatrix_send != NULL){
+		char a1[] = "3";
+		platform.drivers.dotmatrix_send(a1);
+		_delay_ms(2000);
+	}*/
 
 	while (1){
 		run_platform();

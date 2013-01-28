@@ -20,11 +20,21 @@
 #include "DISPLAY.h"
 #include "protocol0.h"
 #include "ledmatrix.h"
+#include "pushbutton.h"
 
 #define AGENT_MAX 4
 #define OPCODE_LEN 16
 #define STR_REG_MAX 3
-#define REG_MAX 7
+#define REG_MAX 13
+
+#define MAX_SERVICE 7
+#define MAX_NODES 4
+#define INVALID 0xff
+
+#define NODE0_ID 0x04
+#define NODE1_ID 0x03
+#define NODE2_ID 0x02
+#define NODE3_ID 0x01
 
 #define PLATFORM_CONFIGURATION() \
 platform_config_t platform_config =
@@ -55,7 +65,7 @@ typedef struct {
 
 typedef struct {
 	agent_config_t agents_conf[AGENT_MAX];
-	uint8_t platform_id;
+	//uint8_t platform_id;
 	uint8_t board_id;
 	uint8_t frame_id;
 } platform_config_t;
@@ -77,8 +87,8 @@ typedef struct {
 	void (*DISPLAY_draw_char)(uint8_t x, uint8_t y, uint16_t font_color, uint16_t bg_color, uint8_t pixel_size, char c);
 	void (*heater_set)(uint8_t duty_cycle);
 
-	void (*init_pushbutton0)(void(*callback)(void));
-	void (*init_pushbutton1)(void(*callback)(void));
+	void(*button0_callback)(void);
+	void(*button1_callback)(void);
 
 	uint16_t (*therm_get_temp)(uint8_t name);
 
@@ -115,17 +125,22 @@ typedef struct {
 
 	char** reg_str;
 
-	char* rec_msg_id;
-	char* rec_msg_content;
+	volatile char* rec_msg_content;
+	volatile uint16_t rec_msg_len;
 
+	volatile uint8_t sem;
 } agent_t;
 
 typedef struct {
-	agent_t agents[4];
+	volatile agent_t agents[4];
 	drivers_t drivers;
+	uint8_t id;
 } platform_t;
 
 extern volatile platform_t platform;
+extern uint8_t service_locations[MAX_SERVICE][MAX_NODES];
+extern volatile uint8_t button0_pressed;
+extern volatile uint8_t button1_pressed;
 
 void init_drivers(void);
 void init_agents(void);
@@ -133,6 +148,9 @@ void reset_agent(uint8_t id);
 uint8_t clone_agent(agent_t *agent);
 void platform_init(void);
 void run_platform(void);
+
+void buttoncallback0(void);
+void buttoncallback1(void);
 
 
 #endif /* PLATFORM_H_ */

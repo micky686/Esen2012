@@ -1,0 +1,14 @@
+		1111100000000001		sendmsg		reg_0		0		1		
+		1111100000010110		sendmsg		reg_1		1		2		
+		1111100000101011		sendmsg		reg_2		2		3		
+		1111100000111100		sendmsg		reg_3		3		0		
+		1111101000000000		pullmsg		reg_0						
+		1111101000000001		pullmsg		reg_1						
+		1111101000000010		pullmsg		reg_2						
+		1111101000000011		pullmsg		reg_3						
+		1111101000000100		pullmsg		reg_4						
+		1111101000000101		pullmsg		reg_5						
+		1111101000000110		pullmsg		reg_6						
+		1111101000001000		pullmsg		reg_str_0						
+		1111101000001001		pullmsg		reg_str_1						
+		1111101000001010		pullmsg		reg_str_2						

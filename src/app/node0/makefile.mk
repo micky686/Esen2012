@@ -12,7 +12,7 @@ OBJ-M-$(MNAME)-y	+=main
 OBJ-ESEL-$(MNAME)-y	+= 
 
 # put module specific used library modules in here
-OBJ-ESEL-MDEP-$(MNAME)-y += protocol0 timer2 bargraph
+OBJ-ESEL-MDEP-$(MNAME)-y += protocol0 timer2 bargraph pushbutton
 
 # put platform specific used library modules in here
 OBJ-PLATFORM-MDEP-$(MNAME)-y += platform exe_layer scheduler comm_layer

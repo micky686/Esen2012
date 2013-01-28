@@ -1,0 +1,64 @@
+\contentsline {chapter}{\numberline {1}Project Outline}{4}{chapter.1}
+\contentsline {section}{\numberline {1.1}Organization}{4}{section.1.1}
+\contentsline {section}{\numberline {1.2}Project Description}{4}{section.1.2}
+\contentsline {section}{\numberline {1.3}Definitions, Acronyms, and Abbreviations}{4}{section.1.3}
+\contentsline {section}{\numberline {1.4}Background}{5}{section.1.4}
+\contentsline {section}{\numberline {1.5}Workpackages}{5}{section.1.5}
+\contentsline {subsection}{\numberline {1.5.1}WP1 Documentation}{5}{subsection.1.5.1}
+\contentsline {subsubsection}{\numberline {1.5.1.1}Requirements and Specification}{5}{subsubsection.1.5.1.1}
+\contentsline {subsubsection}{\numberline {1.5.1.2}Presentation for Workshop 1}{5}{subsubsection.1.5.1.2}
+\contentsline {subsubsection}{\numberline {1.5.1.3}Presentation for Workshop 2}{5}{subsubsection.1.5.1.3}
+\contentsline {subsubsection}{\numberline {1.5.1.4}Lab protocol}{5}{subsubsection.1.5.1.4}
+\contentsline {subsection}{\numberline {1.5.2}WP2 Adaptation of drivers}{5}{subsection.1.5.2}
+\contentsline {subsection}{\numberline {1.5.3}WP3 Agent language tool}{6}{subsection.1.5.3}
+\contentsline {subsection}{\numberline {1.5.4}WP4 Platform Communication}{6}{subsection.1.5.4}
+\contentsline {subsection}{\numberline {1.5.5}WP5 Platform}{7}{subsection.1.5.5}
+\contentsline {section}{\numberline {1.6}Milestones and timeplan}{7}{section.1.6}
+\contentsline {section}{\numberline {1.7}Gantt diagramm}{7}{section.1.7}
+\contentsline {chapter}{\numberline {2}Requirements}{8}{chapter.2}
+\contentsline {section}{\numberline {2.1}User roles}{8}{section.2.1}
+\contentsline {section}{\numberline {2.2}Global Requirements:}{8}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Application Development requirements:}{8}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Application Consumers requirements:}{9}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}Application Designers requirements:}{9}{subsection.2.2.3}
+\contentsline {section}{\numberline {2.3}Non-functional requirements}{9}{section.2.3}
+\contentsline {section}{\numberline {2.4}Low-Level Requirements}{9}{section.2.4}
+\contentsline {subsection}{\numberline {2.4.1}Communication protocol}{9}{subsection.2.4.1}
+\contentsline {subsection}{\numberline {2.4.2}Drivers}{10}{subsection.2.4.2}
+\contentsline {chapter}{\numberline {3}Specification and design}{11}{chapter.3}
+\contentsline {section}{\numberline {3.1}General}{11}{section.3.1}
+\contentsline {section}{\numberline {3.2}Virtualization Platform}{11}{section.3.2}
+\contentsline {section}{\numberline {3.3}Execution Layer}{12}{section.3.3}
+\contentsline {section}{\numberline {3.4}Hardware Services}{13}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Device drivers}{15}{subsection.3.4.1}
+\contentsline {subsubsection}{\numberline {3.4.1.1}Cooler}{15}{subsubsection.3.4.1.1}
+\contentsline {subsubsection}{\numberline {3.4.1.2}Heater}{15}{subsubsection.3.4.1.2}
+\contentsline {subsubsection}{\numberline {3.4.1.3}Temperature sensor}{15}{subsubsection.3.4.1.3}
+\contentsline {subsubsection}{\numberline {3.4.1.4}Led matrix}{15}{subsubsection.3.4.1.4}
+\contentsline {subsubsection}{\numberline {3.4.1.5}Bargraph}{15}{subsubsection.3.4.1.5}
+\contentsline {subsubsection}{\numberline {3.4.1.6}TFT display}{16}{subsubsection.3.4.1.6}
+\contentsline {section}{\numberline {3.5}Communication Layer}{16}{section.3.5}
+\contentsline {section}{\numberline {3.6}Scheduler}{16}{section.3.6}
+\contentsline {section}{\numberline {3.7}Agent language}{17}{section.3.7}
+\contentsline {subsection}{\numberline {3.7.1}Agent language (Assembler level)}{17}{subsection.3.7.1}
+\contentsline {subsubsection}{\numberline {3.7.1.1}Arithmetic operations of agent assembly language}{18}{subsubsection.3.7.1.1}
+\contentsline {subsubsection}{\numberline {3.7.1.2}Control flow operations and comparison in agent assembly language}{20}{subsubsection.3.7.1.2}
+\contentsline {subsubsection}{\numberline {3.7.1.3}Code mobility operations of agent assembly language}{21}{subsubsection.3.7.1.3}
+\contentsline {subsubsection}{\numberline {3.7.1.4}Message exchange}{22}{subsubsection.3.7.1.4}
+\contentsline {subsubsection}{\numberline {3.7.1.5}Store, move and wait operations}{23}{subsubsection.3.7.1.5}
+\contentsline {subsubsection}{\numberline {3.7.1.6}Access to hardware services}{24}{subsubsection.3.7.1.6}
+\contentsline {section}{\numberline {3.8}Communication Architecture}{25}{section.3.8}
+\contentsline {subsection}{\numberline {3.8.1}Hardware}{25}{subsection.3.8.1}
+\contentsline {subsection}{\numberline {3.8.2}Code Mobility}{25}{subsection.3.8.2}
+\contentsline {subsection}{\numberline {3.8.3}Addressing Scheme}{25}{subsection.3.8.3}
+\contentsline {subsection}{\numberline {3.8.4}Communication Interface}{25}{subsection.3.8.4}
+\contentsline {chapter}{\numberline {4}Implementation}{27}{chapter.4}
+\contentsline {section}{\numberline {4.1}Platform}{27}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Initialization}{27}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Execution}{28}{subsection.4.1.2}
+\contentsline {subsection}{\numberline {4.1.3}Communication}{28}{subsection.4.1.3}
+\contentsline {subsection}{\numberline {4.1.4}Code Mobility}{31}{subsection.4.1.4}
+\contentsline {chapter}{\numberline {5}Validation}{33}{chapter.5}
+\contentsline {chapter}{\numberline {6}Results and future plans}{34}{chapter.6}
+\contentsline {chapter}{\numberline {7}Specification}{35}{chapter.7}
+\contentsline {chapter}{\numberline {8}Implementation timetable}{36}{chapter.8}

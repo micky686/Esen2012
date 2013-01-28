@@ -23,7 +23,7 @@ uint8_t execute_agent(agent_t *agent, uint8_t opcode_size) {
 
 		//4. increase program counter
 		if (agent->status == ready) {
-			if (agent->pc < agent->code_len - 1) {
+			if (agent->pc < agent->code_len - 1 || agent->pc == 0xffff) {
 				agent->pc += 1;
 			} else {
 				agent->status = stopped;
@@ -275,6 +275,8 @@ opcode_t decode_opcode(uint16_t opcode) {
 void execute_opcode(agent_t *agent, opcode_t opcode) {
 	uint16_t tmp = 0;
 	int16_t sgn_tmp = 0;
+	//frame_t frame;
+
 
 	switch (opcode.id) {
 	case SETSERVICE:
@@ -291,9 +293,26 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 			break;
 
 		case SERVICE_LED:
-			if (opcode.reg1 > REG_MAX) {
-				opcode.reg1 = opcode.reg1 & REG_STR_MASK;
-				platform.drivers.dotmatrix_send(agent->reg_str[opcode.reg1]);
+			if (platform.drivers.dotmatrix_send != NULL) {
+				_delay_ms(50);
+				if (opcode.reg1 >= REG_MAX) {
+					opcode.reg1 = opcode.reg1 - REG_MAX;
+					if (agent->regstr_len[opcode.reg1] != 0) {
+						platform.drivers.dotmatrix_send(agent->reg_str[opcode.reg1]);
+					}
+				}
+			}
+			break;
+
+		case SERVICE_COOLER:
+			if (platform.drivers.set_cooler != NULL){
+				platform.drivers.set_cooler((agent->regs[opcode.reg1] & 0x00ff));
+			}
+			break;
+
+		case SERVICE_HEATER:
+			if (platform.drivers.heater_set != NULL){
+				platform.drivers.heater_set((agent->regs[opcode.reg1] & 0x00ff));
 			}
 			break;
 
@@ -303,22 +322,45 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 		}
 		break;
 		case GETSERVICE:
-			printf("getservice service_id: %d\n", opcode.value);
+			PRINTF("getservice service_id: %d\n", opcode.value);
 			switch (opcode.value){
 			case SERVICE_THERMOMETER:
+				//_delay_ms(5000);
 				if (platform.drivers.therm_get_temp != NULL){
 
-					tmp = (platform.drivers.therm_get_temp(THERMOMETER1) >>3);
-					tmp += (platform.drivers.therm_get_temp(THERMOMETER2) >>3);
-					tmp += (platform.drivers.therm_get_temp(THERMOMETER3) >>3);
+					tmp = (platform.drivers.therm_get_temp(THERMOMETER1) >>5);
+					tmp += (platform.drivers.therm_get_temp(THERMOMETER2) >>5);
+					tmp += (platform.drivers.therm_get_temp(THERMOMETER3) >>5);
 					tmp /= 3;
 					agent->regs[REG_ACC] = tmp;
 
+					agent->regstr_len[0] = 0;
+					free(agent->reg_str[0]);
+
+					agent->reg_str[0] = malloc (6);
+					agent->regstr_len[0] = 6;
+
+					uint16_t after = (tmp & 0x0007);
+					after *= 125;
+
+					uint16_t before = ((tmp & 0xfff8) >> 3);
+					sprintf(agent->reg_str[REG_ACC], "%d.%d", before, after);
 
 				} else {
 					SET_ERROR(agent->status_flag, ERROR_NO_SERVICE_PRESENT);
 				}
 				break;
+			case SERVICE_BUTTON0:
+				{
+					agent->regs[REG_ACC] = button0_pressed;
+					button0_pressed = 0;
+				}
+				break;
+			case SERVICE_BUTTON1:
+				{
+					agent->regs[REG_ACC] = button1_pressed;
+					button1_pressed = 0;
+				}
 			default:
 				break;
 			}
@@ -332,17 +374,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case ADD_R:
 		PRINTF("add reg_d: %d , reg_r: %d\n", opcode.reg1, opcode.reg2);
-		tmp = (~(agent->regs[opcode.reg1] ^ agent->regs[opcode.reg2] ) & 0x8000);
 		agent->regs[REG_ACC] = agent->regs[opcode.reg1] + agent->regs[opcode.reg2];
-		if (tmp != 0){
-			if (opcode.reg1 != REG_ACC){
-				agent->status_flag = (((agent->regs[REG_ACC] ^ agent->regs[opcode.reg1]) & 0x8000) << 24);
-			} else {
-				agent->status_flag = (((agent->regs[REG_ACC] ^ agent->regs[opcode.reg2]) & 0x8000) << 24);
-			}
-		} else {
-			agent->status_flag &= ~OVERFLOW_MASK;
-		}
 		break;
 
 	case ADD_V:
@@ -427,7 +459,38 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case MOVE:
 		PRINTF("move service:%d\n", opcode.value);
-		//TODO
+		{
+			// find dst
+			uint8_t i;
+			uint8_t dst_node;
+
+			for (i=0; i < MAX_NODES; i++){
+				if (service_locations[opcode.value][i] != INVALID){
+					if (dst_node != platform.id){
+						dst_node = service_locations[opcode.value][i];
+						break;
+					}
+				}
+			}
+
+			//prepare frame
+			frame_t frame;
+			frame.dst_node = dst_node;
+			frame.dst_agent = 0;
+			frame.frame_id.id = platform_config.frame_id;
+			frame.frame_id.src_board = platform_config.board_id;
+			frame.dst_board = platform_config.board_id;
+			frame.frame_id.src_node = platform.id;
+			frame.index = 0;
+
+			uint16_t len;
+			frame.data = serialize_agent(*agent, &len);
+			frame.frame_length = len;
+
+			platform_config.frame_id += 1;
+			agent->regs[REG_ACC] = send_message(frame);
+			free(frame.data);
+		}
 		break;
 
 	case CLONE:
@@ -442,44 +505,55 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case SEND:
 		PRINTF("sendmsg reg:%d, agent:%d, platform:%d\n", opcode.reg1, opcode.agent_id, opcode.node_id);
-		frame_t frame;
-		frame.dst_node = opcode.node_id;
-		frame.dst_agent = opcode.agent_id;
-		frame.frame_id.id = platform_config.frame_id;
-		frame.frame_id.src_board = platform_config.board_id;
-		frame.dst_board = platform_config.board_id;
-		frame.frame_id.src_node = platform_config.platform_id;
-		frame.index = 0;
-		if (opcode.reg1 > REG_MAX) {
-			opcode.reg1 = opcode.reg1 & REG_STR_MASK;
-			frame.frame_length = agent->regstr_len[opcode.reg1];
-			frame.data = (char*) malloc (frame.frame_length);
-			memcpy(frame.data, agent->reg_str[opcode.reg1], frame.frame_length);
-		} else {
-			frame.frame_length = sizeof(int16_t);
-			frame.data = (char*) malloc (frame.frame_length);
-			memcpy(frame.data, &(agent->regs[opcode.reg1]), frame.frame_length);
+		{
+			frame_t frame;
+			frame.dst_node = opcode.node_id;
+			frame.dst_agent = opcode.agent_id;
+			frame.frame_id.id = platform_config.frame_id;
+			frame.frame_id.src_board = platform_config.board_id;
+			frame.dst_board = platform_config.board_id;
+			frame.frame_id.src_node = platform.id;
+			frame.index = 0;
+			if (opcode.reg1 >= REG_MAX) {
+				opcode.reg1 = opcode.reg1 - REG_MAX;
+				frame.frame_length = agent->regstr_len[opcode.reg1];
+				frame.data = (char*) malloc (frame.frame_length);
+				memcpy(frame.data, agent->reg_str[opcode.reg1], frame.frame_length);
+			} else {
+				frame.frame_length = sizeof(int16_t);
+				frame.data = (char*) malloc (frame.frame_length);
+				memcpy(frame.data, &(agent->regs[opcode.reg1]), frame.frame_length);
+			}
+			platform_config.frame_id += 1;
+			agent->regs[REG_ACC] = send_message(frame);
+			free(frame.data);
 		}
-		platform_config.frame_id += 1;
-		agent->regs[REG_ACC] = send_message(frame);
-		free(frame.data);
 		break;
 
 	case RECV:
 		PRINTF("pullmsg reg:%d\n", opcode.reg1);
-		if (agent->rec_msg_content != 0){
-			if (opcode.reg1 > REG_MAX) {
-				opcode.reg1 = opcode.reg1 & REG_STR_MASK;
-				memcpy(agent->reg_str[opcode.reg1], agent->rec_msg_content, strlen(agent->rec_msg_content));
-				agent->regstr_len[opcode.reg1] = strlen(agent->rec_msg_content);
+		if (agent->rec_msg_len != 0){
+
+			if (opcode.reg1 >= REG_MAX) {
+				opcode.reg1 = opcode.reg1 - REG_MAX;
+
+				if (agent->regstr_len[opcode.reg1] != 0){
+					free(agent->reg_str[opcode.reg1]);
+				}
+
+				agent->reg_str[opcode.reg1] = agent->rec_msg_content;
+				agent->regstr_len[opcode.reg1] = agent->rec_msg_len;
+
 			} else {
-				agent->regs[opcode.reg1] = 0;
-				agent->regs[opcode.reg1] = agent->rec_msg_content[0] << 8;
-				agent->regs[opcode.reg1] |= agent->rec_msg_content[1];
+				agent->regs[opcode.reg1] = agent->rec_msg_content[0];
+				free(agent->rec_msg_content);
+				agent->rec_msg_len = 0;
 			}
-			free(agent->rec_msg_content);
+
 			agent->rec_msg_content = 0;
+			agent->rec_msg_len = 0;
 			agent->regs[REG_ACC] = 0;
+
 		} else {
 			agent->regs[REG_ACC] = -1;
 		}
@@ -496,7 +570,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case STORE_C:
 		PRINTF("storecr reg_str:%d, char:%d\n", opcode.reg1, opcode.value);
-		opcode.reg1 = (opcode.reg1 & REG_STR_MASK);
+		opcode.reg1 = (opcode.reg1 - REG_MAX);
 		agent->reg_str[opcode.reg1] = (char*) realloc (agent->reg_str[opcode.reg1], agent->regstr_len[opcode.reg1] + 1);
 		agent->reg_str[opcode.reg1][agent->regstr_len[opcode.reg1]] = opcode.value;
 		agent->regstr_len[opcode.reg1]+= 1;
@@ -504,12 +578,34 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case MV:
 		PRINTF("mv reg_d:%d, reg_r:%d\n", opcode.reg1, opcode.reg2);
-		agent->regs[opcode.reg1] = agent->regs[opcode.reg2];
+
+		if (opcode.reg1 >= REG_MAX && opcode.reg2 >= REG_MAX){
+			//both str
+			opcode.reg1 = opcode.reg1 - REG_MAX;
+			opcode.reg2 = opcode.reg2 - REG_MAX;
+			realloc(agent->reg_str[opcode.reg1], agent->regstr_len[opcode.reg2]);
+			memcpy(agent->reg_str[opcode.reg1], agent->reg_str[opcode.reg2], agent->regstr_len[opcode.reg2]);
+			agent->regstr_len[opcode.reg1] = agent->regstr_len[opcode.reg2];
+
+		} else if (opcode.reg1 >= REG_MAX) {
+			//dst str
+			opcode.reg1 = (opcode.reg1 - REG_MAX);
+			agent->reg_str[opcode.reg1] = (char*) realloc (agent->reg_str[opcode.reg1], agent->regstr_len[opcode.reg1] + 1);
+			agent->reg_str[opcode.reg1][agent->regstr_len[opcode.reg1]] = agent->regs[opcode.reg2] & 0x00ff;
+			agent->regstr_len[opcode.reg1]+= 1;
+
+		} else if (opcode.reg2 >= REG_MAX) {
+			//src str
+			opcode.reg2 = (opcode.reg2 - REG_MAX);
+			agent->regs[opcode.reg1] = agent->reg_str[opcode.reg2][0];
+		} else {
+			agent->regs[opcode.reg1] = agent->regs[opcode.reg2];
+		}
 		break;
 
 	case WAIT:
 		PRINTF("wait delay_ms:%d\n", opcode.value);
-		//TODO
+		_delay_ms(opcode.value*10);
 		break;
 
 	case PRIO:
@@ -519,7 +615,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 	case CLEAR:
 		PRINTF("clr reg_str:%d\n", opcode.reg1);
-		opcode.reg1 = (opcode.reg1 & REG_STR_MASK);
+		opcode.reg1 = (opcode.reg1 - REG_MAX);
 		memset(agent->reg_str[opcode.reg1], 0, agent->regstr_len[opcode.reg1]);
 		agent->reg_str[opcode.reg1] = (char*)realloc(agent->reg_str[opcode.reg1], 1);
 		agent->regstr_len[opcode.reg1] = 0;

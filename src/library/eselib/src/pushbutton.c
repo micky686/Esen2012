@@ -46,7 +46,7 @@ void (*pushbuttoncallback1)(void);
 /*externen Interrupts wieder aktiviert                       */
 /*************************************************************/
 
-SIGNAL(TIMER2_COMP_vect){
+SIGNAL(TIMER1_COMP_vect){
   static volatile uint16_t count; 
   if (count < TIMER2_OCI_COUNT) {
     count ++;
