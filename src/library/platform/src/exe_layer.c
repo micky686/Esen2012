@@ -394,6 +394,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 					agent->regs[REG_ACC] = button1_pressed;
 					button1_pressed = 0;
 				}
+				break;
 			default:
 				break;
 			}
@@ -656,6 +657,14 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 		agent->reg_str[opcode.reg1] = (char*)realloc(agent->reg_str[opcode.reg1], 1);
 		agent->reg_str[opcode.reg1][0] = '\0';
 		agent->regstr_len[opcode.reg1] = 0;
+		break;
+
+	case CONV:
+		PRINTF("convert reg_str:%d, reg_%d\n", opcode.reg1, opcode.reg2);
+		opcode.reg1 = (opcode.reg1 - REG_MAX);
+		agent->regstr_len[opcode.reg1] = 9;
+		agent->reg_str[opcode.reg1] = (char*)realloc(agent->reg_str[opcode.reg1], 9+1);
+		sprintf(agent->reg_str[opcode.reg1], "%d.000", agent->regs[opcode.reg2]);
 		break;
 
 

@@ -38,6 +38,7 @@
 #define WAIT    24
 #define PRIO    25
 #define CLEAR	26
+#define CONV	27
 
 //services
 #define SERVICE_BARGRAPH 0

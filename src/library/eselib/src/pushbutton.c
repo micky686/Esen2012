@@ -11,20 +11,20 @@
 #include  <avr/interrupt.h>
 #include "pushbutton.h"
 
-#define TIMER2_OCI_COUNT 10 
+#define TIMER0_OCI_COUNT 10
 
 // disable pushbutton interrupts and start timer
 #define DEBOUNCE \
   EIMSK &= ~((1<<INT5)|(1<<INT6)); \
-  TCCR2 |= ((1<<CS22)|(1<<CS20)); \
-  TCCR2 &= ~(1<<CS21); \
+  TCCR0 |= ((1<<CS02)|(1<<CS01) |(1<<CS00)); \
+  //TCCR0 &= ~(1<<CS01); \
 
 // configure timer to CTC mode
 #define TIMER_INIT \
-  TCCR2 |= (1<<WGM21); \
-  TCCR2 &= ~(1<<WGM20); \
-  OCR2 = 0xff; \
-  TIMSK |= (1<<OCIE2);
+  TCCR0 |= (1<<WGM01); \
+  TCCR0 &= ~(1<<WGM00); \
+  OCR0 = 0xff; \
+  TIMSK |= (1<<OCIE0);
 
 /**************************************************************/
 /*Prozedur: void (*pushbuttoncallback0)(void): Rueckruffunktion*/
@@ -46,13 +46,13 @@ void (*pushbuttoncallback1)(void);
 /*externen Interrupts wieder aktiviert                       */
 /*************************************************************/
 
-SIGNAL(TIMER1_COMP_vect){
+SIGNAL(TIMER0_COMP_vect){
   static volatile uint16_t count; 
-  if (count < TIMER2_OCI_COUNT) {
+  if (count < TIMER0_OCI_COUNT) {
     count ++;
   } else {
     count = 0;
-    TCCR2 &= ~((1<<CS22)|(1<<CS21)|(1<<CS20));  // stop timer
+    TCCR0 &= ~((1<<CS02)|(1<<CS01)|(1<<CS00));  // stop timer
     EIMSK |= ((1<<INT5)|(1<<INT6));  // enable pushbutton interrupts
   }
 }
