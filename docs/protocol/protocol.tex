@@ -31,7 +31,6 @@
     citecolor=black,       % color of links to bibliography
     filecolor=black,        % color of file links
     urlcolor=purple,        % color of external links
-%    linktoc=page            % only page is linked
 }
 \setcounter{secnumdepth}{3}
 \def\myversion{1.0 }
@@ -45,8 +44,6 @@
 Code mobility in \\Networked Embedded System\\
 \vspace{1cm}
 \LARGE{NES\\}
-%\vspace{0.5cm}
-%\LARGE{Version \myversion approved\\}
 \vspace{1cm}
 Group 4\\
 \vspace{1cm}
@@ -603,15 +600,11 @@ typedef struct {
 		uint16_t rgb, DisplayObject_t object);
 	
 	void (*DISPLAY_drawBorder)(void);
-	
-	uint8_t (*DISPLAY_drawPoints)(uint8_t player_id, 
-		uint8_t points);
+	void (*DISPLAY_string)(uint8_t x, uint8_t y, uint16_t font_color,
+		uint16_t bg_color, uint8_t pixel_size, char *string)
 
 	void (*heater_init)(void);
 	void (*heater_set)(uint8_t duty_cycle);
-
-	void (*init_pushbutton0)(void (*callback)(void));
-	void (*init_pushbutton1)(void (*callback)(void));
 
 	void (*therm_init)(void);
 	int16_t (*therm_get_temp)(uint8_t name);
@@ -732,7 +725,6 @@ The size of the font could be changed by setting the size of the basic drawing p
 \end{itemize}
 
 
-
 \section{Communication Layer}
 
 The agents should be able to communicate with other agents on the same node or on the same board. Therefore the agent 
@@ -800,17 +792,44 @@ As an agent can reproduce it self to another node or board or clone itself withi
 list requires adaptation as soon as new agent is deployed on a platform. Whenever a given platform is the destination 
 end point of a reproduction respectively cloning operation the scheduler needs to update its scheduling list before proceeding with further executions.
 
+
+
 \section{Agent language}
 
 \subsection{Agent language (Assembler level)}
-\noindent
-To develop a mobile agent \textit{Agent language} will be used. Language is tied to agent internal structure and support necessary operation for code mobility and message exchange. While writing the program for agent user should not be aware of hardware services presented on a given platform, but have common knowledge about all available services and what operations are allowed to do with the services (have list of services and available operations). It is the responsibility of the platform to provide required service to the agent (perform measurement, IO operation) or to manifest an error if the service is not available on the given platform. All current variables are allowed to store only in registers of agent structure (Fig. ~\ref{agent}).
+To develop a mobile agent \textit{Agent language} will be used.
+Language is tied to agent internal structure and support necessary operation for code mobility and message exchange.
+While writing the program for agent user should not be aware of hardware services presented on a given platform, 
+but have common knowledge about all available services and what operations are allowed to do with the services
+(have list of services and available operations).
 
 
-\noindent
-The language supports the following groups of operations: arithmetic, control flow, code mobility, message exchange , access to hardware services.
+It is the responsibility of the platform to provide required service to the agent (perform measurement, IO operation)
+or to manifest an error if the service is not available on the given platform.
+All current variables are allowed to store only in registers of agent structure (Fig. ~\ref{agent}).
 
 
+We propose to use the following principle: every opcode should be 16 bits long,
+that will lead to more simple procedure during decoding of the executable on the platform side.
+Another principle is that \texttt{reg_0} is used as \texttt{accumulator}: the results of all computations,
+comparisons an  messages received by the agent will be put to this register.
+This will lead to more compact code on the platform side.
+
+
+The language supports the following groups of operations: arithmetic, control flow, code mobility, message exchange, access to hardware services.
+Every agent has 16 registers in its internal structure: 13 for holding 16-bit numerical values and 3 for holding character strings.
+
+To achieve the following twofold goal: keep the length of the every opcode 16 bits as well provide
+a capability to directly write values to the 16-bit registers we propose to split 
+every 16-bit register into \texttt{high} and \texttt{low} parts,
+that will be used in \texttt{ldl} and \texttt{ldh} commands.
+Pictorially we represent it as follows.
+
+
+The following table reporesents registers of agent structure as well as their corresponding addresses.
+
+
+\vspace{0.2in}
 \begin{tabular}{|l|c|l|c|}
 \hline
 \multicolumn{4}{|c|}{\textbf{Addressing registers of agent structure}}\\
