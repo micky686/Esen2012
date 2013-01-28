@@ -51,6 +51,8 @@
 
 #define ERROR_NO_SERVICE_PRESENT 1
 
+#define MAX_LCD_ROWS 8
+
 #define N1_MASK 0xF000
 #define N2_MASK 0x0F00
 #define N3_MASK 0x00F0
