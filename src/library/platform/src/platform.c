@@ -54,10 +54,12 @@ void init_drivers(void){
 
 #ifdef DISPLAY
 	DISPLAY_init();
-	DISPLAY_string(20, 150, RGB(30,238,30), RGB(0,0,0), 2, "Agents          :");
+	platform.drivers.DISPLAY_string = DISPLAY_string;
+	platform.drivers.DISPLAY_drawBg = DISPLAY_drawBg;
+	/*DISPLAY_string(20, 150, RGB(30,238,30), RGB(0,0,0), 2, "Agents          :");
 	DISPLAY_string(20, 130, RGB(30,238,30), RGB(0,0,0), 2, "Agent message   :");
 	DISPLAY_string(20, 110, RGB(30,238,30), RGB(0,0,0), 2, "Agent state     :");
-	DISPLAY_string(20, 110, RGB(30,238,30), RGB(0,0,0), 2, "Platform status :");
+	DISPLAY_string(20, 110, RGB(30,238,30), RGB(0,0,0), 2, "Platform status :");*/
 #endif
 
 #ifdef THERMOMETER
@@ -67,10 +69,10 @@ void init_drivers(void){
 
 
 #ifdef PUSHBUTTON
-	//platform.drivers.button0_callback = buttoncallback0;
-	//platform.drivers.button1_callback = buttoncallback1;
-	//init_pushbutton0(platform.drivers.button0_callback);
-	//init_pushbutton1(platform.drivers.button1_callback);
+	platform.drivers.button0_callback = buttoncallback0;
+	platform.drivers.button1_callback = buttoncallback1;
+	init_pushbutton0(platform.drivers.button0_callback);
+	init_pushbutton1(platform.drivers.button1_callback);
 	button0_pressed = 0;
 	button1_pressed = 0;
 #endif

@@ -316,6 +316,39 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 			}
 			break;
 
+		case SERVICE_LCD:
+			{
+
+				if (platform.drivers.DISPLAY_string != NULL){
+					//ldl reg_0, row_nr 0 clear
+					//setservice lcd, str_reg_0
+					uint8_t row;
+					if (agent->regs[REG_ACC] == 0){
+						//clear string
+						uint8_t i;
+						for (i = 1; i < MAX_LCD_ROWS + 1; i++){
+							row = 150 - (( i - 1 ) * 20) ;
+							platform.drivers.DISPLAY_string(20, row, RGB(30,238,30), RGB(0,0,0), 2, "                    ");
+						}
+					} else {
+						if (agent->regs[REG_ACC] < MAX_LCD_ROWS + 1) {
+							//calculate row
+							row = 150 - (( agent->regs[REG_ACC] - 1 ) * 20) ;
+							if (opcode.reg1 >= REG_MAX) {
+								opcode.reg1 = opcode.reg1 - REG_MAX;
+								platform.drivers.DISPLAY_string(20, row, RGB(30,238,30), RGB(0,0,0), 2, agent->reg_str[opcode.reg1]);
+							} else {
+								char buf[] = "          ";
+								sprintf(buf,  "%d", agent->regs[opcode.reg1]);
+								platform.drivers.DISPLAY_string(20, row, RGB(30,238,30), RGB(0,0,0), 2, buf);
+							}
+						}
+
+					}
+
+				}
+			}
+			break;
 		default:
 			break;
 
@@ -344,7 +377,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 					after *= 125;
 
 					uint16_t before = ((tmp & 0xfff8) >> 3);
-					sprintf(agent->reg_str[REG_ACC], "%d.%d", before, after);
+					sprintf(agent->reg_str[REG_ACC], "%d.%03d", before, after);
 
 				} else {
 					SET_ERROR(agent->status_flag, ERROR_NO_SERVICE_PRESENT);
@@ -361,6 +394,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 					agent->regs[REG_ACC] = button1_pressed;
 					button1_pressed = 0;
 				}
+				break;
 			default:
 				break;
 			}
@@ -573,6 +607,8 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 		opcode.reg1 = (opcode.reg1 - REG_MAX);
 		agent->reg_str[opcode.reg1] = (char*) realloc (agent->reg_str[opcode.reg1], agent->regstr_len[opcode.reg1] + 1);
 		agent->reg_str[opcode.reg1][agent->regstr_len[opcode.reg1]] = opcode.value;
+		agent->reg_str[opcode.reg1][agent->regstr_len[opcode.reg1]+1] = '\0';
+
 		agent->regstr_len[opcode.reg1]+= 1;
 		break;
 
@@ -583,8 +619,8 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 			//both str
 			opcode.reg1 = opcode.reg1 - REG_MAX;
 			opcode.reg2 = opcode.reg2 - REG_MAX;
-			realloc(agent->reg_str[opcode.reg1], agent->regstr_len[opcode.reg2]);
-			memcpy(agent->reg_str[opcode.reg1], agent->reg_str[opcode.reg2], agent->regstr_len[opcode.reg2]);
+			realloc(agent->reg_str[opcode.reg1], agent->regstr_len[opcode.reg2]+1);
+			memcpy(agent->reg_str[opcode.reg1], agent->reg_str[opcode.reg2], agent->regstr_len[opcode.reg2]+1);
 			agent->regstr_len[opcode.reg1] = agent->regstr_len[opcode.reg2];
 
 		} else if (opcode.reg1 >= REG_MAX) {
@@ -592,6 +628,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 			opcode.reg1 = (opcode.reg1 - REG_MAX);
 			agent->reg_str[opcode.reg1] = (char*) realloc (agent->reg_str[opcode.reg1], agent->regstr_len[opcode.reg1] + 1);
 			agent->reg_str[opcode.reg1][agent->regstr_len[opcode.reg1]] = agent->regs[opcode.reg2] & 0x00ff;
+			agent->reg_str[opcode.reg1][agent->regstr_len[opcode.reg1]+1] = '\0';
 			agent->regstr_len[opcode.reg1]+= 1;
 
 		} else if (opcode.reg2 >= REG_MAX) {
@@ -616,9 +653,18 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 	case CLEAR:
 		PRINTF("clr reg_str:%d\n", opcode.reg1);
 		opcode.reg1 = (opcode.reg1 - REG_MAX);
-		memset(agent->reg_str[opcode.reg1], 0, agent->regstr_len[opcode.reg1]);
+		memset(agent->reg_str[opcode.reg1], 0, agent->regstr_len[opcode.reg1]+1);
 		agent->reg_str[opcode.reg1] = (char*)realloc(agent->reg_str[opcode.reg1], 1);
+		agent->reg_str[opcode.reg1][0] = '\0';
 		agent->regstr_len[opcode.reg1] = 0;
+		break;
+
+	case CONV:
+		PRINTF("convert reg_str:%d, reg_%d\n", opcode.reg1, opcode.reg2);
+		opcode.reg1 = (opcode.reg1 - REG_MAX);
+		agent->regstr_len[opcode.reg1] = 9;
+		agent->reg_str[opcode.reg1] = (char*)realloc(agent->reg_str[opcode.reg1], 9+1);
+		sprintf(agent->reg_str[opcode.reg1], "%d.000", agent->regs[opcode.reg2]);
 		break;
 
 
