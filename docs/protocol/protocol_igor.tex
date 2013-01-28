@@ -31,6 +31,7 @@
     citecolor=black,       % color of links to bibliography
     filecolor=black,        % color of file links
     urlcolor=purple,        % color of external links
+%    linktoc=page            % only page is linked
 }
 \setcounter{secnumdepth}{3}
 \def\myversion{1.0 }
@@ -44,6 +45,8 @@
 Code mobility in \\Networked Embedded System\\
 \vspace{1cm}
 \LARGE{NES\\}
+%\vspace{0.5cm}
+%\LARGE{Version \myversion approved\\}
 \vspace{1cm}
 Group 4\\
 \vspace{1cm}
@@ -54,7 +57,7 @@ Miljenko Jakovljevi\'c, Matrikelnumber 0426673 }
 \rule{16cm}{2pt}\vskip1cm
 \flushleft
 \small{abstract:
-The lab protocof contains the final project documentation. We present the introductory part of the project and all necessary organization details in the chapter 1.
+The lab protocol contains the final project documentation. We present the introductory part of the project and all necessary organization details in the chapter 1.
 The requirements are stated in chapter 2. Chapter 3 provides the reader with unambiguous specification, Implementation details are represented in chapter 4.}
 \flushright
 \LARGE
@@ -146,7 +149,7 @@ The purpose of the project is to design, implement and evaluate code mobility pl
 Our goal is to develop the system that allows users to build and execute simple agent program on top of  hardware ESE platform.
 To achieve the goal we have developed three layered software: agent layer, platform layer, communication layer.
 Our goal is to show that code mobility concepts that are successfully used on much higher abstraction level are applicable for the embedded applications.
-During the project we have developed and implemented infrastructure that allows developer of agent program do not be aware of the hardware services presented on the given platform.
+During the project we have developed and implemented infrastructure that allows developer of agent program to not be aware of the hardware services presented on the given platform.
 
 
 	\section{Definitions, Acronyms, and Abbreviations}
@@ -186,7 +189,7 @@ We introduce milestones and time plan, as well as project management concepts to
 
 In the second workshop we present the results of our work.
 We do the test application for using the code mobility on the board.
-We discuss our major design decisions that have beed made during the design and implementation phases.
+We discuss our major design decisions that have been made during the design and implementation phases.
 
 	\subsubsection{Lab protocol}
 
@@ -338,6 +341,10 @@ For successful completion of our project, the following deadlines should be met:
 \item[--] 31.01.2013 Workshop2: Presentation of results. (D1.3)
 \end{itemize}
 
+<<<<<<< HEAD
+\chapter{Requirements}
+
+=======
 	\section{Gantt diagramm}
 
 To represent interdependencies between tasks and sequence of execution of all tasks in our project we use Gantt diagram.
@@ -351,6 +358,7 @@ Paste Gantt diagram here.
 This section lists all requirements that should meet the project with respect to 
 user roles of code mobility application.
 Defining requirements in a rigorous way will help us to exercise realistic validation scenarios.
+>>>>>>> 73fdacf455ecec4beaa73be97d68c69aaae3a1b3
 
 
 \renewcommand{\labelenumi}{R_\arabic{enumi}}
@@ -422,6 +430,10 @@ Defining requirements in a rigorous way will help us to exercise realistic valid
 \end{enumerate}
 
 
+<<<<<<< HEAD
+\chapter{Specification and design}
+
+=======
 \section{Low-Level Requirements}
 
 
@@ -449,6 +461,7 @@ Defining requirements in a rigorous way will help us to exercise realistic valid
 
 
 \chapter{Specification and design}
+>>>>>>> 73fdacf455ecec4beaa73be97d68c69aaae3a1b3
 
 \section{General}
 
@@ -477,22 +490,44 @@ between the agents is required this must be requested via the communication serv
 as its code and memory segment will be stored in a structure that is shown in the figure below. 
 
 
-\begin{figure}[!htbp]
-\begin{center}
-\includegraphics[scale=0.4]{figures/agent.png}
+\begin{figure}[!htb]
+\lstset{language=C}
+\begin{lstlisting}[frame=single]
+typedef struct {
+
+	uint8_t id;	
+	uint8_t priority;
+	agent_status_t status;
+
+	uint32_t status_flag;
+	uint16_t pc;
+
+	int16_t regs[REG_MAX];
+
+	uint16_t code_len;
+	uint16_t regstr_len [STR_REG_MAX];
+
+	uint16_t* code;
+
+	char** reg_str;
+
+	volatile char* rec_msg_content;
+	volatile uint16_t rec_msg_len;
+	
+} agent_t;
+\end{lstlisting}
 \caption{Agent structure}
-\end{center}
 \label{agent}
 \end{figure}
 
 Every agent has a unique id within the virtualization platform. Additionally a priority and a status for the
 scheduler are stored. Assigning these values for an agent lies within the scope of an agent developer. 
 Reproducing an agent on a virtualization platform where the agent’s id is already used will result in a denial 
-of the reproduction by the platform. Every agent has 6 numerical general purpose registers used for the execution
+of the reproduction by the platform. Every agent has 13 numerical general purpose registers used for the execution
 of the agent language. Additonally there are 3 char general purpose registers. The result of every agent language 
 command will be written to the accumulator. There is also a program counter which is used for the execution of the
 agent and the numerical agent language representation is stored as well. The agent structure also contains a buffer
-for receiving messages from other agents and variable to store the id of the received message.
+for receiving messages from other agents.
 
 
 \noindent
@@ -538,6 +573,8 @@ counter value is changed and the control is returned back to the scheduler.
 \label{exelayer}
 \end{figure}
 
+
+
 The execution layer is 
 called by the method execute which takes the following input parameters:
 \begin{itemize}
@@ -549,7 +586,7 @@ called by the method execute which takes the following input parameters:
 \lstset{language=C}
 \begin{lstlisting}[frame=single]
 /**
-	Function : execute
+	Function : execute_agent
 		excutes the next opcodes of an agent
 	Returns : 
 		the amount of successfully executed opcoded
@@ -557,7 +594,7 @@ called by the method execute which takes the following input parameters:
 		agent : agent status structure
 		opcode: amount of opcodes to be executed
 **/
-uint8_t execute(agent_t* agent, uint8_t opcode)
+uint8_t execute_agent(agent_t *agent, uint8_t opcode_size);
 \end{lstlisting}
 \caption{Executing agent language opcode}
 \label{fig:excopc}
@@ -585,29 +622,29 @@ otherwise the according function pointer will stay null.
 \begin{lstlisting}[frame=single]
 typedef struct {
 
-	void (*init_bargraph)(void);
 	void (*set_bargraph)(uint8_t value);
 
-	void (*clk_init)(void);
 	uint32_t (*clk_get_time)(void);
 
-	void (*init_cooler)(void);
 	void (*set_cooler)(uint8_t duty_cycle);
 
-	void (*DISPLAY_init)(void);
 	void (*DISPLAY_drawBg)(uint16_t rgb);
-	uint8_t (*DISPLAY_drawElement)(uint8_t row, uint8_t col,
-		uint16_t rgb, DisplayObject_t object);
-	
-	void (*DISPLAY_drawBorder)(void);
-	void (*DISPLAY_string)(uint8_t x, uint8_t y, uint16_t font_color,
-		uint16_t bg_color, uint8_t pixel_size, char *string)
 
-	void (*heater_init)(void);
+	void (*DISPLAY_drawDot)(uint8_t row, uint8_t col,
+				uint16_t rgb, uint8_t grid);
+
+	void (*DISPLAY_draw_char)(uint8_t x, uint8_t y, 
+				uint16_t font_color, uint16_t bg_color, 
+				uint8_t pixel_size, char c);
+				
 	void (*heater_set)(uint8_t duty_cycle);
 
-	void (*therm_init)(void);
-	int16_t (*therm_get_temp)(uint8_t name);
+	void(*button0_callback)(void);
+	void(*button1_callback)(void);
+
+	uint16_t (*therm_get_temp)(uint8_t name);
+
+	void (*dotmatrix_send)(char *data);
 
 } drivers_t;
 \end{lstlisting}
@@ -616,114 +653,15 @@ typedef struct {
 \end{figure}
 
 \noindent
-All device drivers should support init methods, which will be called by the platform during its initialization. 
-Even if a hardware device is not supported on a given node, there should be at least a dummy device driver for it present, 
-providing an empty init method. A real device driver should register its methods to the global function pointers during its 
-init_driver method execution. Choosing this approach we would reach some form of modularity which would allow us to exchange 
-to device drivers without necessity to change the platform code.
+The platform detects all the supported drivers on a specific node by inspection of the linked drivers.
+All drivers linked will be initialized during the setup of a platform and the methods provided by the 
+drivers will be stored in the global function pointer table.
+Choosing this approach we would reach some form of modularity which would allow us to exchange 
+the device drivers without necessity to change the platform code.
 
 \noindent
 If an interaction with a device driver is blocking, then the calling agent will be put to status blocking unless there is an answer from
 the device driver.
-
-\subsection{Device drivers}
-
-\subsubsection{Cooler}
-The device driver for the cooler should be initialized with a function:
-
-\begin{itemize}
-		
-\item\texttt{void init_cooler(void)}
-This function should configure the timer and set PWM mode.
-After executing init function cooler should stay off.
-
-\item\texttt{void set_cooler(uint8_t duty_cycle)}
-This function sets the duty cycle of the PWM-signal, which controls the speed of the fan and the cooling effect.
-
-\item\texttt{required components}
-	1 timer for PWM signal
-\end{itemize}
-
-\subsubsection{Heater}
-The device driver for the heating registers should be initialized with a function:
-
-\begin{itemize}
-		
-\item\texttt{void heater_init(void)}
-
-This function should configure the timer and set PWM mode.
-After executing init function heater should stay off.
-
-\item\texttt{void heater_set(uint8_t duty_cycle)}
-
-This function sets the duty cycle of the PWM-signal, which controls the dissipated power (0 - no heating, 100 - max power dissipation)
-
-\item\texttt{required components}
-	1 timer for PWM signal
-\end{itemize}
-
-\subsubsection{Temperature sensor}
-The temperature sensor driver should be initialized with the following function:
-
-\begin{itemize}
-
-\item\texttt{void therm_init(void)}
-
-This function should initialize temperature sensors connected to I2C bus.
-
-\item\texttt{ uint16_t therm_get_temp(uint8_t name)}
-
-This function returns the value of the temperature in degrees Celcius.
-
-\end{itemize}
-
-
-\subsubsection{Led matrix}
-The led matrix driver should be initialized with the following function:
-
-\begin{itemize}
-
-\item\texttt{void init_dotmatrix(void)}
-
-
-\item\texttt{void dotmatrix_send(char *data)}
-
-Using this function we send the first six characters to the led matrix.
-
-\end{itemize}
-
-\subsubsection{Bargraph}
-With the following function we initialize LED bargraph, connected to the port A of nodes 0 or 1 
-\begin{itemize}
-
-\item\texttt{ void bargraph_init(void)}
-
-\item\texttt{void set_bargraph(uint8_t value)}
-
-This function is used to display the corresponding \texttt{value} on the bargraph.
-
-\end{itemize}
-
-
-\subsubsection{TFT display}
-The following function is used to initialize TFT display that is connected to the node 2 of the ESE board:
-\begin{itemize}
-
-\item\texttt{ void DISPLAY_init(void)}
-
-\item\texttt{ void DISPLAY_drawBg(uint16_t rgb)}
-
-This function is used to draw the background of the display. RGB color could be defined using the following macro:
-\texttt{RGB(R[0..255], G[0..255], B[0..255])}.
-
-\item\texttt{ void DISPLAY_string(uint8_t x, uint8_t y, uint16_t font_color, uint16_t bg_color, uint8_t pixel_size, char *string)}
-
-The following function is used to display char array on the display, starting from the position \texttt{x, y}
-with corresponding RGB values of font and background.
-The size of the font could be changed by setting the size of the basic drawing pixel.
-
-\end{itemize}
-
 
 \section{Communication Layer}
 
@@ -732,16 +670,15 @@ language provides means to request the sending or receiving of a message.
 
 
 \noindent
-The sending function is blocking the further execution of the agent until the message is sent respectively received. 
+The sending function is blocking the further execution of the agent until the message is sent. 
 When an agent wants to send a message this message is proceeded to the communications service which takes care of the 
-actual transmission. While the sending procedure is ongoing the further execution of the sending agent is blocked. 
-Its status in the agent structure is set to “blocked”. As soon as the communication service signalizes a successful 
-message transmission or a failure the result of the sending function is written to the accumulator and the agent will 
-be made available for further execution.  
+actual transmission. While the sending procedure is ongoing the further execution of the sending agent is blocked.
+As soon as the communication service signalizes a successful message transmission or a failure the result of the 
+sending function is written to the accumulator and the agent will be made available for further execution.  
 
 
 \noindent
-When an agent sends a message to another agent, the receiving platform stores the id of the message and its content 
+When an agent sends a message to another agent, the receiving platform stores the content 
 to the receiver agent structure. The receiving agent is able to retrieve the last message from its buffer. 
 However only one message can be stored within the receiving agent structure and the next message will overwrite the 
 content and possible the id of the last message.  
@@ -756,9 +693,10 @@ the message was successfully sent or not and should initialize a retransmission 
 \noindent
 Every message sent should be identified by an id, in order to allow the transmission of messages with different semantics.
 
+\noindent
 The receiver of a message should be identified via the node number (0..3) where the receiving agent is currently expected
- to be running and the receiver agent id. As the ids of agents are within the scope of the agent developer she has to make 
-sure, that the correct receiving agent is addressed.Additionally a multicast message could be supported by allowing omitting 
+to be running and the receiver agent id. As the ids of agents are within the scope of the agent developer she has to make 
+sure, that the correct receiving agent is addressed. Additionally a multicast message could be supported by allowing omitting 
 the node address which should result in sending the message to all agents identified by the provided id. 
 
 \section{Scheduler}
@@ -768,8 +706,8 @@ should be made on a static priority based scheduling policy.
 
 
 \noindent
-Every agent is assigned a priority (0..3) by the agent developer which is stored within the agent structure. 
-The highest priority is 3 and the lowest priority is 0. Based on the priorities of the currently running agents 
+Every agent is assigned a priority (0..254) by the agent developer which is stored within the agent structure. 
+The highest priority is 254 and the lowest priority is 0. Based on the priorities of the currently running agents 
 the scheduler creates a static list by which the order of the agent execution is defined. The scheduler instructs 
 the execution layer to execute exactly priority + 1 opcodes for a given agent. Eventually the control returns to 
 the scheduler and the next agent from the list is picked. The list is iterated cyclically.
@@ -784,7 +722,7 @@ the scheduler and the next agent from the list is picked. The list is iterated c
 
 
 \noindent
-If an agent which is to be scheduled next is currently blocked by a sending operation, then its execution should be omitted. 
+If an agent which is to be scheduled next is currently blocked, then its execution should be omitted. 
 
 
 \noindent
@@ -792,44 +730,17 @@ As an agent can reproduce it self to another node or board or clone itself withi
 list requires adaptation as soon as new agent is deployed on a platform. Whenever a given platform is the destination 
 end point of a reproduction respectively cloning operation the scheduler needs to update its scheduling list before proceeding with further executions.
 
-
-
 \section{Agent language}
 
 \subsection{Agent language (Assembler level)}
-To develop a mobile agent \textit{Agent language} will be used.
-Language is tied to agent internal structure and support necessary operation for code mobility and message exchange.
-While writing the program for agent user should not be aware of hardware services presented on a given platform, 
-but have common knowledge about all available services and what operations are allowed to do with the services
-(have list of services and available operations).
+\noindent
+To develop a mobile agent \textit{Agent language} will be used. Language is tied to agent internal structure and support necessary operation for code mobility and message exchange. While writing the program for agent user should not be aware of hardware services presented on a given platform, but have common knowledge about all available services and what operations are allowed to do with the services (have list of services and available operations). It is the responsibility of the platform to provide required service to the agent (perform measurement, IO operation) or to manifest an error if the service is not available on the given platform. All current variables are allowed to store only in registers of agent structure (Fig. ~\ref{agent}).
 
 
-It is the responsibility of the platform to provide required service to the agent (perform measurement, IO operation)
-or to manifest an error if the service is not available on the given platform.
-All current variables are allowed to store only in registers of agent structure (Fig. ~\ref{agent}).
+\noindent
+The language supports the following groups of operations: arithmetic, control flow, code mobility, message exchange , access to hardware services.
 
 
-We propose to use the following principle: every opcode should be 16 bits long,
-that will lead to more simple procedure during decoding of the executable on the platform side.
-Another principle is that \texttt{reg_0} is used as \texttt{accumulator}: the results of all computations,
-comparisons an  messages received by the agent will be put to this register.
-This will lead to more compact code on the platform side.
-
-
-The language supports the following groups of operations: arithmetic, control flow, code mobility, message exchange, access to hardware services.
-Every agent has 16 registers in its internal structure: 13 for holding 16-bit numerical values and 3 for holding character strings.
-
-To achieve the following twofold goal: keep the length of the every opcode 16 bits as well provide
-a capability to directly write values to the 16-bit registers we propose to split 
-every 16-bit register into \texttt{high} and \texttt{low} parts,
-that will be used in \texttt{ldl} and \texttt{ldh} commands.
-Pictorially we represent it as follows.
-
-
-The following table reporesents registers of agent structure as well as their corresponding addresses.
-
-
-\vspace{0.2in}
 \begin{tabular}{|l|c|l|c|}
 \hline
 \multicolumn{4}{|c|}{\textbf{Addressing registers of agent structure}}\\
@@ -864,6 +775,15 @@ Register & \texttt{rrrr} & Char Register & \texttt{rrrr}\\
 \hline
 \texttt{reg_12} & \texttt{1100} &   &  \\
 \hline
+%\texttt{acc} & \texttt{1111} & &\\
+%\hline
+%\texttt{reg_7L} & \texttt{0111} &   &  \\
+%\hline
+%\texttt{reg_7H} & \texttt{1011} &  &  \\
+%\hline
+%\texttt{reg_7} & \texttt{1100} & & \\
+
+%\hline
 \end{tabular}
 
 \subsubsection{Arithmetic operations of agent assembly language}
@@ -1715,6 +1635,9 @@ Syntax  		  & Operands   								     & Program counter       \\
 
 \end{tabular}
 \vspace{0.1in}
+%\noindent
+%\framebox{\texttt{setservice value}}
+%\vspace{0.1in}
 
 \noindent
 \textbf{Get}
@@ -1967,14 +1890,6 @@ micro-controller. The bit rate is constrained by the maximum value of 2 Mbps acc
 Node 4 functions as a gateway to another board. It is a bridge between the local
 and the wireless zigbee network.
 
-\subsection{Distributed Control} 
-% Igor: There seems to be a collision between ttp interrupts and our virtual machine scheduler??? 
-Time-triggered protocols are customary for distributed control applications.
-This approach is suitable for low data volumes and data subject to real time
-constraints and regular sending intervals. 
-In a time triggered scheme each node has a separate slot for writing to the bus.
-Meanwhile, other nodes can read the bus in the same slot or process a computation task.
-
 
 \subsection{Code Mobility}
 Code mobility between nodes includes local mobility on the same board and
@@ -1990,8 +1905,7 @@ access to the personal area network.
 
 \subsection{Addressing Scheme}
 Simple local addressing requires unique identifiers for
-each node. The requirement is that this be compatible with the time-triggered protocol
-implementation. For remote communication, board addresses have to be compatible
+each node. For remote communication, board addresses have to be compatible
 with the configuration of the zigbee network. Since, each node will have a static 
 number of agent execution environments, the address has to contain its
 identifier as as well.  
@@ -2000,79 +1914,61 @@ identifier as as well.
 The interface for accessing the communication system is given below
 in Figures ~\ref{fig:msg-struct} through ~\ref{fig:comm-send-msg}. %%% Problem , does not compile this correctly
 \begin{figure}[!htb]
-\lstset{language=C}
+\lstset{language=C, breaklines=true}
 \begin{lstlisting}[frame=single]
-typedef struct comm_msg_S {
-  int type;         /* Message type identifier */
-  int node;         /* Destination or origin node  
-                       depending on the context */
-  int board;        /* Destination or origin board 
-                       depending on the context */
-  long int len;     /* Payload length */
-  char *payload;    /* Payload data*/  
-} comm_msg_T;
+struct frame{
+	unsigned dst_node:4;		//destination node
+	unsigned dst_board:4;		//destination board
+	unsigned dst_agent:4;		//destination agent
+	frame_id_t frame_id;		//source of a message
+	unsigned frame_length:16;	//length of frame payload in bytes
+	unsigned index:16;		//index for buffering
+	struct frame *next_frame;	//next frame to be sent
+	char *data;			//payload
+};
 \end{lstlisting}
 \caption{Message Structure}
 \label{fig:msg-struct}
 \end{figure}
 
 \begin{figure}[!htb]
-%\lstset{language=C}
+\lstset{language=C}
 \begin{lstlisting}[frame=single]
 /**
-    Function: comm_register 
-              Registers a communication endpoint
-    Returns: Zero if successful
-    Parameters: board
-                Board id
-                node
-                Node id inside a board
+   Function: recv_handler
+             Reassembles a complete frame from received packets
+   Parameters: msg_length	length of the current packet
+               msg_body 	payload of the current packet
  */
-int comm_register(int board, int node);
-\end{lstlisting}
-\caption{Endpoint Registration}
-\label{fig:comm-reg}
-\end{figure}
-
-\begin{figure}[!htb]
-%\lstset{language=C}
-\begin{lstlisting}[frame=single]
-/**
-   Function: comm_set_recvr
-             Sets a callback to process incoming messages
-   Parameters: recvr_callback 
-               Callback function that processes a received message
-   Returns: Zero if successful		  
- */
-int comm_set_recvr(void (*recvr_callback)(comm_msg_T *msg));
+void recv_handler(uint8_t msg_length, uint8_t *msg_body);
 \end{lstlisting}
 \caption{Message Receiving}
 \label{fig:comm-set-recvr}
 \end{figure}
 
 \begin{figure}[!htb]
-%\lstset{language=C}
+\lstset{language=C}
 \begin{lstlisting}[frame=single]
 /** 
-   Function: comm_send_msg
+   Function: send_message
              Sends message over communication interface
-   Parameters: msg 
-               Pointer to message structure; 
-               structure will be copied by function
-               sent_cb 
-               Callback that is called when the message has been sent
-   Returns: Zero if message is accepted for sending 
-            or nonzero if rejected
+   Parameters: frame
+               frame to be sent              
+   Returns: amount of sent packets
 
 */
-int comm_send_msg(comm_msg_T *msg, void (*sent_cb)(int)); 
+uint8_t send_message(frame_t frame);
+
 \end{lstlisting}
 \caption{Message Sending}
 \label{fig:comm-send-msg}
 \end{figure}
 
 
+
 \chapter{Implementation}
+
+<<<<<<< HEAD
 \section{Platform}
 \subsection{Initialization}
 \noindent
@@ -2414,20 +2310,180 @@ was moved or is the initiatior of the moving, the receving platform writes a 0 t
 whereas the sending platform writes the amount of sent packets to the accumulator of the sending agent. 
 
 
+=======
+>>>>>>> 73fdacf455ecec4beaa73be97d68c69aaae3a1b3
 \chapter{Validation}
 
 \chapter{Results and future plans}
 
+<<<<<<< HEAD
+	\section{Purpose}
+
+The specification defines the goals that should meet the project "Code mobility in Networked Embedded system". It is written by project members listed on the title page to precisely identify the goals to meet at the end of the project.
+\vspace{0.1in}
+\noindent
+
+	%\section{Scope}
+
+	\section{Definitions, Acronyms, and Abbreviations}
+
+By \emph{code mobility} we mean the capability of code to change the location where it is executed.
+
+\vspace{0.1in}
+\noindent
+\emph{Strong} code mobility is the ability to allow migration of both code and execution state to the destination, \emph{weak} code mobility allows code transfer but it does not involve the transfer of the execution state.
+
+\vspace{0.1in}
+\noindent
+\emph{Platform} is a component that provides corresponding hardware services to 
+
+	\section{Background}
+
+\noindent
+The research has been done to use code mobility in distributed environment \cite{Bart1} and various application has been developed including \cite{Bart2} web application platform that allows people without major programming experience to develop the application as work-flow specification in graphical form. The use of code mobility is to "move the knowledge close to the resources" \cite{Picco} and enable higher flexibility of accessing remote resources.
+=======
 
 
 
+>>>>>>> 73fdacf455ecec4beaa73be97d68c69aaae3a1b3
 	%\section{References}
 
 	%\section{Overview}
 
+<<<<<<< HEAD
+\chapter{Requirements}	
+
+
+\begin{comment}
+%What do the Application Testers need:
+%1) ?? To test control applications you need access to sensor data ?? Hence a test mode should be supported where sensor data are presented to the tester.
+
+%Functional requirements
+
+%Non-functional requirements
+
+
+%Specification (based on this functional and non-functional requirements)
+
+
+
+%User defines agents in a simple programming language (called "Agent").
+%"Agents" program is interpreted on PC to bytecode.
+
+%NES board support four platforms (nodes) for agents interactions and execution and 1 platform (node) for board-to-board communication.
+
+
+
+%Project outline
+
+%This will be the largest and most important section of the SRS.  The customer requirements will be embodied within Section 2, but this section will give the D-requirements that are used to guide the project’s software design, implementation, and testing.
+
+%Each requirement in this section should be:
+%•	Correct
+%•	Traceable (both forward and backward to prior/future artifacts)
+%•	Unambiguous
+%•	Verifiable (i.e., testable)
+%•	Prioritized (with respect to importance and/or stability)
+%•	Complete
+%•	Consistent
+%•	Uniquely identifiable (usually via numbering like 3.4.5.6)
+
+%Attention should be paid to the carefuly organize the requirements presented in this section so that they may easily accessed and understood.  Furthermore, this SRS is not the software design document, therefore one should avoid the tendency to over-constrain (and therefore design) the software project within this SRS.
+
+	\section{External Interface Requirements}
+
+		\subsection{User Interfaces}
+
+		\subsection{Hardware Interfaces}
+
+		\subsection{Software Interfaces}
+
+		\subsection{Communications Interfaces}
+
+	\section{Functional Requirements}
+This section describes specific features of the software project.  If desired, some requirements may be specified in the use-case format and listed in the Use Cases Section.
+		\subsection{Functional Requirement or Feature 1}
+
+			\subsubsection{Introduction}
+
+			\subsubsection{Inputs}
+
+			\subsubsection{ Processing}
+
+			\subsubsection{Outputs}
+
+			\subsubsection{Error Handling}
+
+		\subsection{ Functional Requirement or Feature 2}
+…
+	\section{Use Cases}
+
+		\subsection{Use Case \#1}
+
+		\subsection{Use Case \#2}
+…
+	\section{ Classes / Objects}
+
+		\subsection{Class / Object \#1}
+
+			\subsubsection{Attributes}
+
+			\subsubsection{Functions}
+
+<Reference to functional requirements and/or use cases>
+
+		\subsection{Class / Object \#2}
+…
+	\section{ Non-Functional Requirements}
+Non-functional requirements may exist for the following attributes.  Often these requirements must be achieved at a system-wide level rather than at a unit level.  State the requirements in the following sections in measurable terms (e.g., 95% of transaction shall be processed in less than a second, system downtime may not exceed 1 minute per day, > 30 day MTBF value, etc). 
+		\subsection{Performance}
+
+		\subsection{Reliability}
+
+		\subsection{Availability}
+
+		\subsection{Security}
+
+		\subsection{Maintainability}
+
+		\subsection{Portability}
+
+		\section{Inverse Requirements}
+
+State any *useful* inverse requirements.
+
+	\section{Design Constraints}
+
+Specify design constrains imposed by other standards, company policies, hardware limitation, etc. that will impact this software project.
+
+	\section{Logical Database Requirements}
+
+Will a database be used?  If so, what logical requirements exist for data formats, storage capabilities, data retention, data integrity, etc.
+
+	\section{Other Requirements}
+
+Catchall section for any additional requirements.
+
+\chapter{Analysis Models}
+
+List all analysis models used in developing specific requirements previously given in this SRS.  Each model should include an introduction and a narrative description.  Furthermore, each model should be traceable the SRS’s requirements.
+
+	\section{Sequence Diagrams}
+
+	\section{Data Flow Diagrams (DFD)}
+
+	\section{State-Transition Diagrams (STD)}
+
+\chapter{Change Management Process}
+
+Identify and describe the process that will be used to update the SRS, as needed, when project scope or requirements change.  Who can submit changes and by what means, and how will these changes be approved.
+
+\end{comment}
+=======
 
 
 \chapter {Specification}
+>>>>>>> 73fdacf455ecec4beaa73be97d68c69aaae3a1b3
 
 
 \chapter{Implementation timetable}
@@ -2485,5 +2541,4 @@ Platform for mobile agents:
 	\bibliographystyle{plain}
 
 \end{document}
-
 
