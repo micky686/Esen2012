@@ -29,8 +29,9 @@ clr reg_str_1
 convert reg_str_1, reg_1
 ldl reg_0, 8
 setservice lcd, reg_str_1
-wait 500
 sendmsg reg_1, 1, 3
+wait 10
+sendmsg reg_1, 2, 3
 wait 500
 ldl reg_0, 1
 jmpgr START
