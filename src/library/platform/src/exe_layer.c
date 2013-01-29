@@ -188,6 +188,14 @@ opcode_t decode_opcode(uint16_t opcode) {
 			result.id = JMP_L;
 			result.value = get_signed_value(BYTE2(opcode));
 			break;
+			
+			//convert reg_str, reg_m
+			//1111 1111 ssss mmmm
+		case 15:
+			result.id = CONV;
+			result.reg1 = NIBBLE3(opcode);
+			result.reg2 = NIBBLE4(opcode);
+			break;
 
 		}
 		break;
@@ -662,8 +670,8 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 	case CONV:
 		PRINTF("convert reg_str:%d, reg_%d\n", opcode.reg1, opcode.reg2);
 		opcode.reg1 = (opcode.reg1 - REG_MAX);
-		agent->regstr_len[opcode.reg1] = 9;
-		agent->reg_str[opcode.reg1] = (char*)realloc(agent->reg_str[opcode.reg1], 9+1);
+		agent->regstr_len[opcode.reg1] = 10;
+		agent->reg_str[opcode.reg1] = (char*)realloc(agent->reg_str[opcode.reg1], 10+1);
 		sprintf(agent->reg_str[opcode.reg1], "%d.000", agent->regs[opcode.reg2]);
 		break;
 
