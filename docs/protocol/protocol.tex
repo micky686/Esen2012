@@ -198,7 +198,7 @@ Desciption of the API and structure of our software.
 \begin{tabular}{|ll|ll|}
 \hline \multicolumn{4}{|c|}{\textbf{Workpackage 1. Documentation}}\\
 \hline
-Responsible:	&  Konstantin Selyunin			& Start date:		& 07.11.2012 \\
+Responsible:	&  Konstantin Selyunin, Igor Pelesi\'c	& Start date:		& 07.11.2012 \\
 Deliverables:	&  D1.1 Requirements and Specification  & Finish date:	 	& 28.01.2013\\
 		&  D1.2 Presentation for Workshop 1	& Estimated Effort: 	& 180 hours \\
 		&  D1.3 Presentation for Workshop 2	& Interdependencies:	& all	\\
@@ -251,7 +251,7 @@ set font and background colors and print arrays of characters on the display.
 \hline
 Responsible:	&  Igor Pelesi\'c , Konstantin Selyunin	& Start date:		& 15.11.2012 \\
 Deliverables:	&  D2.1 driver implementation		& Finish date:	 	& 12.12.2012\\
-		&  					& Estimated Effort: 	& 80 hours \\
+		&  					& Estimated Effort: 	& 50 hours \\
 		&  					& Interdependencies:	& 	\\
 		&  					& 			& 	\\
 \hline
@@ -271,7 +271,7 @@ The Agent language should provide access to the hardware as well as have syntax 
 Responsible:	&  Konstantin Selyunin			& Start date:		& 06.12.2012 \\
 Deliverables:	&  D3.1 agent language tool		& Finish date:	 	& 21.12.2012\\
 		&  					& Estimated Effort: 	& 40 hours \\
-		&  					& Interdependencies:	& 	\\
+		&  					& Interdependencies:	& D1.1 	\\
 		&  					& 			& 	\\
 \hline
 \end{tabular}
@@ -294,7 +294,7 @@ One of the main goals for possible future work is to make agents and message tra
 Responsible:	&  Igor Pelesi\'c			& Start date:		& 10.12.2012 \\
 Deliverables:	&  D4.1 CSMA/CA communication protocol	& Finish date:	 	& 21.12.2012\\
 		&  					& Estimated Effort: 	& 60 hours \\
-		&  					& Interdependencies:	& 	\\
+		&  					& Interdependencies:	& D1.1	\\
 		&  					& 			& 	\\
 \hline
 \end{tabular}
@@ -314,9 +314,9 @@ to dedicated $\mu$C, to save memory. It should be done during compile time.
 \hline \multicolumn{4}{|c|}{\textbf{Workpackage 5. Platform }}\\
 \hline
 Responsible:	&  Igor Pelesi\'c			& Start date:		& 21.12.2012 \\
-Deliverables:	&  D5.1 Platform			& Finish date:	 	& 15.01.2013\\
-		&  					& Estimated Effort: 	& 120 hours \\
-		&  					& Interdependencies:	& 	\\
+Deliverables:	&  D5.1 Platform. Scheduler		& Finish date:	 	& 15.01.2013\\
+		&  D5.2 Platform. Execution layer	& Estimated Effort: 	& 120 hours \\
+		&  D5.3 Platform. Communication layer	& Interdependencies:	& 	\\
 		&  					& 			& 	\\
 \hline
 \end{tabular}
@@ -2474,7 +2474,7 @@ For the
 \section{Platform}
 
 As the size of flash memory in $\mu$C is enough limited (128 kB),
-one of our goals was to keep the size of firmware as small as possible,
+one of our goals was to reduce the size of firmware as small as possible,
 in order to keep the platform extendable for adding new features.
 Every platform that corresponds to a node on the ESE board supports only 
 dedicated hardware drivers, this approach is achieved during compilation time.
@@ -2543,21 +2543,40 @@ put the resulting value to the \texttt{reg_0} of agent.
 By using this approach we go one level up in the abstraction ladder hierarchy.
 
 
-But there is always space for improvement. As one of the 
+But there is always space for improvement. As one of the future goals one 
+can consider to implement high level language, that will be compiled 
+into the designed assembler language.
 
 \section{Drivers}
 
-While some drivers have already been implemented and provided with ESE library
-to use all the required drivers with the virtualization platform for code mobility 
+While some drivers have already been implemented and provided with ESE library,
+to use all the required drivers in our project it is required to attach 
+the drivers to the platform.
+
+During this step some side condition has occurred:
+for example, because of simulataneous using of the same
+timer by two drivers the platform has been restarted.
 
 
 \section{Validation}
 
-\section{Expenditure}
+\section{Time expenditure}
 
 We started our work on October, 29th and end three month later, on 29th of January.
-Because of the Christmas holidays and problems with zigbee implementation 
+Because of the Christmas holidays, problems with zigbee implementation and illness of 
+our third colleague
 the whole project needed longer time then estimated.
+
+According to the table of planned and real dates the implementation phase
+last one month longer then it was planned.
+
+It is necessary to take into account that essentially from that month 
+2 weeks was Christmas holidays and due to the illness of our colleague [J]
+it is required more time that it was supposed to.
+
+
+It is worth to mention that despite the force-majeure we succeeded to complete 
+our project on time.
 
 \vspace{0.2in}
 \begin{tabular}{|>{\raggedright}m{5cm}|l|l|l|}
@@ -2585,14 +2604,71 @@ implementation phase (communication protocol)
 implementation phase (refinement of drivers)
 &  03.12.2012 - 07.12.2012			& 07.12.2012	 	& -1 day	\\\hline
 
-implementation phase (platform)
-&  08.12.2012 - 27.12.2012			& 22.01.2013	 	& +25 days	\\\hline
+implementation phase (platform, total)
+&  08.12.2012 - 27.12.2012			& 23.01.2013	 	& +26 days	\\\hline
 
-implementation phase (platform)
-&  08.12.2012 - 27.12.2012			& 22.01.2013	 	& +25 days	\\\hline
+implementation phase (platform, scheduling)
+&  08.12.2012 - 15.12.2012			& 15.12.2012	 	& 0 days	\\\hline
+
+implementation phase (platform, hardware middle layer)
+&  15.12.2012 - 21.12.2012			& 10.01.2013	 	& +20 days	\\\hline
+
+implementation phase (platform, communication layer)
+&  22.12.2012 - 27.12.2012			& 23.01.2013	 	& +26 days	\\\hline
+
+validation phase
+&  13.01.2013 - 24.01.2013			& 26.01.2013	 	& +2 days	\\\hline
+
+workshop 2 presentation
+&  23.01.2013 - 29.01.2013			& 29.01.2013	 	& 0 days	\\\hline
+
+lab protocol documentation
+&  12.11.2012 - 23.01.2013			& 29.01.2013	 	& +5 days	\\\hline
 
 \hline
 \end{tabular}
+
+
+
+\vspace{0.2in}
+\begin{tabular}{|>{\raggedright}m{5cm}|l|l|l|}
+\hline \multicolumn{4}{|c|}{\textbf{Spent time per workpackage}}\\
+\hline
+workpackage		&  planned time			& spent time		&  difference		\\\hline
+
+
+D1.1 Requirements and Specification
+& 60 		& 58	 		& -2	\\\hline
+
+D1.2 Presentation for Workshop 1
+& 20 		& 24 	 		& +4	\\\hline
+
+D1.3 Presentation for Workshop 2
+& 20 		& 20 	 		& 0	\\\hline
+
+D1.4 Lab protocol
+& 80 		& 90	 		& +10	\\\hline
+
+D2.1 driver implementation
+& 50 		& 40      	 	& -10	\\\hline
+
+D3.1 agent language tool
+& 40 		& 43 	 		& +3	\\\hline
+
+D4.1 CSMA/CA communication protocol
+& 60 		& 57 	 		& -3	\\\hline
+
+D5.1 Platform. Scheduler
+& 20		& 14 	 		& -6	\\\hline
+
+D5.2 Platform. Execution layer
+& 30 		& 43	 		& +13	\\\hline
+
+D5.3 Platform. Communication layer
+& 70 		& 113 	 		& +43 	\\\hline
+\hline
+\end{tabular}
+
 
 
 \chapter{Conclusion}
