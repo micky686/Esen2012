@@ -4,6 +4,7 @@
 \usepackage{multirow}
 \usepackage[utf8]{inputenc}
 \usepackage{xcolor}
+\usepackage{textcomp}
 \usepackage{verbatim}
 \usepackage{geometry} % to change the page dimensions
 \geometry{a4paper} % or letterpaper (US) or a5paper or....
@@ -2495,7 +2496,7 @@ validated on microcontroller simulator for the target environment.
 			& description & expected result		& result	\\\hline
 1	&
  platform initialization
-&  		& 8.11.2012	 	& -2 days	\\\hline
+&  		& 8.11.2012	 		\\\hline
 
 defining requirements, and specification (ALAT, communication architecture, platform)
 &  11.11.2012 - 30.11.2012		& 29.11.2012	 	& -1 days	\\\hline
@@ -2596,7 +2597,7 @@ TinyOS is a modular software and provides means to access hardware by adding
 components to the kernel and access the hardware by means of interfaces of this components.
 
 
-For accessing the serial port the following components could be used: \texttt{UARTByte, UARTStream, ...}
+For accessing the serial port the following components could be used: \texttt{UARTByte, UARTStream }
 which provide different level of abstraction: from sending a single byte to arrays
 via UART, but none of this components send anything to the serial in practice.
 TinyOS website provides information that in most of the cases components are 
@@ -2812,16 +2813,54 @@ to discuss possible fallacies and pitfalls of our project and intended solution.
 \appendix
 
 \chapter{Source code}
-
+\lstset{
+	language=C,
+	keywordstyle=\bfseries\ttfamily\color[rgb]{0,0,1},
+	identifierstyle=\ttfamily,
+	commentstyle=\color[rgb]{0.133,0.545,0.133},
+	stringstyle=\ttfamily\color[rgb]{0.627,0.126,0.941},
+	showstringspaces=false,
+	basicstyle=\small,
+	numberstyle=\footnotesize,
+	numbers=left,
+	stepnumber=1,
+	numbersep=10pt,
+	tabsize=2,
+	breaklines=true,
+	prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+	breakatwhitespace=false,
+	aboveskip={1.5\baselineskip},
+  columns=fixed, upquote=true,
+  extendedchars=true,
+ }
+\section{Platform}
+\subsection{platform.h}
+\lstinputlisting{../../src/library/platform/include/platform.h}
+\subsection{platform.c}
+\lstinputlisting{../../src/library/platform/src/platform.c}
+\subsection{scheduler.h}
+\lstinputlisting{../../src/library/platform/include/scheduler.h}
+\subsection{scheduler.c}
+\lstinputlisting{../../src/library/platform/src/scheduler.c}
+\subsection{hw\_layer.c}
+\lstinputlisting{../../src/library/platform/src/scheduler.c}
+\subsection{hw\_layer.c}
+%\lstinputlisting{../../src/library/platform/src/hw_layer.c}
+\subsection{exe\_layer.c}
+%\lstinputlisting{../../src/library/platform/src/hw_layer.c}
+\subsection{comm\_layer.c}
+%\lstinputlisting{../../src/library/platform/src/hw_layer.c}
+\subsection{hw\_layer.c}
 \section{Agent assembler tool}
-
+\subsection{asm\_agent}
+%\lstinputlisting{../../src/app/asm/asm\_agent}
+\lstset{
+	language=Python,
+	}
 \section{Platform}
 
 \section{Drivers}
 
 
-
-
 \end{document}
-
 
