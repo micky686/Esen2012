@@ -586,14 +586,15 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 				agent->reg_str[opcode.reg1] = agent->rec_msg_content;
 				agent->regstr_len[opcode.reg1] = agent->rec_msg_len;
 
+
 			} else {
-				agent->regs[opcode.reg1] = agent->rec_msg_content[0];
+				agent->regs[opcode.reg1] = ((agent->rec_msg_content[1] << 8) | agent->rec_msg_content[0]);
 				free(agent->rec_msg_content);
-				agent->rec_msg_len = 0;
 			}
 
 			agent->rec_msg_content = 0;
 			agent->rec_msg_len = 0;
+
 			agent->regs[REG_ACC] = 0;
 
 		} else {

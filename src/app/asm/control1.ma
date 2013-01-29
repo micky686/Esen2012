@@ -2,14 +2,14 @@ move temp
 compare reg_0, 0
 jmpeq START1
 die
-START1: ldl reg_2, 20	//kp
-ldl reg_3, 1			//kd
+START1: ldl reg_2, 70		//kp
+ldl reg_3, 0			//kd
 ldl reg_1, 25			//start desired
 START:pullmsg reg_1
 mul reg_1, 8
-mv reg_1, reg_0			//desired
+mv reg_9, reg_0			//desired
 getservice temp
-sub reg_0, reg_1		//current - desired = e
+sub reg_0, reg_9		//current - desired = e
 setservice bargraph, reg_0
 mv reg_5, reg_0			//temporary e
 add reg_0, reg_4		//esum + e
@@ -29,5 +29,5 @@ jmpls S1
 ldl reg_8, 100
 S1:setservice fan, reg_8
 ldl reg_0, 1
-jmpgr START1
+jmpgr START
 
