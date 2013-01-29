@@ -453,7 +453,7 @@ Defining requirements in a rigorous way will help us to exercise realistic valid
 
 
 \chapter{Specification and design}
-
+\label{ch:spec}
 \section{General}
 
 The following figure depicts the general outline of the code mobility project.
@@ -2458,13 +2458,99 @@ For the
 
 \chapter{Validation}
 
+We have performed validation on different levels for different part of our project.
+The main components on which validation was performed are Agent language tool,
+virtualization platform, communication protocol, as well as the final 
+validation of overall system.
+
+
+The validation of Agent language based on the unit testing methodology,
+since inputs and outputs for this part can be clearly and unambiguously defined.
+
+The platform was validated by series of tests, based on the use cases
+in our specification (see sec.\ref{ch:spec}). 
+
+The communication protocol was the most elusive part to validate.
+Based on extensive testing in different use scenarios we could establish
+a safe margin for maximum of data transmission rate.
+For the validation of the protocol we used tools for serial communication
+between microcontroller and PC, such as \texttt{xxd}.
+
+In order to test the services provided by the aforementioned software components
+together we have implemented application for controlling temperature.
+First of all we test the interaction between agent language tool and execution platform
+by compiling the platform for x86 target applying our debug platform.
+
+The second step was to perform functional validation of the platform
+by executing the application code. The code itself in C-format has been previously
+validated on microcontroller simulator for the target environment.
+
+
 \section{Overall system validation}
+
+\vspace{0.2in}
+\begin{tabular}{>{\raggedright}m{5cm}|>{\raggedright}m{5cm}|l|l|}
+\hline \multicolumn{4}{|c|}{\textbf{Overall system validation}}\\
+\hline
+			& description & expected result		& result	\\\hline
+1	&
+ platform initialization
+&  		& 8.11.2012	 	& -2 days	\\\hline
+
+defining requirements, and specification (ALAT, communication architecture, platform)
+&  11.11.2012 - 30.11.2012		& 29.11.2012	 	& -1 days	\\\hline
+
+presentation for workshop 1
+&  30.11.2012 - 5.12.2012				& 5.12.2012	 	& 0 days	\\\hline
+
+implementation phase (total)
+&  6.12.2012 - 21.12.2012			& 21.01.2013	 	& +30 days	\\\hline
+
+implementation phase (Agent language tool)
+&  6.12.2012 - 12.12.2012			& 17.01.2013	 	& +5 days	\\\hline
+
+implementation phase (communication protocol)
+&  6.12.2012 - 11.12.2012			& 10.01.2013	 	& -1 days	\\\hline
+
+implementation phase (refinement of drivers)
+&  03.12.2012 - 07.12.2012			& 07.12.2012	 	& -1 day	\\\hline
+
+implementation phase (platform, total)
+&  08.12.2012 - 27.12.2012			& 23.01.2013	 	& +26 days	\\\hline
+
+implementation phase (platform, scheduling)
+&  08.12.2012 - 15.12.2012			& 15.12.2012	 	& 0 days	\\\hline
+
+implementation phase (platform, hardware middle layer)
+&  15.12.2012 - 21.12.2012			& 10.01.2013	 	& +20 days	\\\hline
+
+implementation phase (platform, communication layer)
+&  22.12.2012 - 27.12.2012			& 23.01.2013	 	& +26 days	\\\hline
+
+validation phase
+&  13.01.2013 - 24.01.2013			& 26.01.2013	 	& +2 days	\\\hline
+
+workshop 2 presentation
+&  23.01.2013 - 29.01.2013			& 29.01.2013	 	& 0 days	\\\hline
+
+lab protocol documentation
+&  12.11.2012 - 23.01.2013			& 29.01.2013	 	& +5 days	\\\hline
+
+\hline
+\end{tabular}
+
+
 
 \section{Driver validation}
 
 \section{Platform validation}
 
 \section{Agent language tool-Platform validation}
+
+During the design of agent program and execution of an agent two reverse actions are performed:
+
+
+\section{Validation of communication protocol}
 
 \section{Test cases}
 
@@ -2563,8 +2649,8 @@ timer by two drivers the platform has been restarted.
 \section{Time expenditure}
 
 We started our work on October, 29th and end three month later, on 29th of January.
-Because of the Christmas holidays, problems with zigbee implementation and illness of 
-our third colleague
+Because of the  problems with zigbee implementation and porting of the protocol to bus1,
+memory leaks, non-reproducable 
 the whole project needed longer time then estimated.
 
 According to the table of planned and real dates the implementation phase
