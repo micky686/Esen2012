@@ -2085,7 +2085,7 @@ is achieved.\\
 \begin{lstlisting}[frame=single]
 
 # put platform specific hardware drivers to be supported by this node
-OBJ-ESEL-MDEP-$(MNAME)-y += protocol0 bargraph
+OBJ-ESEL-MDEP-\$(MNAME)-y += protocol0 bargraph
 
 \end{lstlisting}
 \caption{Platform makefile}
@@ -2555,6 +2555,23 @@ During the design of agent program and execution of an agent two reverse actions
 
 \section{Test cases}
 
+\vspace{0.2in}
+
+\begin{table}
+\begin{tabular}{|l|l|} \hline
+  \textbf{Test Description} & \textbf{Correct Result} \\\hline
+  Platform initialization & Platforms display status clear. \\
+  & The execution platform is running.\\ \hline
+  Agent execution & Scheduler allocates execution resources. \\ \hline
+  Messaging & Agents exchange messages.\\ \hline
+  Agent migration & Sending an agent between platforms. \\ 
+  &  Resuming execution. \\ \hline
+  Load survivability  & High data load induced. \\
+  & System works under stress. \\ 
+  \hline
+\end{tabular}
+\caption{System Validation Test Cases}
+\end{table}
 
 \chapter{Results, future plans and expenditure of work}
 
