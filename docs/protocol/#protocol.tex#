@@ -2760,58 +2760,7 @@ to discuss possible fallacies and pitfalls of our project and intended solution.
 
 \appendix
 
-\chapter{Source code}
-\lstset{
-	language=C,
-	keywordstyle=\bfseries\ttfamily\color[rgb]{0,0,1},
-	identifierstyle=\ttfamily,
-	commentstyle=\color[rgb]{0.133,0.545,0.133},
-	stringstyle=\ttfamily\color[rgb]{0.627,0.126,0.941},
-	showstringspaces=false,
-	basicstyle=\small,
-	numberstyle=\footnotesize,
-	numbers=left,
-	stepnumber=1,
-	numbersep=10pt,
-	tabsize=2,
-	breaklines=true,
-	prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
-	breakatwhitespace=false,
-	aboveskip={1.5\baselineskip},
-  columns=fixed, upquote=true,
-  extendedchars=true,
- }
-\section{Platform}
-\subsection{platform.h}
-\lstinputlisting{src/platform.h}
-\subsection{platform.c}
-\lstinputlisting{src/platform.c}
-\subsection{scheduler.h}
-\lstinputlisting{src/scheduler.h}
-\subsection{scheduler.c}
-\lstinputlisting{src/scheduler.c}
-\subsection{hw\_layer.h}
-\lstinputlisting{src/hwlayer.h}
-\subsection{exe\_layer.h}
-\lstinputlisting{src/exelayer.h}
-\subsection{exe\_layer.c}
-\lstinputlisting{src/exelayer.c}
-\subsection{comm\_layer.h}
-\lstinputlisting{src/commlayer.h}
-\subsection{comm\_layer.c}
-\lstinputlisting{src/commlayer.c}
 
-\section{Agent assembler tool}
-\subsection{asm\_agent}
-\lstset{ language=Python, }
-\lstinputlisting{src/asmagent}
-
-\section{Communication protocol}
-\lstset{ language=C, }
-\subsection{protocol0.h}
-\lstinputlisting{src/protocol0.h}
-\subsection{protocol0.c}
-\lstinputlisting{src/protocol0.c}
 
 
 \end{document}
