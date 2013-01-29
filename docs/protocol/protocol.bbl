@@ -1,0 +1,29 @@
+\begin{thebibliography}{1}
+
+\bibitem{Bart1}
+E.~Bartocci, D.~Cacciagrano, N.~Cannata, F.~Corradini, E.~Merelli, L.~Milanesi,
+  and P.~Romano.
+\newblock An agent-based multilayer architecture for bioinformatics grids.
+\newblock {\em EEE transactions on Nanobioscience}, 6(2):142--148, 2007.
+
+\bibitem{galler}
+J\"{u}rgen Galler.
+\newblock A modular software package for the embedded systems engineering
+  board.
+\newblock Bachelor thesis, Faculty of Informatics, A-1040 Wien Karlsplatz 13,
+  2011.
+
+\bibitem{Bart2}
+Flavio~De Paoli, Antonella~Di Stefano, Andrea Omicini, and Corrado Santoro,
+  editors.
+\newblock {\em Proceedings of the 7th WOA 2006 Workshop, From Objects to Agents
+  (Dagli Oggetti Agli Agenti), Catania, Italy, September 26-27, 2006}, volume
+  204 of {\em CEUR Workshop Proceedings}. CEUR-WS.org, 2006.
+
+\bibitem{Picco}
+Paolo Romano, Ezio Bartocci, Guglielmo Bertolini, Flavio~De Paoli, Domenico
+  Marra, Giancarlo Mauri, Emanuela Merelli, and Luciano Milanesi.
+\newblock Biowep: a workflow enactment portal for bioinformatics applications.
+\newblock {\em BMC Bioinformatics}, 8(S-1), 2007.
+
+\end{thebibliography}

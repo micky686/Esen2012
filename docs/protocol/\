@@ -2881,7 +2881,7 @@ to discuss possible fallacies and pitfalls of our project and intended solution.
 \subsection{protocol0.h}
 \lstinputlisting{src/protocol0.h}
 \subsection{protocol0.c}
-\lstinputlisting{src/protocol0.c}
+%\lstinputlisting{src/protocol0.c}
 
 \end{document}
 
