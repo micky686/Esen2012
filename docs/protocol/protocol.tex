@@ -2449,7 +2449,7 @@ GOTO:	setservice temp, reg_0
 			compare reg_4, reg_0
 			jmpls GOTO
 \end{lstlisting}
-\caption{Error: Multiple labels}
+\caption{Multiple labels error}
 \label{fig:multlabels}
 \end{figure}
 
@@ -2458,27 +2458,165 @@ For the
 
 \chapter{Validation}
 
-\chapter{Results and future plans}
+\section{Overall system validation}
+
+\section{Driver validation}
+
+\section{Platform validation}
+
+\section{Agent language tool-Platform validation}
+
+\section{Test cases}
+
+
+\chapter{Results and future plans and expenditure of work}
+
+\section{Platform}
+
+As the size of flash memory in $\mu$C is enough limited (128 kB),
+one of our goals was to keep the size of firmware as small as possible,
+in order to keep the platform extendable for adding new features.
+Every platform that corresponds to a node on the ESE board supports only 
+dedicated hardware drivers, this approach is achieved during compilation time.
+
+
+
+
+
+
+
+
+\section{Communication}
+
+We have implemented CSMA/CA protocol which allows up to 15 bytes of payload
+in a single message.
+To transfer payload more that 15 bytes we introduce frames which
+provide us with higher level of abstraction.
+We transfer agent code using the aforementioned frames.
+Before moving the code, the platform serialize agent and then send it as
+messages over the communication medium.
+
+As a result we have communication protocol that supports transferring 
+agent code and messages between agents from one board to another.
+
+During the implementation phase we spent two times more then it was planned 
+trying to make board to board communication using zigbee and tiny os.
+
+
+What we have figured out is the following: it is possible to transfer the data
+from one board to another using tinyOS and zigbee stack, it works great. 
+The main pitfall here is the communication between zigbee node and serial bus.
+TinyOS is a modular software and provides means to access hardware by adding 
+components to the kernel and access the hardware by means of interfaces of this components.
+
+
+For accessing the serial port the following components could be used: \texttt{UARTByte, UARTStream, ...}
+which provide different level of abstraction: from sending a single byte to arrays
+via UART, but none of this components send anything to the serial.
+TinyOS website provides information that in most of the cases components are 
+platform specific, so we come to conclusion that probably serial communication
+using tinyOS does not work due to incompatibility of the platform.
+
+\section{Agent language}
+
+We have developed the Agent language, defined executable opcodes and implemented
+ assembler tool for  converting agent program 
+into binary code.
+
+The main decision here was to keep the size of all opcodes constant,
+so that it lead to more simple assemble procedure and more simple decoding
+on the platform side.
+
+As it is of prior importance to provide user with the feedback about the 
+program written, we manifest all the possible errors in the agent program.
+Agent language tool generates listing file that shows the results of assemble and 
+binary executable code of agent that could be inserted in a desired platform.
+
+According to the specification, for mobile agent developer it is of no importance
+by what means to access the hardware. She could write, for instance,
+\[
+\texttt{getservice temp}
+\]
+and while executing this command platform will access temperature
+sensors on the ESE board via I2C interface, compute average of all three sensors and 
+put the resulting value to the \texttt{reg_0} of agent.
+By using this approach we go one level up in the abstraction ladder hierarchy.
+
+
+But there is always space for improvement. As one of the 
+
+\section{Drivers}
+
+\section{Validation}
+
+\section{Expenditure}
 
 
 
 \chapter{Conclusion}
 
-In our code mobility project we have focused on implementing and validating code mobility environment
-on the ESE board. As a testing application we have developed a distributed controll application,
+In our project we have focused on implementing and validating code mobility environment
+on the ESE board. As a testing application we have developed a distributed control application,
 where all actions are executed by agents, that reside on the each platform of the ESE board,
 Testing application demonstrates all the capabilities of developed environment:
-during the start of the application mobile agent is transfered from node 0 to node 1, where then 
+after the start of the application mobile agent is transfered from node 0 to node 1, where then 
 this agent fetch temperature value of heating element from the platform, compares it with setpoint and
 adjust it by setting cooling service.
+Meanwhile the agents on the nodes 2 and 3 are responsible for accessing TFT display and led matrix.
 
-Meanwile the agent 
+
+The testing application illustrates the following implementation results: the  ability to transfer code from
+one node to another including state and values of all registers,
+transferring messages between agents, execute several agents on the current platform.
+
+
+For project management we used e-mail and traditional meetings and skype to get the work done.
+We installed and deployed to the public cloud Heroku
+open source bugtracker (redmine). This web application could be used for composing Gantt diagram,
+defining and assigning tasks and documenting current results of the project, as well as
+planning future work.
+Redmine is great helper for project administrator since it is possible to assign 
+roles and tasks for each members and monitor the current working process online.
+
+
+The course was extremely helpful for various reasons.
+First of all, we master our skills in development of embedded system applications and 
+communication between nodes.
+We get acquainted ourselves with new code mobility concept, implemented simple
+assembler-like language, sufficient for writing useful mobile agents.
+The most hard and time consuming part of the project was implementing
+virtualization platform that support scheduler, provides access to hardware services,
+and capable of transferring agents between platforms.
+
+
+It is worth to mention that working in a group was extremely helpful for mastering project
+management skills. Defining plan and meeting the deadlines is worth to practice 
+for real day-to-day experience. Despite all the difficulties with the third guy [J],
+we succeeded to get work done in time.
+
+
+The workshop days was of great advantage for us to master our presentation skills as well as
+to discuss possible fallacies and pitfalls of our project and intended solution.
 
 
 
 	\bibliography{protocol}
 
 	\bibliographystyle{plain}
+
+
+\appendix
+
+\chapter{Source code}
+
+\section{Agent assembler tool}
+
+\section{Platform}
+
+\section{Drivers}
+
+
+
 
 \end{document}
 
