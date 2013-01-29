@@ -4,7 +4,6 @@
 \usepackage{multirow}
 \usepackage[utf8]{inputenc}
 \usepackage{xcolor}
-\usepackage{textcomp}
 \usepackage{verbatim}
 \usepackage{geometry} % to change the page dimensions
 \geometry{a4paper} % or letterpaper (US) or a5paper or....
@@ -199,7 +198,8 @@ Desciption of the API and structure of our software.
 \begin{tabular}{|ll|ll|}
 \hline \multicolumn{4}{|c|}{\textbf{Workpackage 1. Documentation}}\\
 \hline
-Responsible:	&  Konstantin Selyunin, Igor Pelesi\'c	& Start date:		& 07.11.2012 \\
+Responsible:	&  Konstantin Selyunin, Igor Pelesi\'c,	& Start date:		&  \\
+                &  Miljenko Jakovljevi\'c               &                       & 07.11.2012 \\           
 Deliverables:	&  D1.1 Requirements and Specification  & Finish date:	 	& 28.01.2013\\
 		&  D1.2 Presentation for Workshop 1	& Estimated Effort: 	& 180 hours \\
 		&  D1.3 Presentation for Workshop 2	& Interdependencies:	& all	\\
@@ -292,7 +292,7 @@ One of the main goals for possible future work is to make agents and message tra
 \begin{tabular}{|ll|ll|}
 \hline \multicolumn{4}{|c|}{\textbf{Workpackage 4. Communication }}\\
 \hline
-Responsible:	&  Igor Pelesi\'c			& Start date:		& 10.12.2012 \\
+Responsible:	&  Igor Pelesi\'c, Miljenko Jakovljevi\'c & Start date:		& 10.12.2012 \\
 Deliverables:	&  D4.1 CSMA/CA communication protocol	& Finish date:	 	& 21.12.2012\\
 		&  					& Estimated Effort: 	& 60 hours \\
 		&  					& Interdependencies:	& D1.1	\\
@@ -2411,7 +2411,6 @@ whereas the sending platform writes the amount of sent packets to the accumulato
 
 
 \section{Agent language assembler tool}
-
 Agent language assemler tool provides the means to convert agent program with \texttt{.ma} extension (which stands for "mobile agent")
 into binary code, that could be executed on the platform.
 After the compilation it generates two files: listing of the program for the debugging purposes and binary file with \texttt{.bin} entension.
@@ -2455,29 +2454,47 @@ GOTO:	setservice temp, reg_0
 \label{fig:multlabels}
 \end{figure}
 
-For the 
-
-
 \chapter{Validation}
 
 We have performed validation on different levels for different part of our project.
-The main components on which validation was performed are Agent language tool,
+The main components on which validation was performed are the agent language tool,
 virtualization platform, communication protocol, as well as the final 
-validation of overall system.
+validation of the overall system.
 
-
-The validation of Agent language based on the unit testing methodology,
+\section{Agent language tool}
+Validation of the agent language is based on the unit testing methodology,
 since inputs and outputs for this part can be clearly and unambiguously defined.
 
+\section{Platform validation}
 The platform was validated by series of tests, based on the use cases
-in our specification (see sec.\ref{ch:spec}). 
+in our specification (see sec.\ref{ch:spec} and Table~\ref{tab:validacases} ). 
 
+\vspace{0.2in}
+\begin{table}[!htbp]
+\begin{tabular}{|l|l|l|l|} \hline
+  \textbf{Id} & \textbf{Test Description} & \textbf{Correct Condition} & \textbf{Result} \\\hline
+  1 & Platform initialization & Platforms display status clear. & OK \\
+    & & The execution platform is running. & \\ \hline 
+  2 & Agent execution & Scheduler allocates execution resources. & OK \\ \hline
+  3 & Messaging & Agents exchange messages. & OK \\ \hline
+  4 & Agent migration & Sending an agent between platforms. & OK \\ 
+  & &  Resuming execution. & \\ \hline
+  5 & Load survivability  & High data load induced. & OK \\
+    & & System works under stress. & \\ 
+  \hline
+\end{tabular}
+\label{tab:validacases}
+\caption{Use Cases for Platform Validation }
+\end{table}
+
+\section{Validation of communication protocol}
 The communication protocol was the most elusive part to validate.
 Based on extensive testing in different use scenarios we could establish
 a safe margin for maximum of data transmission rate.
 For the validation of the protocol we used tools for serial communication
 between microcontroller and PC, such as \texttt{xxd}.
 
+\section{Overall system validation}
 In order to test the services provided by the aforementioned software components
 together we have implemented application for controlling temperature.
 First of all we test the interaction between agent language tool and execution platform
@@ -2488,92 +2505,6 @@ by executing the application code. The code itself in C-format has been previous
 validated on microcontroller simulator for the target environment.
 
 
-\section{Overall system validation}
-
-\vspace{0.2in}
-\begin{tabular}{>{\raggedright}m{5cm}|>{\raggedright}m{5cm}|l|l|}
-\hline \multicolumn{4}{|c|}{\textbf{Overall system validation}}\\
-\hline
-			& description & expected result		& result	\\\hline
-1	&
- platform initialization
-&  		& 8.11.2012	 		\\\hline
-
-defining requirements, and specification (ALAT, communication architecture, platform)
-&  11.11.2012 - 30.11.2012		& 29.11.2012	 	& -1 days	\\\hline
-
-presentation for workshop 1
-&  30.11.2012 - 5.12.2012			& 5.12.2012	 	& 0 days	\\\hline
-
-implementation phase (total)
-&  6.12.2012 - 21.12.2012			& 21.01.2013	 	& +30 days	\\\hline
-
-implementation phase (Agent language tool)
-&  6.12.2012 - 12.12.2012			& 17.01.2013	 	& +5 days	\\\hline
-
-implementation phase (communication protocol)
-&  6.12.2012 - 11.12.2012			& 10.01.2013	 	& -1 days	\\\hline
-
-implementation phase (refinement of drivers)
-&  03.12.2012 - 07.12.2012			& 07.12.2012	 	& -1 day	\\\hline
-
-implementation phase (platform, total)
-&  08.12.2012 - 27.12.2012			& 23.01.2013	 	& +26 days	\\\hline
-
-implementation phase (platform, scheduling)
-&  08.12.2012 - 15.12.2012			& 15.12.2012	 	& 0 days	\\\hline
-
-implementation phase (platform, hardware middle layer)
-&  15.12.2012 - 21.12.2012			& 10.01.2013	 	& +20 days	\\\hline
-
-implementation phase (platform, communication layer)
-&  22.12.2012 - 27.12.2012			& 23.01.2013	 	& +26 days	\\\hline
-
-validation phase
-&  13.01.2013 - 24.01.2013			& 26.01.2013	 	& +2 days	\\\hline
-
-workshop 2 presentation
-&  23.01.2013 - 29.01.2013			& 29.01.2013	 	& 0 days	\\\hline
-
-lab protocol documentation
-&  12.11.2012 - 23.01.2013			& 29.01.2013	 	& +5 days	\\\hline
-
-\hline
-\end{tabular}
-
-
-
-\section{Driver validation}
-
-\section{Platform validation}
-
-\section{Agent language tool-Platform validation}
-
-During the design of agent program and execution of an agent two reverse actions are performed:
-
-
-\section{Validation of communication protocol}
-
-\section{Test cases}
-
-\vspace{0.2in}
-
-\begin{table}
-\begin{tabular}{|l|l|} \hline
-  \textbf{Test Description} & \textbf{Correct Result} \\\hline
-  Platform initialization & Platforms display status clear. \\
-  & The execution platform is running.\\ \hline
-  Agent execution & Scheduler allocates execution resources. \\ \hline
-  Messaging & Agents exchange messages.\\ \hline
-  Agent migration & Sending an agent between platforms. \\ 
-  &  Resuming execution. \\ \hline
-  Load survivability  & High data load induced. \\
-  & System works under stress. \\ 
-  \hline
-\end{tabular}
-\caption{System Validation Test Cases}
-\end{table}
-
 \chapter{Results, future plans and expenditure of work}
 
 \section{Platform}
@@ -2583,11 +2514,6 @@ one of our goals was to reduce the size of firmware as small as possible,
 in order to keep the platform extendable for adding new features.
 Every platform that corresponds to a node on the ESE board supports only 
 dedicated hardware drivers, this approach is achieved during compilation time.
-
-
-
-
-
 
 
 
@@ -2615,7 +2541,7 @@ TinyOS is a modular software and provides means to access hardware by adding
 components to the kernel and access the hardware by means of interfaces of this components.
 
 
-For accessing the serial port the following components could be used: \texttt{UARTByte, UARTStream }
+For accessing the serial port the following components could be used: \texttt{UARTByte, UARTStream, ...}
 which provide different level of abstraction: from sending a single byte to arrays
 via UART, but none of this components send anything to the serial in practice.
 TinyOS website provides information that in most of the cases components are 
@@ -2662,8 +2588,6 @@ During this step some side condition has occurred:
 for example, because of simulataneous using of the same
 timer by two drivers the platform has been restarted.
 
-
-\section{Validation}
 
 \section{Time expenditure}
 
@@ -2802,7 +2726,7 @@ Redmine is great helper for project administrator since it is possible to assign
 roles and tasks for each members and monitor the current working process online.
 
 
-The course was extremely helpful for various reasons.
+On the whole, the course was extremely helpful for various reasons.
 First of all, we master our skills in development of embedded system applications and 
 communication between nodes.
 We get acquainted ourselves with new code mobility concept, implemented simple
@@ -2811,6 +2735,12 @@ The most hard and time consuming part of the project was implementing
 virtualization platform that support scheduler, provides access to hardware services,
 and capable of transferring agents between platforms.
 
+In the related work we used for inspiration, code mobility applications were implemented mostly in Java. As it is known,
+Java offers many high level abstractions with its rich set of library functions. By moving to the domain of embedded systems, 
+many otherwise hidden nuts and bolts of low-level programming become apparent. 
+Among these are the issues such as race conditions, bugs in interrupt programming, non-reproducible Heisenberg bugs, memory leaks,~\&c.
+Although Java is progressively gaining in popularity even in the embedded community, a programmer could never experience the thrill associated
+with these issues by remaining completely on the higher level of abstraction.
 
 It is worth to mention that working in a group was extremely helpful for mastering project
 management skills. Defining plan and meeting the deadlines is worth to practice 
@@ -2831,6 +2761,7 @@ to discuss possible fallacies and pitfalls of our project and intended solution.
 \appendix
 
 \chapter{Source code}
+<<<<<<< HEAD
 \lstset{
 	language=C,
 	keywordstyle=\bfseries\ttfamily\color[rgb]{0,0,1},
@@ -2882,6 +2813,18 @@ to discuss possible fallacies and pitfalls of our project and intended solution.
 \lstinputlisting{src/protocol0.h}
 \subsection{protocol0.c}
 \lstinputlisting{src/protocol0.c}
+=======
+
+\section{Agent assembler tool}
+
+\section{Platform}
+
+\section{Drivers}
+
+>>>>>>> c8258f1a2066b840439a7ae81e54fad1a9a97f14
+
+
 
 \end{document}
+
 
