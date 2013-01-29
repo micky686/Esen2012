@@ -2456,17 +2456,35 @@ GOTO:	setservice temp, reg_0
 \chapter{Validation}
 
 We have performed validation on different levels for different part of our project.
-The main components on which validation was performed are Agent language tool,
+The main components on which validation was performed are the agent language tool,
 virtualization platform, communication protocol, as well as the final 
-validation of overall system.
+validation of the overall system.
 
-\section{Agent language tool-Platform validation}
-The validation of Agent language based on the unit testing methodology,
+\section{Agent language tool}
+Validation of the agent language is based on the unit testing methodology,
 since inputs and outputs for this part can be clearly and unambiguously defined.
 
 \section{Platform validation}
 The platform was validated by series of tests, based on the use cases
-in our specification (see sec.\ref{ch:spec}). 
+in our specification (see sec.\ref{ch:spec} and Table~\ref{tab:validacases} ). 
+
+\vspace{0.2in}
+\begin{table}[!htbp]
+\begin{tabular}{|l|l|l|l|} \hline
+  \textbf{Id} & \textbf{Test Description} & \textbf{Correct Condition} & \textbf{Result} \\\hline
+  1 & Platform initialization & Platforms display status clear. & OK \\
+    & & The execution platform is running. & \\ \hline 
+  2 & Agent execution & Scheduler allocates execution resources. & OK \\ \hline
+  3 & Messaging & Agents exchange messages. & OK \\ \hline
+  4 & Agent migration & Sending an agent between platforms. & OK \\ 
+  & &  Resuming execution. & \\ \hline
+  5 & Load survivability  & High data load induced. & OK \\
+    & & System works under stress. & \\ 
+  \hline
+\end{tabular}
+\label{tab:validacases}
+\caption{Use Cases for Platform Validation }
+\end{table}
 
 \section{Validation of communication protocol}
 The communication protocol was the most elusive part to validate.
@@ -2486,27 +2504,6 @@ by executing the application code. The code itself in C-format has been previous
 validated on microcontroller simulator for the target environment.
 
 
-\section{Validation Cases}
-The use cases used to validate the final deliverable are shown in Table~\ref{tab:validacases}. 
-
-\vspace{0.2in}
-\begin{table}[!htbp]
-\begin{tabular}{|l|l|l|l|} \hline
-  \textbf{Id} & \textbf{Test Description} & \textbf{Correct Condition} & \textbf{Result} \\\hline
-  1 & Platform initialization & Platforms display status clear. & OK \\
-    & & The execution platform is running. & \\ \hline 
-  2 & Agent execution & Scheduler allocates execution resources. & OK \\ \hline
-  3 & Messaging & Agents exchange messages. & OK \\ \hline
-  4 & Agent migration & Sending an agent between platforms. & OK \\ 
-  & &  Resuming execution. & \\ \hline
-  5 & Load survivability  & High data load induced. & OK \\
-    & & System works under stress. & \\ 
-  \hline
-\end{tabular}
-\label{tab:validacases}
-\caption{Use Cases for System Validation }
-\end{table}
-
 \chapter{Results, future plans and expenditure of work}
 
 \section{Platform}
@@ -2516,11 +2513,6 @@ one of our goals was to reduce the size of firmware as small as possible,
 in order to keep the platform extendable for adding new features.
 Every platform that corresponds to a node on the ESE board supports only 
 dedicated hardware drivers, this approach is achieved during compilation time.
-
-
-
-
-
 
 
 
@@ -2595,8 +2587,6 @@ During this step some side condition has occurred:
 for example, because of simulataneous using of the same
 timer by two drivers the platform has been restarted.
 
-
-\section{Validation}
 
 \section{Time expenditure}
 
