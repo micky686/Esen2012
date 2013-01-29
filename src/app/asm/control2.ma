@@ -15,7 +15,7 @@ add reg_0, reg_4		//esum + e
 mv reg_4, reg_0
 mul reg_5, reg_2		//kp * e
 mv reg_7, reg_0
-sub reg_6, reg_5		//e - ealt
+sub reg_5, reg_6		//e - ealt
 mul reg_0, reg_3		//kd (e  - ealt)
 add reg_0, reg_7		// y
 mv reg_8, reg_0			
