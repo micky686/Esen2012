@@ -2469,7 +2469,7 @@ For the
 \section{Test cases}
 
 
-\chapter{Results and future plans and expenditure of work}
+\chapter{Results, future plans and expenditure of work}
 
 \section{Platform}
 
@@ -2512,7 +2512,7 @@ components to the kernel and access the hardware by means of interfaces of this 
 
 For accessing the serial port the following components could be used: \texttt{UARTByte, UARTStream, ...}
 which provide different level of abstraction: from sending a single byte to arrays
-via UART, but none of this components send anything to the serial.
+via UART, but none of this components send anything to the serial in practice.
 TinyOS website provides information that in most of the cases components are 
 platform specific, so we come to conclusion that probably serial communication
 using tinyOS does not work due to incompatibility of the platform.
@@ -2547,10 +2547,52 @@ But there is always space for improvement. As one of the
 
 \section{Drivers}
 
+While some drivers have already been implemented and provided with ESE library
+to use all the required drivers with the virtualization platform for code mobility 
+
+
 \section{Validation}
 
 \section{Expenditure}
 
+We started our work on October, 29th and end three month later, on 29th of January.
+Because of the Christmas holidays and problems with zigbee implementation 
+the whole project needed longer time then estimated.
+
+\vspace{0.2in}
+\begin{tabular}{|>{\raggedright}m{5cm}|l|l|l|}
+\hline \multicolumn{4}{|c|}{\textbf{Planned and real dates}}\\
+\hline
+			&  planned dates			& real end date		& 		\\\hline
+preliminary tasks (assigning roles, gathering data, setting up environment)
+&  29.10.2012 - 10.11.2012		& 8.11.2012	 	& -2 days	\\\hline
+
+defining requirements, and specification (ALAT, communication architecture, platform)
+&  11.11.2012 - 30.11.2012		& 29.11.2012	 	& -1 days	\\\hline
+
+presentation for workshop 1
+&  30.11.2012 - 5.12.2012				& 5.12.2012	 	& 0 days	\\\hline
+
+implementation phase (total)
+&  6.12.2012 - 21.12.2012			& 21.01.2013	 	& +30 days	\\\hline
+
+implementation phase (Agent language tool)
+&  6.12.2012 - 12.12.2012			& 17.01.2013	 	& +5 days	\\\hline
+
+implementation phase (communication protocol)
+&  6.12.2012 - 11.12.2012			& 10.01.2013	 	& -1 days	\\\hline
+
+implementation phase (refinement of drivers)
+&  03.12.2012 - 07.12.2012			& 07.12.2012	 	& -1 day	\\\hline
+
+implementation phase (platform)
+&  08.12.2012 - 27.12.2012			& 22.01.2013	 	& +25 days	\\\hline
+
+implementation phase (platform)
+&  08.12.2012 - 27.12.2012			& 22.01.2013	 	& +25 days	\\\hline
+
+\hline
+\end{tabular}
 
 
 \chapter{Conclusion}
@@ -2570,7 +2612,7 @@ one node to another including state and values of all registers,
 transferring messages between agents, execute several agents on the current platform.
 
 
-For project management we used e-mail and traditional meetings and skype to get the work done.
+For project management we used e-mail, personal meetings and skype to get the work done.
 We installed and deployed to the public cloud Heroku
 open source bugtracker (redmine). This web application could be used for composing Gantt diagram,
 defining and assigning tasks and documenting current results of the project, as well as
