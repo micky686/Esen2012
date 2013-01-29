@@ -87,3 +87,9 @@
 \contentsline {section}{\numberline {A.3}Communication protocol}{81}{section.A.3}
 \contentsline {subsection}{\numberline {A.3.1}protocol0.h}{81}{subsection.A.3.1}
 \contentsline {subsection}{\numberline {A.3.2}protocol0.c}{83}{subsection.A.3.2}
+<<<<<<< HEAD
+=======
+\contentsline {section}{\numberline {A.4}Agent assembler tool}{88}{section.A.4}
+\contentsline {section}{\numberline {A.5}Platform}{88}{section.A.5}
+\contentsline {section}{\numberline {A.6}Drivers}{88}{section.A.6}
+>>>>>>> d99a4ada9fba07bf7b2e38d016e6bf27062cbde9
