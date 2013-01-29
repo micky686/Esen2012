@@ -2410,8 +2410,51 @@ whereas the sending platform writes the amount of sent packets to the accumulato
 
 
 \section{Agent language assembler tool}
+Agent language assemler tool provides the means to convert agent program with \texttt{.ma} extension (which stands for "mobile agent")
+into binary code, that could be executed on the platform.
+After the compilation it generates two files: listing of the program for the debugging purposes and binary file with \texttt{.bin} entension.
 
-The implementation of Agent language assembler tool is basically two pass assember, block diagram of which could be shown in 
+
+For the implementation of Agent language assembler tool we use Python programming language.
+
+
+The implementation of Agent language assembler tool is basically two pass assember, block diagram of which is shown in 
+in the figure below.
+
+This tool performs two passes over source file. In the first pass it reads the entire source file,
+looking for labels in the source code and identifying opcodes.
+All labels, mnemonics, operands are collected and are put to the symbol table.
+No instructions are assembled during this pass and symbol table contain labels, mnemonics and operands.
+As every instruction has fixed size it is clear enough how to determine the offset in the branching instruction.
+But we should point out that during the execution of each instruction programm counter increments by 1, so the 
+\texttt{final_offset = relative_offset - 1}.
+
+
+One of the most important issues is to correctly assemble labels of the branching instructions.
+There can be two problems with labels: \emph{multiple-defined labels} and \emph{invalid labels}.
+Example of multiple-defined labels error is as follows:
+
+
+\begin{figure}[!htb]
+\lstset{tabsize=2}
+\begin{lstlisting}[frame=single]
+	
+GOTO:	add reg_0, reg_4
+			...
+			...
+GOTO:	setservice temp, reg_0
+			...
+			...
+			pullmsg reg_4
+			compare reg_4, reg_0
+			jmpls GOTO
+\end{lstlisting}
+\caption{Error: Multiple labels}
+\label{fig:multlabels}
+\end{figure}
+
+For the 
+
 
 \chapter{Validation}
 
@@ -2421,7 +2464,15 @@ The implementation of Agent language assembler tool is basically two pass assemb
 
 \chapter{Conclusion}
 
+In our code mobility project we have focused on implementing and validating code mobility environment
+on the ESE board. As a testing application we have developed a distributed controll application,
+where all actions are executed by agents, that reside on the each platform of the ESE board,
+Testing application demonstrates all the capabilities of developed environment:
+during the start of the application mobile agent is transfered from node 0 to node 1, where then 
+this agent fetch temperature value of heating element from the platform, compares it with setpoint and
+adjust it by setting cooling service.
 
+Meanwile the agent 
 
 
 

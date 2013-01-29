@@ -80,11 +80,9 @@ typedef struct {
 
 	void (*set_cooler)(uint8_t duty_cycle);
 
+	void (*DISPLAY_string)(uint8_t x, uint8_t y, uint16_t font_color, uint16_t bg_color, uint8_t pixel_size, char *string);
 	void (*DISPLAY_drawBg)(uint16_t rgb);
 
-	void (*DISPLAY_drawDot)(uint8_t row, uint8_t col, uint16_t rgb, uint8_t grid);
-
-	void (*DISPLAY_draw_char)(uint8_t x, uint8_t y, uint16_t font_color, uint16_t bg_color, uint8_t pixel_size, char c);
 	void (*heater_set)(uint8_t duty_cycle);
 
 	void(*button0_callback)(void);

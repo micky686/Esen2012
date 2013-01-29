@@ -38,6 +38,7 @@
 #define WAIT    24
 #define PRIO    25
 #define CLEAR	26
+#define CONV	27
 
 //services
 #define SERVICE_BARGRAPH 0
@@ -50,6 +51,8 @@
 #define SERVICE_BUTTON1 7
 
 #define ERROR_NO_SERVICE_PRESENT 1
+
+#define MAX_LCD_ROWS 8
 
 #define N1_MASK 0xF000
 #define N2_MASK 0x0F00

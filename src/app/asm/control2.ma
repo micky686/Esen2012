@@ -2,7 +2,7 @@ move temp
 compare reg_0, 0
 jmpeq START1
 die
-START1: ldl reg_1, 30
+START1: ldl reg_1, 25
 
 mul reg_1, 8
 mv reg_1, reg_0			//desired
