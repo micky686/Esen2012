@@ -101,8 +101,7 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 		uint8_t agent_id = GET_PAYLOAD_DST_AGENT(msg_body);
 		uint16_t frame_size = GET_PAYLOAD_FRAME_LEN(msg_body);
 
-		if (platform.agents[agent_id].status == ready ) {
-	
+
 			if (frame_size > (msg_length - START_PACKET_LEN)){
 				//we need to buffer
 				frame_t* new_frame = malloc(sizeof(frame_t));
@@ -133,7 +132,7 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 				memcpy(platform.agents[agent_id].rec_msg_content, msg_body+START_PACKET_LEN, frame_size);
 				platform.agents[agent_id].rec_msg_len = frame_size;
 			}
-		}
+
 
 	} else {
 		//new packet received

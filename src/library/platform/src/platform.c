@@ -56,9 +56,10 @@ void init_drivers(void){
 
 
 #ifdef PUSHBUTTON
+	uint8_t i;
 	for (i = 0; i < AGENT_MAX; i++){
 		button0_pressed[i] = 0;
-		button1_pressed[i] = 0
+		button1_pressed[i] = 0;
 	}
 	platform.drivers.button0_callback = buttoncallback0;
 	platform.drivers.button1_callback = buttoncallback1;
