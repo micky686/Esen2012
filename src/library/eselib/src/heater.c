@@ -21,10 +21,10 @@
 /****************************************************************************/
 
 void heater_init(void){
-  //TCCR0 |= ((1<<WGM00)|(1<<COM01)|(1<<COM00));
-  //TCCR0 &= ~(1<<WGM01);
-  //TCCR0 |= (1<<CS02) | (1<<CS01);   
-  //TCCR0 &= ~(1<<CS00);        
+  TCCR0 |= ((1<<WGM00)|(1<<COM01)|(1<<COM00));
+  TCCR0 &= ~(1<<WGM01);
+  TCCR0 |= (1<<CS02) | (1<<CS01);
+  TCCR0 &= ~(1<<CS00);
 
   CNT_WGM_MODE_SELECT02(0, 1); /* phase correct PWM */
   CNT_COM_MODE_SELECT02(0, 3); /* Set OC0 on compare match, clear OC0 at BOTTOM, (inverting mode) */

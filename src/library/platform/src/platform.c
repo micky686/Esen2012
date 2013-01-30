@@ -231,6 +231,7 @@ uint8_t clone_agent(agent_t *agent){
  */
 void platform_init(void) {
 
+
 #ifdef NODE0
 	platform.id = NODE0_ID;
 #elif NODE1

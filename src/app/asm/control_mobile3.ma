@@ -2,7 +2,37 @@ wait 50
 move temp
 compare reg_0, 0
 jmpeq TEMP
+move heater
+compare reg_0, 0
+jmpeq HS
 die
+HS: ldl reg_2, 5 //kp
+ldl reg_3, 2 //kd
+ldl reg_1, 25 //start desired
+HEATER:pullmsg reg_1
+mul reg_1, 8
+mv reg_9, reg_0 //desired
+getservice temp
+sub reg_9, reg_0 //desired - current = e
+mv reg_5, reg_0 //temporary e
+add reg_0, reg_4 //esum + e
+mv reg_4, reg_0
+mul reg_5, reg_2 //kp * e
+mv reg_7, reg_0
+sub reg_5, reg_6 //e - ealt
+mul reg_0, reg_3 //kd (e - ealt)
+add reg_0, reg_7 // y
+mv reg_8, reg_0
+mv reg_6, reg_5 //ealt
+compare reg_8, 0
+jmpgr H
+ldl reg_8, 0
+H: compare reg_8, 100
+jmpls H1
+ldl reg_8, 100
+H1: setservice heater, reg_8
+ldl reg_0, 1
+jmpgr HEATER
 TEMP: ldl reg_2, 70 	//kp
 ldl reg_3, 10			//kd
 ldl reg_11, 2			//ki
@@ -77,6 +107,7 @@ ldl reg_0, 6
 setservice lcd, reg_str_1
 wait 2
 sendmsg reg_1, 0, 3
+sendmsg reg_1, 1, 3
 compare reg_10, 0
 jmpgr LCD1
 move led_matrix
