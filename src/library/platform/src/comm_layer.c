@@ -101,37 +101,39 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 		uint8_t agent_id = GET_PAYLOAD_DST_AGENT(msg_body);
 		uint16_t frame_size = GET_PAYLOAD_FRAME_LEN(msg_body);
 
-		if (frame_size > (msg_length - START_PACKET_LEN)){
-			//we need to buffer
-			frame_t* new_frame = malloc(sizeof(frame_t));
-			memset(new_frame, 0, sizeof(frame_t));
-			new_frame->frame_id.id = GET_PAYLOAD_FRAME_ID(msg_body);
-			new_frame->frame_id.src_node = GET_PAYLOAD_SRC_NODE(msg_body);
-			new_frame->frame_id.src_board = GET_PAYLOAD_SRC_BOARD(msg_body);
-			new_frame->dst_agent = agent_id;
-			new_frame->frame_length = frame_size;
-			new_frame->data = (char*) malloc(frame_size+1);
-			memcpy(new_frame->data, msg_body+START_PACKET_LEN, msg_length - START_PACKET_LEN);
-			new_frame->index = msg_length - START_PACKET_LEN;
+		if (platform.agents[agent_id].status == ready ) {
+	
+			if (frame_size > (msg_length - START_PACKET_LEN)){
+				//we need to buffer
+				frame_t* new_frame = malloc(sizeof(frame_t));
+				memset(new_frame, 0, sizeof(frame_t));
+				new_frame->frame_id.id = GET_PAYLOAD_FRAME_ID(msg_body);
+				new_frame->frame_id.src_node = GET_PAYLOAD_SRC_NODE(msg_body);
+				new_frame->frame_id.src_board = GET_PAYLOAD_SRC_BOARD(msg_body);
+				new_frame->dst_agent = agent_id;
+				new_frame->frame_length = frame_size;
+				new_frame->data = (char*) malloc(frame_size+1);
+				memcpy(new_frame->data, msg_body+START_PACKET_LEN, msg_length - START_PACKET_LEN);
+				new_frame->index = msg_length - START_PACKET_LEN;
 
-			if (frm_list.last != NULL){
-				frm_list.last->next_frame = new_frame;
-				frm_list.last = new_frame;
-				frm_list.size += 1;
+				if (frm_list.last != NULL){
+					frm_list.last->next_frame = new_frame;
+					frm_list.last = new_frame;
+					frm_list.size += 1;
+				} else {
+					frm_list.first = new_frame;
+					frm_list.last = new_frame;
+					frm_list.size = 1;
+				}
+
 			} else {
-				frm_list.first = new_frame;
-				frm_list.last = new_frame;
-				frm_list.size = 1;
+				//write directly to agent
+				platform.agents[agent_id].rec_msg_content = (char*)realloc(platform.agents[agent_id].rec_msg_content, frame_size +1);
+				memset(platform.agents[agent_id].rec_msg_content, 0, frame_size + 1);
+				memcpy(platform.agents[agent_id].rec_msg_content, msg_body+START_PACKET_LEN, frame_size);
+				platform.agents[agent_id].rec_msg_len = frame_size;
 			}
-
-		} else {
-			//write directly to agent
-			platform.agents[agent_id].rec_msg_content = (char*)realloc(platform.agents[agent_id].rec_msg_content, frame_size +1);
-			memset(platform.agents[agent_id].rec_msg_content, 0, frame_size + 1);
-			memcpy(platform.agents[agent_id].rec_msg_content, msg_body+START_PACKET_LEN, frame_size);
-			platform.agents[agent_id].rec_msg_len = frame_size;
 		}
-
 
 	} else {
 		//new packet received
