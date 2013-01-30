@@ -283,7 +283,6 @@ opcode_t decode_opcode(uint16_t opcode) {
 void execute_opcode(agent_t *agent, opcode_t opcode) {
 	uint16_t tmp = 0;
 	int16_t sgn_tmp = 0;
-	//frame_t frame;
 
 
 	switch (opcode.id) {
@@ -326,7 +325,6 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 
 		case SERVICE_LCD:
 			{
-
 				if (platform.drivers.DISPLAY_string != NULL){
 					//ldl reg_0, row_nr 0 clear
 					//setservice lcd, str_reg_0
@@ -353,10 +351,10 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 						}
 
 					}
-
 				}
 			}
 			break;
+			
 		default:
 			break;
 
@@ -366,7 +364,7 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 			PRINTF("getservice service_id: %d\n", opcode.value);
 			switch (opcode.value){
 			case SERVICE_THERMOMETER:
-				//_delay_ms(5000);
+				
 				if (platform.drivers.therm_get_temp != NULL){
 
 					tmp = (platform.drivers.therm_get_temp(THERMOMETER1) >>5);
@@ -391,18 +389,21 @@ void execute_opcode(agent_t *agent, opcode_t opcode) {
 					SET_ERROR(agent->status_flag, ERROR_NO_SERVICE_PRESENT);
 				}
 				break;
+				
 			case SERVICE_BUTTON0:
 				{
-					agent->regs[REG_ACC] = button0_pressed;
-					button0_pressed = 0;
+					agent->regs[REG_ACC] = button0_pressed[agent->id];
+					button0_pressed[agent->id] = 0;
 				}
 				break;
+				
 			case SERVICE_BUTTON1:
 				{
-					agent->regs[REG_ACC] = button1_pressed;
-					button1_pressed = 0;
+					agent->regs[REG_ACC] = button1_pressed[agent->id];
+					button1_pressed[agent->id] = 0;
 				}
 				break;
+				
 			default:
 				break;
 			}

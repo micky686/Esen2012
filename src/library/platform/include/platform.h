@@ -126,19 +126,18 @@ typedef struct {
 	volatile char* rec_msg_content;
 	volatile uint16_t rec_msg_len;
 
-	volatile uint8_t sem;
 } agent_t;
 
 typedef struct {
-	volatile agent_t agents[4];
+	volatile agent_t agents[AGENT_MAX];
 	drivers_t drivers;
 	uint8_t id;
 } platform_t;
 
 extern volatile platform_t platform;
 extern uint8_t service_locations[MAX_SERVICE][MAX_NODES];
-extern volatile uint8_t button0_pressed;
-extern volatile uint8_t button1_pressed;
+extern volatile uint8_t button0_pressed[AGENT_MAX];
+extern volatile uint8_t button1_pressed[AGENT_MAX];
 
 void init_drivers(void);
 void init_agents(void);

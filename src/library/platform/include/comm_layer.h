@@ -98,7 +98,6 @@ typedef struct {
 extern frame_list_t frm_list;
 
 uint8_t send_message(frame_t frame);
-//uint8_t send_msg(uint8_t message_header, uint8_t *msg_body);
 
 #define HI_MASK 0xf0
 #define LO_MASK 0x0f

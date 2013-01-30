@@ -70,19 +70,6 @@ uint8_t send_message(frame_t frame){
 	return res;
 }
 
-
-
-/*uint8_t send_msg(uint8_t message_header, uint8_t *msg_body){
-
-	printf("header %x\n", message_header);
-	uint8_t i = 0;
-	for (i = 0; i < (message_header & 0x0f); i++){
-		printf("%d: data: %x\n", i, msg_body[i]);
-	}
-	fflush(stdout);
-	recv_handler(message_header&0x0f, msg_body);
-}*/
-
 /* |	dst_node	|	packet len	|
  * |	start_type	|  	src board	|
  * |	src_node	|	frame id	|
@@ -217,30 +204,6 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 
 }
 
-
-
-/*typedef struct {
-
-	uint8_t id;				0
-	uint8_t priority;		1
-	agent_status_t status;	2
-
-	uint32_t status_flag;	3456
-	uint16_t pc;			78
-
-	int16_t regs[REG_MAX];	910 1112 1314 1516 1718 1920 2122
-
-	uint16_t code_len;		2324
-	uint16_t* code;
-
-	uint16_t regstr_len [STR_REG_MAX]; 2526 2728 2930
-	char** reg_str;
-
-	uint16_t rec_msg_len; 3132
-	char* rec_msg_content;
-
-
-} agent_t;*/
 char* serialize_agent(agent_t agent, uint16_t* agent_len){
 
 	*agent_len = FIXED_LEN + (agent.code_len * sizeof(uint16_t)) + agent.regstr_len[0] + agent.regstr_len[1] + agent.regstr_len[2] + agent.rec_msg_len;
