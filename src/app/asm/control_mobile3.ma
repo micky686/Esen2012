@@ -34,7 +34,7 @@ H1: setservice heater, reg_8
 ldl reg_0, 1
 jmpgr HEATER
 TEMP: ldl reg_2, 70 	//kp
-ldl reg_3, 10			//kd
+ldl reg_3,  0			//kd
 ldl reg_11, 2			//ki
 ldl reg_12, 3			//ki 
 ldl reg_10, 0			//mobility init yes
@@ -55,10 +55,6 @@ sub reg_5, reg_6		//e - ealt
 mul reg_0, reg_3		//kd (e  - ealt)
 add reg_0, reg_7		// y
 mv reg_8, reg_0			
-div reg_4, reg_11		//ki * esum
-mul reg_0, reg_12
-add reg_0, reg_8		// y
-mv reg_8, reg_0
 mv reg_6, reg_5			//ealt
 compare reg_8, 0
 jmpgr S
