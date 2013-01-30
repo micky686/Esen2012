@@ -65,7 +65,6 @@ typedef struct {
 
 typedef struct {
 	agent_config_t agents_conf[AGENT_MAX];
-	//uint8_t platform_id;
 	uint8_t board_id;
 	uint8_t frame_id;
 } platform_config_t;

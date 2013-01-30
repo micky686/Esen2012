@@ -2,8 +2,8 @@ move temp
 compare reg_0, 0
 jmpeq START1
 die
-START1: ldl reg_2, 30		//kp
-ldl reg_3, 5			//kd
+START1: ldl reg_2, 5		//kp
+ldl reg_3, 2			//kd
 ldl reg_1, 25			//start desired
 START:pullmsg reg_1
 mul reg_1, 8

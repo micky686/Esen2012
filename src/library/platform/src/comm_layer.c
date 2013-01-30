@@ -217,30 +217,6 @@ void recv_handler(uint8_t msg_length, uint8_t *msg_body){
 
 }
 
-
-
-/*typedef struct {
-
-	uint8_t id;				0
-	uint8_t priority;		1
-	agent_status_t status;	2
-
-	uint32_t status_flag;	3456
-	uint16_t pc;			78
-
-	int16_t regs[REG_MAX];	910 1112 1314 1516 1718 1920 2122
-
-	uint16_t code_len;		2324
-	uint16_t* code;
-
-	uint16_t regstr_len [STR_REG_MAX]; 2526 2728 2930
-	char** reg_str;
-
-	uint16_t rec_msg_len; 3132
-	char* rec_msg_content;
-
-
-} agent_t;*/
 char* serialize_agent(agent_t agent, uint16_t* agent_len){
 
 	*agent_len = FIXED_LEN + (agent.code_len * sizeof(uint16_t)) + agent.regstr_len[0] + agent.regstr_len[1] + agent.regstr_len[2] + agent.rec_msg_len;

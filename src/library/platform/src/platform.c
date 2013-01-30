@@ -17,13 +17,13 @@ volatile uint8_t button0_pressed;
 volatile uint8_t button1_pressed;
 
 uint8_t service_locations[MAX_SERVICE][MAX_NODES] = {
-			{NODE0_ID, NODE1_ID, INVALID, INVALID},		 //BARGRAPH
+			{NODE0_ID, NODE1_ID, INVALID, INVALID},	 //BARGRAPH
 			{NODE1_ID, INVALID, INVALID, INVALID}, 	 //THERMOMETER
 			{NODE1_ID, INVALID, INVALID, INVALID},	 //COOLER
 			{NODE1_ID, INVALID, INVALID, INVALID},   //HEATER
 			{NODE3_ID, INVALID, INVALID, INVALID},   //LED
 			{NODE2_ID, INVALID, INVALID, INVALID},   //LCD
-			{NODE0_ID, NODE1_ID, NODE2_ID, NODE3_ID}			 //BUTTONS
+			{NODE0_ID, NODE1_ID, NODE2_ID, NODE3_ID} //BUTTONS
 };
 
 void init_drivers(void){
@@ -37,18 +37,9 @@ void init_drivers(void){
 	 protocol_init(platform.id, recv_handler);
 #endif
 
-#ifdef TIMER2
-
-#endif
-
-#ifdef CLOCK
-
-#endif
-
 #ifdef HEATER
 	heater_init();
 	platform.drivers.heater_set = heater_set;
-	//heater_set(50);
 #endif
 
 
@@ -56,10 +47,6 @@ void init_drivers(void){
 	DISPLAY_init();
 	platform.drivers.DISPLAY_string = DISPLAY_string;
 	platform.drivers.DISPLAY_drawBg = DISPLAY_drawBg;
-	/*DISPLAY_string(20, 150, RGB(30,238,30), RGB(0,0,0), 2, "Agents          :");
-	DISPLAY_string(20, 130, RGB(30,238,30), RGB(0,0,0), 2, "Agent message   :");
-	DISPLAY_string(20, 110, RGB(30,238,30), RGB(0,0,0), 2, "Agent state     :");
-	DISPLAY_string(20, 110, RGB(30,238,30), RGB(0,0,0), 2, "Platform status :");*/
 #endif
 
 #ifdef THERMOMETER
@@ -80,23 +67,11 @@ void init_drivers(void){
 #ifdef COOLER
 	init_cooler();
 	platform.drivers.set_cooler = set_cooler;
-	//set_cooler(50);
 #endif
 
 #ifdef LEDMATRIX
 	init_dotmatrix();
 	platform.drivers.dotmatrix_send = dotmatrix_send;
-	//platform.drivers.dotmatrix_send=dotmatrix_send_scrolling_text;
-	//dotmatrix_enable_scrolling();
-
-	//char buf[] = "ABCD";
-	//dotmatrix_send(buf);
-	//platform.drivers.dotmatrix_send(buf);
-	/*uint16_t val = 0xff;
-	dotmatrix_send_int(val, 0);
-	dotmatrix_send_comma(1);
-	dotmatrix_send_int(val, 3);*/
-
 #endif
 
 }
@@ -184,12 +159,6 @@ void reset_agent(uint8_t id){
 	agent->pc = 0;
 	agent->status_flag = 0;
 
-/*	if (agent->rec_msg_id != 0){
-		free(agent->rec_msg_id);
-		agent->rec_msg_id = 0;
-
-	}
-*/
 	if (agent->rec_msg_content != 0) {
 		free(agent->rec_msg_content);
 		agent->rec_msg_content = 0;
@@ -272,7 +241,6 @@ void platform_init(void) {
 void run_platform(void) {
 
 	schedule_next();
-	//_delay_ms(1000);
 }
 
 int main(void) {
@@ -280,11 +248,6 @@ int main(void) {
 
 	platform_init();
 
-	/*if (platform.drivers.dotmatrix_send != NULL){
-		char a1[] = "3";
-		platform.drivers.dotmatrix_send(a1);
-		_delay_ms(2000);
-	}*/
 
 	while (1){
 		run_platform();
