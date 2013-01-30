@@ -4,8 +4,9 @@ compare reg_0, 0
 jmpeq TEMP
 die
 TEMP: ldl reg_2, 70 	//kp
-ldl reg_3, 10			//kd
-ldl reg_11, 2			//ki
+ldl reg_3, 5			//kd
+ldl reg_11, 3			//ki
+ldl reg_12, 4			//ki 
 ldl reg_10, 0			//mobility init yes
 ldl reg_1, 25			//start desired
 TEMP1: pullmsg reg_1
@@ -24,7 +25,8 @@ sub reg_5, reg_6		//e - ealt
 mul reg_0, reg_3		//kd (e  - ealt)
 add reg_0, reg_7		// y
 mv reg_8, reg_0			
-mul reg_11, reg_4		//ki * esum
+div reg_4, reg_11		//ki * esum
+mul reg_0, reg_12
 add reg_0, reg_8		// y
 mv reg_8, reg_0
 mv reg_6, reg_5			//ealt
@@ -57,13 +59,18 @@ storecr reg_str_2, :
 ldl reg_0, 4
 setservice lcd, reg_str_2
 wait 2
-LCD1: getservice button1
+LCD1: mv reg_2, reg_1
+getservice button1
 add reg_1, reg_0
 mv reg_1, reg_0
 getservice button0
 sub reg_1, reg_0
 mv reg_1, reg_0
-clr reg_str_1
+compare reg_10, 1
+jmpls LCD2
+compare reg_2, reg_1
+jmpeq LCD1
+LCD2: clr reg_str_1
 convert reg_str_1, reg_1
 ldl reg_0, 6
 setservice lcd, reg_str_1
