@@ -4,9 +4,9 @@ compare reg_0, 0
 jmpeq TEMP
 die
 TEMP: ldl reg_2, 70 	//kp
-ldl reg_3, 5			//kd
-ldl reg_11, 3			//ki
-ldl reg_12, 4			//ki 
+ldl reg_3, 10			//kd
+ldl reg_11, 2			//ki
+ldl reg_12, 3			//ki 
 ldl reg_10, 0			//mobility init yes
 ldl reg_1, 25			//start desired
 TEMP1: pullmsg reg_1
@@ -37,6 +37,7 @@ S: compare reg_8, 100
 jmpls S1
 ldl reg_8, 100
 S1: setservice fan, reg_8
+wait 10
 sendmsg reg_str_0, 0, 1
 compare reg_10, 0
 jmpgr TEMP1
