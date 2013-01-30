@@ -53,12 +53,45 @@
 % Begin of document
 \begin{document}
 
-\section{Demo Application}
+
+\section{Validation}
 
 \begin{frame}
-  \frametitle{Sequence Diagram of Demo Application}
+  \frametitle{Validation}
+  \framesubtitle{Practical}
+  \begin{description}
+  \item Stepwise Approach
+    \begin{itemize}     
+      \item monotonic rate of progress from less correct to more correct functionality 
+    \end{itemize}
+  \item Unit Testing 
+    \begin{itemize}     
+     \item components with precise specification (ALAT)
+     \item expected output for prepared input vectors
+    \end{itemize}
+  \item Functional Testing
+    \begin{itemize}     
+     \item components with less precise specification
+      \item complexity because of side-effects 
+      \item system-wide interraction produces emergent behaviour
+      \item user interaction as entry of control-flow 
+    \end{itemize}
+  \end{description}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Validation}
+   \framesubtitle{Integrated with Development Paradigm}
+  \includegraphics[width=4in]{img/stepwise_validation_process.png}
+\end{frame}
+
+\section{Demo Application}
+\begin{frame}
+  \frametitle{Demo Application}
+  \framesubtitle{Sequence Diagram}
   \includegraphics[width=4in]{img/sequence-diagram-demoapp.png}
 \end{frame}
+
 
 % End of document
 \end{document}
